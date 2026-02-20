@@ -12,9 +12,10 @@
       font-family: Arial, sans-serif;
       background:#000;
       overflow-x:hidden;
+      overflow-y:auto; /* IMPORTANT: allows scroll to trigger panels */
     }
 
-    /* ===== Background video (fixed) ===== */
+    /* ===== Background video (always visible) ===== */
     .bg{
       position:fixed; inset:0; z-index:0; overflow:hidden; background:#000;
     }
@@ -22,35 +23,50 @@
       width:100%; height:100%;
       object-fit:cover; object-position:center;
     }
+    /* film overlay */
     .bg::after{
       content:""; position:absolute; inset:0;
-      background: radial-gradient(900px 520px at 25% 35%, rgba(0,0,0,0.08), rgba(0,0,0,0.55)),
-                  linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.45));
+      background: radial-gradient(900px 520px at 25% 35%, rgba(0,0,0,0.06), rgba(0,0,0,0.55)),
+                linear-gradient(to bottom, rgba(0,0,0,0.10), rgba(0,0,0,0.40));
       pointer-events:none;
     }
 
-    /* ===== Top center brand (like Auberry) ===== */
-    .brand-center{
-      position:fixed;
-      top:18px; left:0; right:0;
-      z-index:30;
-      text-align:center;
-      color:rgba(255,255,255,0.92);
-      letter-spacing:4px;
-      font-size:12px;
-      text-transform:uppercase;
+    /* ===== Intro logo (Auberry-like) ===== */
+    .intro{
+      position:fixed; inset:0;
+      z-index:80;
+      display:flex; align-items:center; justify-content:center;
       pointer-events:none;
     }
+    .intro img{
+      width:min(240px, 55vw);
+      opacity:0;
+      transform:translateY(10px);
+      animation: logoIn 1.8s ease forwards;
+      animation-delay: 0.4s;
+      filter: drop-shadow(0 18px 40px rgba(0,0,0,0.35));
+    }
+    /* fade logo away after it appears */
+    .intro.hide{
+      opacity:0;
+      transition: opacity 900ms ease;
+    }
 
-    /* ===== Burger left ===== */
+    @keyframes logoIn{
+      to{ opacity:1; transform:translateY(0); }
+    }
+
+    /* ===== Burger menu (middle-left, always visible) ===== */
     .burger{
       position:fixed;
-      top:18px; left:18px;
-      z-index:35;
-      width:46px; height:46px;
+      top:50%;
+      left:18px;
+      transform:translateY(-50%);
+      z-index:90;
+      width:50px; height:50px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,0.18);
-      background:rgba(0,0,0,0.18);
+      background:rgba(0,0,0,0.20);
       backdrop-filter: blur(10px);
       display:grid; place-items:center;
       cursor:pointer;
@@ -71,7 +87,7 @@
     /* ===== Menu overlay ===== */
     .menu{
       position:fixed; inset:0;
-      z-index:50;
+      z-index:95;
       background:rgba(0,0,0,0.55);
       backdrop-filter: blur(12px);
       display:none;
@@ -81,7 +97,7 @@
       position:absolute; top:0; left:0;
       width:min(420px, 88vw);
       height:100%;
-      background:rgba(255,255,255,0.92);
+      background:rgba(255,255,255,0.94);
       padding:22px;
       border-right:1px solid rgba(0,0,0,0.10);
     }
@@ -113,15 +129,12 @@
     }
     .menu a:hover{ opacity:0.7 }
 
-    /* ===== Auberry scroll rig ===== */
-    /* This creates vertical scroll space */
+    /* ===== Auberry scroll stage ===== */
     .scroll-stage{
       position:relative;
       z-index:10;
-      height:500vh; /* 5 slides => 500vh (1 slide per 100vh) */
+      height:500vh; /* 5 slides */
     }
-
-    /* Sticky viewport stays in place while you scroll */
     .sticky{
       position:sticky;
       top:0;
@@ -129,26 +142,36 @@
       overflow:hidden;
     }
 
-    /* Horizontal track moves left as you scroll down */
+    /* Panels overlay (HIDDEN until you scroll) */
+    .overlay{
+      position:absolute;
+      inset:0;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity 600ms ease;
+    }
+    body.reveal .overlay{
+      opacity:1;
+      pointer-events:auto;
+    }
+
     .track{
       height:100vh;
       display:flex;
-      width:500vw; /* 5 slides */
+      width:500vw;
       will-change:transform;
       transform:translate3d(0,0,0);
     }
 
-    /* ===== Each slide layout (white text panel + image) ===== */
+    /* Slide layout: white text panel + image */
     .slide{
       width:100vw;
       height:100vh;
       display:grid;
-      grid-template-columns: 22vw 78vw; /* Auberry-ish */
+      grid-template-columns: 22vw 78vw;
       min-width:100vw;
       align-items:stretch;
     }
-
-    /* Left white panel */
     .left{
       background:rgba(255,255,255,0.92);
       padding:60px 34px 28px 34px;
@@ -170,7 +193,7 @@
       margin-top:10px;
       line-height:1.2;
     }
-    .body{
+    .bodycopy{
       margin-top:18px;
       font-size:13px;
       line-height:1.7;
@@ -191,12 +214,7 @@
       color:#111;
       opacity:0.65;
     }
-
-    /* Right image panel */
-    .right{
-      position:relative;
-      overflow:hidden;
-    }
+    .right{ position:relative; overflow:hidden; }
     .img{
       position:absolute; inset:0;
       background-size:cover;
@@ -204,43 +222,32 @@
       filter:saturate(1.02) contrast(1.02);
     }
 
-    /* Tiny “Scroll” hint like Auberry */
-    .scroll-hint{
-      position:fixed;
-      top:92px;
-      left:50%;
-      transform:translateX(-50%);
-      z-index:30;
-      color:rgba(255,255,255,0.70);
-      font-size:11px;
-      letter-spacing:3px;
-      text-transform:uppercase;
-      pointer-events:none;
-    }
-
-    /* Mobile fallback: stack vertically (Auberry does this too) */
     @media (max-width: 860px){
       .slide{ grid-template-columns: 1fr; grid-template-rows: 38vh 62vh; }
       .left{ padding:18px 18px 14px 18px; }
-      .body{ max-width:100%; }
-      .scroll-hint{ display:none; }
+      .bodycopy{ max-width:100%; }
     }
   </style>
 </head>
 
 <body>
 
+  <!-- Background Video -->
   <div class="bg">
     <video id="bgVideo" autoplay muted loop playsinline preload="auto">
       <source src="./bg.mp4" type="video/mp4">
     </video>
   </div>
 
-  <div class="brand-center">RR ASSET MANAGEMENT</div>
-  <div class="scroll-hint">Scroll</div>
+  <!-- Intro Logo -->
+  <div class="intro" id="intro">
+    <img src="./logo.png" alt="RR Asset Management Logo">
+  </div>
 
+  <!-- Burger -->
   <button class="burger" id="burger" aria-label="Open menu"><i></i></button>
 
+  <!-- Menu -->
   <div class="menu" id="menu">
     <div class="menu-panel">
       <div class="menu-top">
@@ -255,97 +262,84 @@
     </div>
   </div>
 
-  <!-- Auberry-style scroll stage -->
+  <!-- Scroll Stage (overlay hidden until scroll) -->
   <section class="scroll-stage" id="stage">
     <div class="sticky">
-      <div class="track" id="track">
+      <div class="overlay" id="overlay">
+        <div class="track" id="track">
 
-        <!-- Slide 1 -->
-        <div class="slide">
-          <div class="left">
-            <div>
-              <div class="kicker">RR Asset</div>
-              <div class="title">Strategic Capital</div>
-              <div class="body">Focused investment solutions designed for long-term performance and disciplined risk management.</div>
-              <div class="rule"></div>
+          <div class="slide">
+            <div class="left">
+              <div>
+                <div class="kicker">RR Asset</div>
+                <div class="title">Strategic Capital</div>
+                <div class="bodycopy">Focused investment solutions designed for long-term performance and disciplined risk management.</div>
+                <div class="rule"></div>
+              </div>
+              <div class="small">01 / 05</div>
             </div>
-            <div class="small">01 / 05</div>
+            <div class="right"><div class="img" style="background-image:url('1.jpg')"></div></div>
           </div>
-          <div class="right">
-            <div class="img" style="background-image:url('1.jpg')"></div>
-          </div>
-        </div>
 
-        <!-- Slide 2 -->
-        <div class="slide">
-          <div class="left">
-            <div>
-              <div class="kicker">Our Edge</div>
-              <div class="title">Global Reach</div>
-              <div class="body">Opportunities identified through research, conviction, and a repeatable process.</div>
-              <div class="rule"></div>
+          <div class="slide">
+            <div class="left">
+              <div>
+                <div class="kicker">Our Edge</div>
+                <div class="title">Global Reach</div>
+                <div class="bodycopy">Opportunities identified through research, conviction, and a repeatable process.</div>
+                <div class="rule"></div>
+              </div>
+              <div class="small">02 / 05</div>
             </div>
-            <div class="small">02 / 05</div>
+            <div class="right"><div class="img" style="background-image:url('2.jpg')"></div></div>
           </div>
-          <div class="right">
-            <div class="img" style="background-image:url('2.jpg')"></div>
-          </div>
-        </div>
 
-        <!-- Slide 3 -->
-        <div class="slide">
-          <div class="left">
-            <div>
-              <div class="kicker">Portfolio</div>
-              <div class="title">Risk Managed</div>
-              <div class="body">Structured portfolios balancing growth, preservation, and liquidity needs.</div>
-              <div class="rule"></div>
+          <div class="slide">
+            <div class="left">
+              <div>
+                <div class="kicker">Portfolio</div>
+                <div class="title">Risk Managed</div>
+                <div class="bodycopy">Structured portfolios balancing growth, preservation, and liquidity needs.</div>
+                <div class="rule"></div>
+              </div>
+              <div class="small">03 / 05</div>
             </div>
-            <div class="small">03 / 05</div>
+            <div class="right"><div class="img" style="background-image:url('3.jpg')"></div></div>
           </div>
-          <div class="right">
-            <div class="img" style="background-image:url('3.jpg')"></div>
-          </div>
-        </div>
 
-        <!-- Slide 4 -->
-        <div class="slide">
-          <div class="left">
-            <div>
-              <div class="kicker">Execution</div>
-              <div class="title">Institutional Approach</div>
-              <div class="body">Professional execution supported by transparent governance and reporting.</div>
-              <div class="rule"></div>
+          <div class="slide">
+            <div class="left">
+              <div>
+                <div class="kicker">Execution</div>
+                <div class="title">Institutional Approach</div>
+                <div class="bodycopy">Professional execution supported by transparent governance and reporting.</div>
+                <div class="rule"></div>
+              </div>
+              <div class="small">04 / 05</div>
             </div>
-            <div class="small">04 / 05</div>
+            <div class="right"><div class="img" style="background-image:url('4.jpg')"></div></div>
           </div>
-          <div class="right">
-            <div class="img" style="background-image:url('4.jpg')"></div>
-          </div>
-        </div>
 
-        <!-- Slide 5 -->
-        <div class="slide">
-          <div class="left">
-            <div>
-              <div class="kicker">Contact</div>
-              <div class="title">Partner With Us</div>
-              <div class="body">Building lasting relationships through performance, clarity, and trust.</div>
-              <div class="rule"></div>
+          <div class="slide">
+            <div class="left">
+              <div>
+                <div class="kicker">Contact</div>
+                <div class="title">Partner With Us</div>
+                <div class="bodycopy">Building lasting relationships through performance, clarity, and trust.</div>
+                <div class="rule"></div>
+              </div>
+              <div class="small">05 / 05</div>
             </div>
-            <div class="small">05 / 05</div>
+            <div class="right"><div class="img" style="background-image:url('5.jpg')"></div></div>
           </div>
-          <div class="right">
-            <div class="img" style="background-image:url('5.jpg')"></div>
-          </div>
-        </div>
 
+        </div>
       </div>
     </div>
   </section>
 
   <script>
-    // Force autoplay (some browsers need a nudge)
+    // Autoplay nudge
     window.addEventListener("load", () => {
       const v = document.getElementById("bgVideo");
       if (!v) return;
@@ -354,11 +348,23 @@
       if (p && typeof p.then === "function") p.catch(()=>{});
     });
 
+    const intro = document.getElementById("intro");
     const stage = document.getElementById("stage");
     const track = document.getElementById("track");
     const slides = 5;
 
-    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+    // Hide intro after it fades in (logo stays a moment)
+    setTimeout(()=> intro.classList.add("hide"), 2600);
+
+    function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
+
+    // Reveal panels ONLY when user starts scrolling
+    let revealed = false;
+    function revealPanels(){
+      if (revealed) return;
+      revealed = true;
+      document.body.classList.add("reveal");
+    }
 
     function onScroll(){
       const rect = stage.getBoundingClientRect();
@@ -366,7 +372,6 @@
       const stageHeight = stage.offsetHeight;
       const view = window.innerHeight;
 
-      // progress 0..1 while scrolling inside stage
       const y = window.scrollY - stageTop;
       const max = stageHeight - view;
       const t = max > 0 ? clamp(y / max, 0, 1) : 0;
@@ -375,7 +380,15 @@
       track.style.transform = `translate3d(${x}px,0,0)`;
     }
 
-    window.addEventListener("scroll", onScroll, { passive:true });
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 5) revealPanels();
+      onScroll();
+    }, { passive:true });
+
+    // Also reveal on wheel/touch immediately
+    window.addEventListener("wheel", () => revealPanels(), { passive:true });
+    window.addEventListener("touchstart", () => revealPanels(), { passive:true });
+
     window.addEventListener("resize", onScroll);
     onScroll();
 
@@ -392,7 +405,10 @@
         const idx = parseInt(link.getAttribute("data-goto"), 10);
         menu.classList.remove("open");
 
-        // Scroll to correct progress inside the stage
+        // Reveal if not already
+        revealPanels();
+
+        // Scroll to correct progress inside stage
         const rect = stage.getBoundingClientRect();
         const stageTop = window.scrollY + rect.top;
         const stageHeight = stage.offsetHeight;
