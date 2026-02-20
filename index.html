@@ -1,372 +1,239 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RR Asset Management</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>RR Asset Management</title>
 
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      font-family: Arial, sans-serif;
-      background:#000;
-      overflow-x:hidden;
-      overflow-y:auto;
-    }
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family: Arial, sans-serif;
+  background:#000;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
 
-    /* ===== Background video (always visible) ===== */
-    .bg{
-      position:fixed; inset:0; z-index:0; overflow:hidden; background:#000;
-    }
-    .bg video{
-      width:100%; height:100%;
-      object-fit:cover; object-position:center;
-    }
-    .bg::after{
-      content:""; position:absolute; inset:0;
-      background: radial-gradient(900px 520px at 25% 35%, rgba(0,0,0,0.06), rgba(0,0,0,0.55)),
-                linear-gradient(to bottom, rgba(0,0,0,0.10), rgba(0,0,0,0.40));
-      pointer-events:none;
-    }
+/* ===== Background video ===== */
+.bg{
+  position:fixed; inset:0; z-index:0; overflow:hidden; background:#000;
+}
+.bg video{
+  width:100%; height:100%;
+  object-fit:cover; object-position:center;
+}
+.bg::after{
+  content:""; position:absolute; inset:0;
+  background: radial-gradient(900px 520px at 25% 35%, rgba(0,0,0,0.06), rgba(0,0,0,0.55)),
+              linear-gradient(to bottom, rgba(0,0,0,0.10), rgba(0,0,0,0.40));
+  pointer-events:none;
+}
 
-    /* ===== Intro logo ===== */
-    .intro{
-      position:fixed; inset:0;
-      z-index:20; /* behind slides overlay */
-      display:flex; align-items:center; justify-content:center;
-      pointer-events:none;
-    }
-    .intro img{
-      width:min(240px, 55vw);
-      opacity:0;
-      transform:translateY(10px);
-      animation: logoIn 1.8s ease forwards;
-      animation-delay: 0.4s;
-      filter: drop-shadow(0 18px 40px rgba(0,0,0,0.35));
-    }
+/* ===== Intro logo ===== */
+.intro{
+  position:fixed; inset:0;
+  z-index:20;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+}
+.intro img{
+  width:min(240px, 55vw);
+  opacity:0;
+  transform:translateY(10px);
+  animation: logoIn 1.8s ease forwards;
+  animation-delay: 0.4s;
+}
+@keyframes logoIn{
+  to{ opacity:1; transform:translateY(0); }
+}
 
-    @keyframes logoIn{
-      to{ opacity:1; transform:translateY(0); }
-    }
+/* ===== Left Sidebar ===== */
+.side-bar{
+  position:fixed;
+  top:0; left:0;
+  width:80px;
+  height:100vh;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter: blur(8px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:90;
+  cursor:pointer;
+  opacity:0;
+  animation: sideFade 1.5s ease forwards;
+  animation-delay:1.2s;
+}
+@keyframes sideFade{ to{ opacity:1; } }
 
-    /* ===== Left White Sidebar + Hamburger ===== */
-    .side-bar{
-      position:fixed;
-      top:0;
-      left:0;
-      width:80px;
-      height:100vh;
-      background:rgba(255,255,255,0.92);
-      backdrop-filter: blur(8px);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      z-index:90;
-      cursor:pointer;
-      opacity:0;
-      animation: sideFade 1.5s ease forwards;
-      animation-delay:1.2s;
-    }
-    @keyframes sideFade{
-      to{ opacity:1; }
-    }
-    .burger-lines i{
-      width:24px;
-      height:1.6px;
-      background:#111;
-      position:relative;
-      display:block;
-    }
-    .burger-lines i::before,
-    .burger-lines i::after{
-      content:"";
-      position:absolute;
-      left:0;
-      width:24px;
-      height:1.6px;
-      background:#111;
-    }
-    .burger-lines i::before{ top:-8px; }
-    .burger-lines i::after{ top:8px; }
+.burger-lines i{
+  width:24px;
+  height:1.6px;
+  background:#111;
+  position:relative;
+  display:block;
+}
+.burger-lines i::before,
+.burger-lines i::after{
+  content:"";
+  position:absolute;
+  left:0;
+  width:24px;
+  height:1.6px;
+  background:#111;
+}
+.burger-lines i::before{ top:-8px; }
+.burger-lines i::after{ top:8px; }
 
-    /* ===== Menu overlay ===== */
-    .menu{
-      position:fixed; inset:0;
-      z-index:95;
-      background:rgba(0,0,0,0.55);
-      backdrop-filter: blur(12px);
-      display:none;
-    }
-    .menu.open{ display:block; }
-    .menu-panel{
-      position:absolute; top:0; left:0;
-      width:min(420px, 88vw);
-      height:100%;
-      background:rgba(255,255,255,0.94);
-      padding:22px;
-      border-right:1px solid rgba(0,0,0,0.10);
-    }
-    .menu-top{
-      display:flex; align-items:center; justify-content:space-between;
-      margin-bottom:22px;
-      letter-spacing:3px;
-      font-size:12px;
-      text-transform:uppercase;
-      color:#111;
-    }
-    .close{
-      width:46px; height:46px;
-      border-radius:999px;
-      border:1px solid rgba(0,0,0,0.18);
-      background:rgba(255,255,255,0.9);
-      cursor:pointer;
-      font-size:18px;
-      line-height:46px;
-    }
-    .menu a{
-      display:block;
-      padding:14px 6px;
-      text-decoration:none;
-      color:#111;
-      letter-spacing:1px;
-      font-size:14px;
-      border-bottom:1px solid rgba(0,0,0,0.08);
-    }
-    .menu a:hover{ opacity:0.7 }
+/* ===== PREMIUM MENU ===== */
+.menu{
+  position:fixed;
+  inset:0;
+  z-index:95;
+  background:rgba(0,0,0,0.45);
+  backdrop-filter: blur(14px);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.5s ease;
+}
+.menu.open{
+  opacity:1;
+  pointer-events:auto;
+}
 
-    /* ===== Scroll stage ===== */
-    .scroll-stage{
-      position:relative;
-      z-index:40; /* above logo */
-      height:500vh;
-    }
-    .sticky{
-      position:sticky;
-      top:0;
-      height:100vh;
-      overflow:hidden;
-    }
-    .overlay{
-      position:absolute;
-      inset:0;
-      opacity:0;
-      pointer-events:none;
-      transition: opacity 600ms ease;
-    }
-    body.reveal .overlay{
-      opacity:1;
-      pointer-events:auto;
-    }
+.menu-panel{
+  position:absolute;
+  top:0;
+  left:0;
+  width:min(420px, 88vw);
+  height:100%;
+  background:rgba(255,255,255,0.96);
+  padding:60px 50px;
+  transform:translateX(-100%);
+  transition:transform 0.8s cubic-bezier(0.77,0,0.175,1);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.menu.open .menu-panel{
+  transform:translateX(0);
+}
 
-    .track{
-      height:100vh;
-      display:flex;
-      width:500vw;
-      will-change:transform;
-      transform:translate3d(0,0,0);
-    }
+.menu-logo img{
+  width:160px;
+  margin-bottom:60px;
+  opacity:0;
+  transform:translateY(20px);
+  transition:all 0.6s ease 0.3s;
+}
 
-    .slide{
-      width:100vw;
-      height:100vh;
-      display:grid;
-      grid-template-columns: 22vw 78vw;
-      min-width:100vw;
-      align-items:stretch;
-    }
-    .left{
-      background:rgba(255,255,255,0.92);
-      padding:60px 34px 28px 34px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-    }
-    .kicker{
-      font-size:12px;
-      letter-spacing:2px;
-      text-transform:uppercase;
-      color:#111;
-      opacity:0.8;
-    }
-    .title{
-      font-size:18px;
-      letter-spacing:0.5px;
-      color:#111;
-      margin-top:10px;
-      line-height:1.2;
-    }
-    .bodycopy{
-      margin-top:18px;
-      font-size:13px;
-      line-height:1.7;
-      color:#111;
-      opacity:0.78;
-      max-width:280px;
-    }
-    .rule{
-      height:1px;
-      width:100%;
-      background:rgba(0,0,0,0.10);
-      margin-top:22px;
-    }
-    .small{
-      font-size:11px;
-      letter-spacing:2px;
-      text-transform:uppercase;
-      color:#111;
-      opacity:0.65;
-    }
-    .right{ position:relative; overflow:hidden; }
-    .img{
-      position:absolute; inset:0;
-      background-size:cover;
-      background-position:center;
-      filter:saturate(1.02) contrast(1.02);
-    }
+.menu-links a{
+  display:block;
+  font-size:18px;
+  margin-bottom:28px;
+  text-decoration:none;
+  color:#111;
+  opacity:0;
+  transform:translateY(20px);
+  transition:all 0.6s ease;
+}
 
-    @media (max-width: 860px){
-      .slide{ grid-template-columns: 1fr; grid-template-rows: 38vh 62vh; }
-      .left{ padding:18px 18px 14px 18px; }
-      .bodycopy{ max-width:100%; }
-    }
-  </style>
+.menu.open .menu-logo img,
+.menu.open .menu-links a{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.menu.open .menu-links a:nth-child(1){ transition-delay:0.4s; }
+.menu.open .menu-links a:nth-child(2){ transition-delay:0.5s; }
+.menu.open .menu-links a:nth-child(3){ transition-delay:0.6s; }
+.menu.open .menu-links a:nth-child(4){ transition-delay:0.7s; }
+.menu.open .menu-links a:nth-child(5){ transition-delay:0.8s; }
+
+.menu-footer{
+  font-size:13px;
+  line-height:1.7;
+  color:#222;
+  opacity:0;
+  transform:translateY(20px);
+  transition:all 0.6s ease 0.9s;
+}
+.menu.open .menu-footer{
+  opacity:1;
+  transform:translateY(0);
+}
+.menu-footer a{
+  text-decoration:none;
+  color:#111;
+}
+.menu-footer a:hover{
+  opacity:0.6;
+}
+</style>
 </head>
 
 <body>
 
-  <!-- Background Video -->
-  <div class="bg">
-    <video id="bgVideo" autoplay muted loop playsinline preload="auto">
-      <source src="./bg.mp4" type="video/mp4">
-    </video>
-  </div>
+<div class="bg">
+  <video autoplay muted loop playsinline>
+    <source src="./bg.mp4" type="video/mp4">
+  </video>
+</div>
 
-  <!-- Logo -->
-  <div class="intro" id="intro">
-    <img src="./logo.png" alt="RR Asset Management Logo">
-  </div>
+<div class="intro">
+  <img src="./logo.png" alt="RR Asset Management Logo">
+</div>
 
-  <!-- Sidebar + Hamburger -->
-  <div class="side-bar" id="burger">
-    <div class="burger-lines"><i></i></div>
-  </div>
+<div class="side-bar" id="burger">
+  <div class="burger-lines"><i></i></div>
+</div>
 
-  <!-- Menu -->
-  <div class="menu" id="menu">
-    <div class="menu-panel">
-      <div class="menu-top">
-        <div>Menu</div>
-        <button class="close" id="closeMenu" aria-label="Close">✕</button>
+<!-- PREMIUM MENU -->
+<div class="menu" id="menu">
+  <div class="menu-panel">
+
+    <div>
+      <div class="menu-logo">
+        <img src="./logo.png" alt="RR Asset Management Logo">
       </div>
-      <a href="#" data-goto="0">Home</a>
-      <a href="#" data-goto="1">About</a>
-      <a href="#" data-goto="2">Strategy</a>
-      <a href="#" data-goto="3">Approach</a>
-      <a href="#" data-goto="4">Contact</a>
+
+      <nav class="menu-links">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Strategy</a>
+        <a href="#">Approach</a>
+        <a href="#">Contact</a>
+      </nav>
     </div>
+
+    <div class="menu-footer">
+      <p>
+        SUN HOUSE<br>
+        428 LONG DRIVE, GREENFORD, UB6 8UH
+      </p>
+      <p>
+        <a href="tel:+442085753700">+44 (0) 20 8575 3700</a>
+      </p>
+    </div>
+
   </div>
+</div>
 
-  <!-- Scroll Stage -->
-  <section class="scroll-stage" id="stage">
-    <div class="sticky">
-      <div class="overlay" id="overlay">
-        <div class="track" id="track">
-          <!-- Slides here (same as your previous) -->
-          <div class="slide">
-            <div class="right" style="grid-column:1 / -1;">
-              <div class="img" style="background-image:url('1.jpg')"></div>
-            </div>
-          </div>
+<script>
+const menu = document.getElementById("menu");
+const burger = document.getElementById("burger");
 
-          <div class="slide">
-            <div class="left">
-              <div>
-                <div class="kicker">Our Edge</div>
-                <div class="title">Global Reach</div>
-                <div class="bodycopy">Opportunities identified through research, conviction, and a repeatable process.</div>
-                <div class="rule"></div>
-              </div>
-              <div class="small">02 / 05</div>
-            </div>
-            <div class="right"><div class="img" style="background-image:url('2.jpg')"></div></div>
-          </div>
+burger.addEventListener("click", () => {
+  menu.classList.toggle("open");
+});
 
-          <!-- Repeat other slides 3,4,5 as before -->
+menu.addEventListener("click", (e)=>{
+  if(e.target === menu){
+    menu.classList.remove("open");
+  }
+});
+</script>
 
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <script>
-    window.addEventListener("load", () => {
-      const v = document.getElementById("bgVideo");
-      if (!v) return;
-      v.muted = true;
-      const p = v.play();
-      if (p && typeof p.then === "function") p.catch(()=>{});
-    });
-
-    const intro = document.getElementById("intro");
-    const stage = document.getElementById("stage");
-    const track = document.getElementById("track");
-    const slides = 5;
-
-    function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
-
-    let revealed = false;
-    function revealPanels(){
-      if (revealed) return;
-      revealed = true;
-      document.body.classList.add("reveal");
-    }
-
-    function onScroll(){
-      const rect = stage.getBoundingClientRect();
-      const stageTop = window.scrollY + rect.top;
-      const stageHeight = stage.offsetHeight;
-      const view = window.innerHeight;
-
-      const y = window.scrollY - stageTop;
-      const max = stageHeight - view;
-      const t = max > 0 ? clamp(y / max, 0, 1) : 0;
-
-      const x = -t * (slides - 1) * window.innerWidth;
-      track.style.transform = `translate3d(${x}px,0,0)`;
-    }
-
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 5) revealPanels();
-      onScroll();
-    }, { passive:true });
-    window.addEventListener("wheel", () => revealPanels(), { passive:true });
-    window.addEventListener("touchstart", () => revealPanels(), { passive:true });
-    window.addEventListener("resize", onScroll);
-    onScroll();
-
-    // Menu toggle
-    const menu = document.getElementById("menu");
-    document.getElementById("burger").addEventListener("click", ()=> menu.classList.add("open"));
-    document.getElementById("closeMenu").addEventListener("click", ()=> menu.classList.remove("open"));
-    menu.addEventListener("click", (e)=>{ if(e.target === menu) menu.classList.remove("open"); });
-
-    // Menu jump to slide
-    document.querySelectorAll("[data-goto]").forEach(link=>{
-      link.addEventListener("click",(e)=>{
-        e.preventDefault();
-        const idx = parseInt(link.getAttribute("data-goto"), 10);
-        menu.classList.remove("open");
-        revealPanels();
-        const rect = stage.getBoundingClientRect();
-        const stageTop = window.scrollY + rect.top;
-        const stageHeight = stage.offsetHeight;
-        const view = window.innerHeight;
-        const max = stageHeight - view;
-        const t = clamp(idx / (slides - 1), 0, 1);
-        window.scrollTo({ top: stageTop + t * max, behavior: "smooth" });
-      });
-    });
-  </script>
 </body>
 </html>
