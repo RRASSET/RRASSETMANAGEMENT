@@ -10,48 +10,28 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
-
 body{
   font-family: Arial, sans-serif;
   background:#000;
-  overflow-x:hidden;
+  overflow:hidden; /* IMPORTANT: we control scroll ourselves */
 }
 
 /* ================= BACKGROUND VIDEO ================= */
-
-.bg{
-  position:fixed;
-  inset:0;
-  z-index:0;
-  overflow:hidden;
-}
-
-.bg video{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
+.bg{ position:fixed; inset:0; z-index:0; overflow:hidden; background:#000; }
+.bg video{ width:100%; height:100%; object-fit:cover; object-position:center; }
 .bg::after{
-  content:"";
-  position:absolute;
-  inset:0;
+  content:""; position:absolute; inset:0;
   background: radial-gradient(900px 520px at 25% 35%, rgba(0,0,0,0.06), rgba(0,0,0,0.55)),
               linear-gradient(to bottom, rgba(0,0,0,0.10), rgba(0,0,0,0.40));
-}
-
-/* ================= INTRO LOGO ================= */
-
-.intro{
-  position:fixed;
-  inset:0;
-  z-index:20;
-  display:flex;
-  align-items:center;
-  justify-content:center;
   pointer-events:none;
 }
 
+/* ================= INTRO LOGO ================= */
+.intro{
+  position:fixed; inset:0; z-index:20;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+}
 .intro img{
   width:min(240px,55vw);
   opacity:0;
@@ -59,117 +39,104 @@ body{
   animation:logoIn 1.8s ease forwards;
   animation-delay:0.4s;
 }
+@keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
 
-@keyframes logoIn{
-  to{opacity:1;transform:translateY(0);}
-}
-
-/* ================= LEFT SIDEBAR ================= */
-
+/* ================= LEFT BURGER ================= */
 .side-bar{
-  position:fixed;
-  top:0;
-  left:0;
-  width:80px;
-  height:100vh;
+  position:fixed; top:0; left:0;
+  width:80px; height:100vh;
   background:rgba(255,255,255,0.92);
   backdrop-filter:blur(8px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display:flex; align-items:center; justify-content:center;
   z-index:90;
   cursor:pointer;
   opacity:0;
   animation:sideFade 1.5s ease forwards;
   animation-delay:1.2s;
 }
-
-@keyframes sideFade{
-  to{opacity:1;}
-}
+@keyframes sideFade{ to{opacity:1;} }
 
 .burger-lines i{
-  width:24px;
-  height:1.6px;
-  background:#111;
-  position:relative;
-  display:block;
+  width:24px; height:1.6px;
+  background:#111; position:relative; display:block;
 }
-
 .burger-lines i::before,
 .burger-lines i::after{
-  content:"";
-  position:absolute;
-  left:0;
-  width:24px;
-  height:1.6px;
-  background:#111;
+  content:""; position:absolute; left:0;
+  width:24px; height:1.6px; background:#111;
+}
+.burger-lines i::before{ top:-8px; }
+.burger-lines i::after{ top:8px; }
+
+/* ================= HORIZONTAL SCROLL AREA ================= */
+.hwrap{
+  position:relative;
+  z-index:10;
+  height:100vh;
+  width:100vw;
+  overflow:hidden;
 }
 
-.burger-lines i::before{top:-8px;}
-.burger-lines i::after{top:8px;}
+.htrack{
+  height:100%;
+  display:flex;
+  will-change:transform;
+  transform:translate3d(0,0,0);
+  transition:transform 0.02s linear;
+}
+
+/* Each section/panel */
+.panel{
+  height:100vh;
+  width:100vw;
+  flex:0 0 100vw;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:60px 60px 60px 120px; /* leave room for sidebar */
+  color:#fff;
+}
+
+/* Just demo styling so you can SEE panels (remove later) */
+.panel h1{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:400;
+  font-size: clamp(34px, 6vw, 74px);
+  letter-spacing:0.5px;
+}
 
 /* ================= SLIDING MENU PANEL ================= */
-
 .menu{
-  position:fixed;
-  top:0;
-  left:0;
-  height:100vh;
-  width:420px;
+  position:fixed; top:0; left:0;
+  height:100vh; width:420px;
   background:#f4f4f2;
   z-index:95;
 
   transform:translateX(-100%);
   transition:transform 0.9s cubic-bezier(.77,0,.18,1);
 }
-
-.menu.open{
-  transform:translateX(0);
-}
+.menu.open{ transform:translateX(0); }
 
 .menu-panel{
   height:100%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
   text-align:center;
   padding:60px 30px;
   position:relative;
 }
 
-/* BACK ARROW */
-
 .back-arrow{
-  position:absolute;
-  left:40px;
-  top:50%;
+  position:absolute; left:40px; top:50%;
   transform:translateY(-50%);
   font-size:28px;
-  cursor:pointer;
-  color:#222;
+  cursor:pointer; color:#222;
 }
 
-/* LOGO */
-
-.menu-logo{
-  opacity:0;
-  transform:translateY(20px);
-  transition:all 0.6s ease;
-}
-
-.menu.open .menu-logo{
-  opacity:1;
-  transform:translateY(0);
-}
-
-.menu-logo img{
-  width:180px;
-  margin-bottom:50px;
-}
-
-/* MENU LINKS */
+/* Logo + links stagger */
+.menu-logo{ opacity:0; transform:translateY(20px); transition:all 0.6s ease; }
+.menu.open .menu-logo{ opacity:1; transform:translateY(0); }
+.menu-logo img{ width:180px; margin-bottom:50px; }
 
 .menu-links a{
   display:block;
@@ -182,29 +149,18 @@ body{
   transform:translateY(20px);
   transition:all 0.6s ease;
 }
-
-.menu.open .menu-links a{
-  opacity:1;
-  transform:translateY(0);
-}
-
+.menu.open .menu-links a{ opacity:1; transform:translateY(0); }
 .menu-links a:nth-child(1){transition-delay:0.15s;}
 .menu-links a:nth-child(2){transition-delay:0.25s;}
 .menu-links a:nth-child(3){transition-delay:0.35s;}
 .menu-links a:nth-child(4){transition-delay:0.45s;}
-
-.menu-links a:hover{opacity:0.6;}
-
-/* DIVIDER */
+.menu-links a:hover{ opacity:0.6; }
 
 .divider{
-  width:200px;
-  height:1px;
+  width:200px; height:1px;
   background:#c6b67a;
   margin:50px auto 30px auto;
 }
-
-/* FOOTER */
 
 .menu-footer{
   font-family:'Cormorant Garamond', serif;
@@ -215,16 +171,8 @@ body{
   transform:translateY(20px);
   transition:all 0.6s ease 0.6s;
 }
-
-.menu.open .menu-footer{
-  opacity:1;
-  transform:translateY(0);
-}
-
-.menu-footer .contact{
-  margin-top:15px;
-  font-size:20px;
-}
+.menu.open .menu-footer{ opacity:1; transform:translateY(0); }
+.menu-footer .contact{ margin-top:15px; font-size:20px; }
 
 .privacy{
   display:block;
@@ -236,6 +184,9 @@ body{
   color:#c6b67a;
   text-decoration:none;
 }
+
+/* When menu open, prevent interactions behind it */
+body.menu-open .hwrap{ pointer-events:none; }
 </style>
 </head>
 
@@ -255,10 +206,19 @@ body{
   <div class="burger-lines"><i></i></div>
 </div>
 
+<!-- HORIZONTAL PANELS -->
+<div class="hwrap">
+  <div class="htrack" id="track">
+    <section class="panel"><h1>Landing</h1></section>
+    <section class="panel"><h1>Expertise</h1></section>
+    <section class="panel"><h1>Projects</h1></section>
+    <section class="panel"><h1>Press</h1></section>
+  </div>
+</div>
+
 <!-- SLIDING MENU -->
 <div class="menu" id="menu">
   <div class="menu-panel">
-
     <div class="back-arrow" id="closeMenu">←</div>
 
     <div class="menu-logo">
@@ -266,10 +226,10 @@ body{
     </div>
 
     <nav class="menu-links">
-      <a href="#">Home</a>
-      <a href="#">Expertise</a>
-      <a href="#">Interior Projects</a>
-      <a href="#">Press</a>
+      <a href="#" data-goto="0">Home</a>
+      <a href="#" data-goto="1">Expertise</a>
+      <a href="#" data-goto="2">Interior Projects</a>
+      <a href="#" data-goto="3">Press</a>
     </nav>
 
     <div class="divider"></div>
@@ -277,32 +237,105 @@ body{
     <div class="menu-footer">
       SUN HOUSE, 428 LONG DRIVE,<br>
       GREENFORD, UB6 8UH
-      <div class="contact">
-        +44 (0) 20 8575 3700
-      </div>
+      <div class="contact">+44 (0) 20 8575 3700</div>
       <a href="#" class="privacy">Privacy Policy</a>
     </div>
-
   </div>
 </div>
 
 <script>
+/* ===== MENU ===== */
 const menu = document.getElementById("menu");
 const burger = document.getElementById("burger");
 const closeMenu = document.getElementById("closeMenu");
 
-burger.addEventListener("click", () => {
+function openMenu(){
   menu.classList.add("open");
-});
-
-closeMenu.addEventListener("click", () => {
+  document.body.classList.add("menu-open");
+}
+function closeMenuFn(){
   menu.classList.remove("open");
-});
+  document.body.classList.remove("menu-open");
+}
+
+burger.addEventListener("click", openMenu);
+closeMenu.addEventListener("click", closeMenuFn);
 
 document.addEventListener("keydown", e => {
-  if(e.key === "Escape"){
-    menu.classList.remove("open");
-  }
+  if(e.key === "Escape") closeMenuFn();
+});
+
+/* ===== HORIZONTAL SCROLL (wheel + touch + drag) ===== */
+const track = document.getElementById("track");
+const panels = Array.from(track.querySelectorAll(".panel"));
+let currentX = 0;
+let targetX = 0;
+
+function maxScroll(){
+  return (panels.length - 1) * window.innerWidth;
+}
+
+function clamp(v, min, max){
+  return Math.max(min, Math.min(max, v));
+}
+
+// Smooth animation loop
+function raf(){
+  currentX += (targetX - currentX) * 0.08; // smoothness
+  track.style.transform = `translate3d(${-currentX}px,0,0)`;
+  requestAnimationFrame(raf);
+}
+raf();
+
+// Wheel / trackpad
+window.addEventListener("wheel", (e) => {
+  if(document.body.classList.contains("menu-open")) return;
+  // Convert vertical scroll to horizontal travel
+  targetX = clamp(targetX + e.deltaY * 1.0, 0, maxScroll());
+}, { passive:true });
+
+// Touch + drag (mobile + desktop drag)
+let isDown = false;
+let startX = 0;
+let startTarget = 0;
+
+function pointerDown(clientX){
+  if(document.body.classList.contains("menu-open")) return;
+  isDown = true;
+  startX = clientX;
+  startTarget = targetX;
+}
+function pointerMove(clientX){
+  if(!isDown) return;
+  const dx = clientX - startX;
+  targetX = clamp(startTarget - dx, 0, maxScroll());
+}
+function pointerUp(){
+  isDown = false;
+}
+
+window.addEventListener("mousedown", (e)=>pointerDown(e.clientX));
+window.addEventListener("mousemove", (e)=>pointerMove(e.clientX));
+window.addEventListener("mouseup", pointerUp);
+
+window.addEventListener("touchstart", (e)=>pointerDown(e.touches[0].clientX), {passive:true});
+window.addEventListener("touchmove", (e)=>pointerMove(e.touches[0].clientX), {passive:true});
+window.addEventListener("touchend", pointerUp);
+
+// Resize handling
+window.addEventListener("resize", () => {
+  targetX = clamp(targetX, 0, maxScroll());
+  currentX = clamp(currentX, 0, maxScroll());
+});
+
+// Menu links jump to section
+document.querySelectorAll(".menu-links a[data-goto]").forEach(a=>{
+  a.addEventListener("click", (e)=>{
+    e.preventDefault();
+    const idx = Number(a.dataset.goto);
+    targetX = clamp(idx * window.innerWidth, 0, maxScroll());
+    closeMenuFn();
+  });
 });
 </script>
 
