@@ -1,394 +1,408 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>RR Asset Management</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RR Asset Management</title>
 
-<style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:#000;}
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      font-family: Arial, sans-serif;
+      background:#000;
+      overflow-x:hidden;
+    }
 
-  /* ===== Background video ===== */
-  .bg{
-    position:fixed; inset:0; z-index:0; overflow:hidden; background:#000;
-  }
-  .bg video{
-    width:100%; height:100%; object-fit:cover; object-position:center;
-  }
-  /* Auberry-ish film */
-  .bg::after{
-    content:""; position:absolute; inset:0;
-    background: radial-gradient(900px 500px at 25% 35%, rgba(0,0,0,0.10), rgba(0,0,0,0.55)),
-                linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(0,0,0,0.55));
-    pointer-events:none;
-  }
+    /* ===== Background video (fixed) ===== */
+    .bg{
+      position:fixed; inset:0; z-index:0; overflow:hidden; background:#000;
+    }
+    .bg video{
+      width:100%; height:100%;
+      object-fit:cover; object-position:center;
+    }
+    .bg::after{
+      content:""; position:absolute; inset:0;
+      background: radial-gradient(900px 520px at 25% 35%, rgba(0,0,0,0.08), rgba(0,0,0,0.55)),
+                  linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.45));
+      pointer-events:none;
+    }
 
-  /* ===== Top overlay UI ===== */
-  .topbar{
-    position:fixed; top:0; left:0; right:0;
-    z-index:10;
-    padding:22px 28px;
-    display:flex; align-items:center; justify-content:space-between;
-    pointer-events:none;
-  }
-  .brand{
-    pointer-events:auto;
-    color:rgba(255,255,255,0.92);
-    font-size:12px; letter-spacing:3px; text-transform:uppercase;
-    display:flex; align-items:center; gap:14px;
-  }
+    /* ===== Top center brand (like Auberry) ===== */
+    .brand-center{
+      position:fixed;
+      top:18px; left:0; right:0;
+      z-index:30;
+      text-align:center;
+      color:rgba(255,255,255,0.92);
+      letter-spacing:4px;
+      font-size:12px;
+      text-transform:uppercase;
+      pointer-events:none;
+    }
 
-  /* Burger (left) */
-  .burger{
-    pointer-events:auto;
-    width:44px; height:44px;
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,0.18);
-    background:rgba(0,0,0,0.18);
-    backdrop-filter: blur(8px);
-    display:grid; place-items:center;
-    cursor:pointer;
-  }
-  .burger span{
-    display:block; width:18px; height:1.5px;
-    background:rgba(255,255,255,0.92);
-    position:relative;
-  }
-  .burger span::before,.burger span::after{
-    content:""; position:absolute; left:0; width:18px; height:1.5px;
-    background:rgba(255,255,255,0.92);
-  }
-  .burger span::before{ top:-6px; }
-  .burger span::after{ top:6px; }
+    /* ===== Burger left ===== */
+    .burger{
+      position:fixed;
+      top:18px; left:18px;
+      z-index:35;
+      width:46px; height:46px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(0,0,0,0.18);
+      backdrop-filter: blur(10px);
+      display:grid; place-items:center;
+      cursor:pointer;
+    }
+    .burger i{
+      width:18px; height:1.6px;
+      background:rgba(255,255,255,0.92);
+      position:relative; display:block;
+    }
+    .burger i::before,.burger i::after{
+      content:""; position:absolute; left:0;
+      width:18px; height:1.6px;
+      background:rgba(255,255,255,0.92);
+    }
+    .burger i::before{ top:-6px }
+    .burger i::after{ top:6px }
 
-  /* Right minimal nav (optional) */
-  .nav{
-    pointer-events:auto;
-    display:flex; gap:18px;
-    font-size:12px; letter-spacing:2px; text-transform:uppercase;
-  }
-  .nav a{ color:rgba(255,255,255,0.75); text-decoration:none; }
-  .nav a:hover{ color:rgba(255,255,255,0.95); }
+    /* ===== Menu overlay ===== */
+    .menu{
+      position:fixed; inset:0;
+      z-index:50;
+      background:rgba(0,0,0,0.55);
+      backdrop-filter: blur(12px);
+      display:none;
+    }
+    .menu.open{ display:block; }
+    .menu-panel{
+      position:absolute; top:0; left:0;
+      width:min(420px, 88vw);
+      height:100%;
+      background:rgba(255,255,255,0.92);
+      padding:22px;
+      border-right:1px solid rgba(0,0,0,0.10);
+    }
+    .menu-top{
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:22px;
+      letter-spacing:3px;
+      font-size:12px;
+      text-transform:uppercase;
+      color:#111;
+    }
+    .close{
+      width:46px; height:46px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,0.18);
+      background:rgba(255,255,255,0.9);
+      cursor:pointer;
+      font-size:18px;
+      line-height:46px;
+    }
+    .menu a{
+      display:block;
+      padding:14px 6px;
+      text-decoration:none;
+      color:#111;
+      letter-spacing:1px;
+      font-size:14px;
+      border-bottom:1px solid rgba(0,0,0,0.08);
+    }
+    .menu a:hover{ opacity:0.7 }
 
-  /* ===== Auberry-style overlay panels ===== */
-  .wrapper{
-    position:relative;
-    z-index:2;
-    width:100vw; height:100vh;
-    overflow:hidden;
-  }
-  .track{
-    display:flex;
-    width:500vw; height:100vh;
-    transition:transform 0.9s cubic-bezier(.77,0,.18,1);
-    will-change:transform;
-  }
-  .panel{
-    width:100vw; height:100vh;
-    position:relative;
-  }
+    /* ===== Auberry scroll rig ===== */
+    /* This creates vertical scroll space */
+    .scroll-stage{
+      position:relative;
+      z-index:10;
+      height:500vh; /* 5 slides => 500vh (1 slide per 100vh) */
+    }
 
-  /* This is the “overlay panel” that sits on top of the video */
-  .card{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    width:min(980px, 86vw);
-    height:min(560px, 72vh);
-    border-radius:26px;
-    overflow:hidden;
-    border:1px solid rgba(255,255,255,0.14);
-    background:rgba(0,0,0,0.16);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 30px 90px rgba(0,0,0,0.45);
-  }
+    /* Sticky viewport stays in place while you scroll */
+    .sticky{
+      position:sticky;
+      top:0;
+      height:100vh;
+      overflow:hidden;
+    }
 
-  /* Image inside the overlay card */
-  .card .img{
-    position:absolute; inset:0;
-    background-size:cover; background-position:center;
-    filter: saturate(1.05) contrast(1.05);
-    opacity:0.92;
-  }
-  /* subtle dark glaze */
-  .card .img::after{
-    content:""; position:absolute; inset:0;
-    background: linear-gradient(90deg, rgba(0,0,0,0.55), rgba(0,0,0,0.15));
-  }
+    /* Horizontal track moves left as you scroll down */
+    .track{
+      height:100vh;
+      display:flex;
+      width:500vw; /* 5 slides */
+      will-change:transform;
+      transform:translate3d(0,0,0);
+    }
 
-  /* Text inside card (left) */
-  .card .content{
-    position:absolute;
-    left:38px; bottom:38px;
-    max-width:520px;
-    color:rgba(255,255,255,0.92);
-  }
-  .card h1{
-    font-size:clamp(26px, 3.2vw, 46px);
-    letter-spacing:0.5px;
-    margin-bottom:10px;
-    font-weight:600;
-  }
-  .card p{
-    font-size:clamp(14px, 1.2vw, 16px);
-    line-height:1.6;
-    color:rgba(255,255,255,0.75);
-  }
+    /* ===== Each slide layout (white text panel + image) ===== */
+    .slide{
+      width:100vw;
+      height:100vh;
+      display:grid;
+      grid-template-columns: 22vw 78vw; /* Auberry-ish */
+      min-width:100vw;
+      align-items:stretch;
+    }
 
-  /* Small progress dots (Auberry-like) */
-  .dots{
-    position:fixed;
-    bottom:26px;
-    left:50%;
-    transform:translateX(-50%);
-    z-index:10;
-    display:flex;
-    gap:10px;
-    pointer-events:auto;
-  }
-  .dot{
-    width:8px; height:8px;
-    border-radius:999px;
-    background:rgba(255,255,255,0.25);
-    border:1px solid rgba(255,255,255,0.15);
-    cursor:pointer;
-  }
-  .dot.active{ background:rgba(255,255,255,0.85); }
+    /* Left white panel */
+    .left{
+      background:rgba(255,255,255,0.92);
+      padding:60px 34px 28px 34px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .kicker{
+      font-size:12px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      color:#111;
+      opacity:0.8;
+    }
+    .title{
+      font-size:18px;
+      letter-spacing:0.5px;
+      color:#111;
+      margin-top:10px;
+      line-height:1.2;
+    }
+    .body{
+      margin-top:18px;
+      font-size:13px;
+      line-height:1.7;
+      color:#111;
+      opacity:0.78;
+      max-width:280px;
+    }
+    .rule{
+      height:1px;
+      width:100%;
+      background:rgba(0,0,0,0.10);
+      margin-top:22px;
+    }
+    .small{
+      font-size:11px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      color:#111;
+      opacity:0.65;
+    }
 
-  /* ===== Menu overlay ===== */
-  .menu{
-    position:fixed; inset:0;
-    z-index:20;
-    background:rgba(0,0,0,0.65);
-    backdrop-filter: blur(10px);
-    display:none;
-  }
-  .menu.open{ display:block; }
+    /* Right image panel */
+    .right{
+      position:relative;
+      overflow:hidden;
+    }
+    .img{
+      position:absolute; inset:0;
+      background-size:cover;
+      background-position:center;
+      filter:saturate(1.02) contrast(1.02);
+    }
 
-  .menu-panel{
-    position:absolute; top:0; left:0;
-    width:min(420px, 88vw);
-    height:100%;
-    background:rgba(10,10,10,0.65);
-    border-right:1px solid rgba(255,255,255,0.12);
-    padding:26px;
-  }
-  .menu-top{
-    display:flex; align-items:center; justify-content:space-between;
-    color:rgba(255,255,255,0.9);
-    letter-spacing:2px; text-transform:uppercase; font-size:12px;
-    margin-bottom:28px;
-  }
-  .close{
-    width:44px; height:44px; border-radius:999px;
-    border:1px solid rgba(255,255,255,0.18);
-    background:rgba(0,0,0,0.18);
-    color:rgba(255,255,255,0.9);
-    cursor:pointer;
-  }
-  .menu a{
-    display:block;
-    padding:14px 6px;
-    color:rgba(255,255,255,0.82);
-    text-decoration:none;
-    font-size:14px;
-    letter-spacing:1px;
-    border-bottom:1px solid rgba(255,255,255,0.08);
-  }
-  .menu a:hover{ color:white; }
+    /* Tiny “Scroll” hint like Auberry */
+    .scroll-hint{
+      position:fixed;
+      top:92px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:30;
+      color:rgba(255,255,255,0.70);
+      font-size:11px;
+      letter-spacing:3px;
+      text-transform:uppercase;
+      pointer-events:none;
+    }
 
-  /* Mobile: allow swipe scrolling if needed */
-  @media (max-width: 720px){
-    .card{ height:min(520px, 74vh); }
-  }
-</style>
+    /* Mobile fallback: stack vertically (Auberry does this too) */
+    @media (max-width: 860px){
+      .slide{ grid-template-columns: 1fr; grid-template-rows: 38vh 62vh; }
+      .left{ padding:18px 18px 14px 18px; }
+      .body{ max-width:100%; }
+      .scroll-hint{ display:none; }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- Background Video -->
-<div class="bg">
-  <video id="bgVideo" autoplay muted loop playsinline preload="auto">
-    <source src="./bg.mp4" type="video/mp4">
-  </video>
-</div>
-
-<!-- Topbar -->
-<div class="topbar">
-  <div class="brand">
-    <button class="burger" id="burger" aria-label="Open menu"><span></span></button>
-    <div>RR ASSET MANAGEMENT</div>
+  <div class="bg">
+    <video id="bgVideo" autoplay muted loop playsinline preload="auto">
+      <source src="./bg.mp4" type="video/mp4">
+    </video>
   </div>
 
-  <div class="nav">
-    <a href="#about" data-goto="1">About</a>
-    <a href="#strategy" data-goto="2">Strategy</a>
-    <a href="#contact" data-goto="4">Contact</a>
-  </div>
-</div>
+  <div class="brand-center">RR ASSET MANAGEMENT</div>
+  <div class="scroll-hint">Scroll</div>
 
-<!-- Menu overlay -->
-<div class="menu" id="menu">
-  <div class="menu-panel">
-    <div class="menu-top">
-      <div>Menu</div>
-      <button class="close" id="closeMenu" aria-label="Close menu">✕</button>
+  <button class="burger" id="burger" aria-label="Open menu"><i></i></button>
+
+  <div class="menu" id="menu">
+    <div class="menu-panel">
+      <div class="menu-top">
+        <div>Menu</div>
+        <button class="close" id="closeMenu" aria-label="Close">✕</button>
+      </div>
+      <a href="#" data-goto="0">Home</a>
+      <a href="#" data-goto="1">About</a>
+      <a href="#" data-goto="2">Strategy</a>
+      <a href="#" data-goto="3">Approach</a>
+      <a href="#" data-goto="4">Contact</a>
     </div>
-
-    <a href="#home" data-goto="0">Home</a>
-    <a href="#about" data-goto="1">About</a>
-    <a href="#strategy" data-goto="2">Strategy</a>
-    <a href="#approach" data-goto="3">Approach</a>
-    <a href="#contact" data-goto="4">Contact</a>
   </div>
-</div>
 
-<!-- Horizontal panels overlay -->
-<div class="wrapper">
-  <div class="track" id="track">
+  <!-- Auberry-style scroll stage -->
+  <section class="scroll-stage" id="stage">
+    <div class="sticky">
+      <div class="track" id="track">
 
-    <section class="panel">
-      <div class="card">
-        <div class="img" style="background-image:url('1.jpg');"></div>
-        <div class="content">
-          <h1>Strategic Capital</h1>
-          <p>Focused investment solutions designed for long-term performance.</p>
+        <!-- Slide 1 -->
+        <div class="slide">
+          <div class="left">
+            <div>
+              <div class="kicker">RR Asset</div>
+              <div class="title">Strategic Capital</div>
+              <div class="body">Focused investment solutions designed for long-term performance and disciplined risk management.</div>
+              <div class="rule"></div>
+            </div>
+            <div class="small">01 / 05</div>
+          </div>
+          <div class="right">
+            <div class="img" style="background-image:url('1.jpg')"></div>
+          </div>
         </div>
-      </div>
-    </section>
 
-    <section class="panel">
-      <div class="card">
-        <div class="img" style="background-image:url('2.jpg');"></div>
-        <div class="content">
-          <h1>Global Reach</h1>
-          <p>Opportunities identified through disciplined research and conviction.</p>
+        <!-- Slide 2 -->
+        <div class="slide">
+          <div class="left">
+            <div>
+              <div class="kicker">Our Edge</div>
+              <div class="title">Global Reach</div>
+              <div class="body">Opportunities identified through research, conviction, and a repeatable process.</div>
+              <div class="rule"></div>
+            </div>
+            <div class="small">02 / 05</div>
+          </div>
+          <div class="right">
+            <div class="img" style="background-image:url('2.jpg')"></div>
+          </div>
         </div>
-      </div>
-    </section>
 
-    <section class="panel">
-      <div class="card">
-        <div class="img" style="background-image:url('3.jpg');"></div>
-        <div class="content">
-          <h1>Risk Managed</h1>
-          <p>Structured portfolios balancing growth and preservation.</p>
+        <!-- Slide 3 -->
+        <div class="slide">
+          <div class="left">
+            <div>
+              <div class="kicker">Portfolio</div>
+              <div class="title">Risk Managed</div>
+              <div class="body">Structured portfolios balancing growth, preservation, and liquidity needs.</div>
+              <div class="rule"></div>
+            </div>
+            <div class="small">03 / 05</div>
+          </div>
+          <div class="right">
+            <div class="img" style="background-image:url('3.jpg')"></div>
+          </div>
         </div>
-      </div>
-    </section>
 
-    <section class="panel">
-      <div class="card">
-        <div class="img" style="background-image:url('4.jpg');"></div>
-        <div class="content">
-          <h1>Institutional Approach</h1>
-          <p>Professional execution supported by transparent governance.</p>
+        <!-- Slide 4 -->
+        <div class="slide">
+          <div class="left">
+            <div>
+              <div class="kicker">Execution</div>
+              <div class="title">Institutional Approach</div>
+              <div class="body">Professional execution supported by transparent governance and reporting.</div>
+              <div class="rule"></div>
+            </div>
+            <div class="small">04 / 05</div>
+          </div>
+          <div class="right">
+            <div class="img" style="background-image:url('4.jpg')"></div>
+          </div>
         </div>
-      </div>
-    </section>
 
-    <section class="panel">
-      <div class="card">
-        <div class="img" style="background-image:url('5.jpg');"></div>
-        <div class="content">
-          <h1>Partner With Us</h1>
-          <p>Building lasting relationships through performance and trust.</p>
+        <!-- Slide 5 -->
+        <div class="slide">
+          <div class="left">
+            <div>
+              <div class="kicker">Contact</div>
+              <div class="title">Partner With Us</div>
+              <div class="body">Building lasting relationships through performance, clarity, and trust.</div>
+              <div class="rule"></div>
+            </div>
+            <div class="small">05 / 05</div>
+          </div>
+          <div class="right">
+            <div class="img" style="background-image:url('5.jpg')"></div>
+          </div>
         </div>
+
       </div>
-    </section>
+    </div>
+  </section>
 
-  </div>
-</div>
-
-<!-- Dots -->
-<div class="dots" id="dots" aria-label="Slide navigation"></div>
-
-<script>
-  // Ensure autoplay
-  window.addEventListener("load", () => {
-    const v = document.getElementById("bgVideo");
-    if (!v) return;
-    v.muted = true;
-    const p = v.play();
-    if (p && typeof p.then === "function") p.catch(()=>{});
-  });
-
-  // Slides
-  const track = document.getElementById("track");
-  const total = 5;
-  let current = 0;
-  let locked = false;
-
-  // Dots
-  const dotsWrap = document.getElementById("dots");
-  const dots = [];
-  for (let i=0;i<total;i++){
-    const d = document.createElement("div");
-    d.className = "dot" + (i===0 ? " active" : "");
-    d.addEventListener("click", () => goTo(i));
-    dotsWrap.appendChild(d);
-    dots.push(d);
-  }
-  function setActiveDot(){
-    dots.forEach((d,i)=>d.classList.toggle("active", i===current));
-  }
-
-  function goTo(i){
-    current = Math.max(0, Math.min(total-1, i));
-    track.style.transform = `translateX(-${current * 100}vw)`;
-    setActiveDot();
-  }
-
-  // Wheel scroll (Auberry feel)
-  window.addEventListener("wheel", (e) => {
-    if (locked) return;
-    locked = true;
-    setTimeout(()=>locked=false, 650);
-
-    if (e.deltaY > 0 && current < total - 1) current++;
-    if (e.deltaY < 0 && current > 0) current--;
-
-    goTo(current);
-  }, { passive:true });
-
-  // Menu
-  const menu = document.getElementById("menu");
-  document.getElementById("burger").addEventListener("click", ()=> menu.classList.add("open"));
-  document.getElementById("closeMenu").addEventListener("click", ()=> menu.classList.remove("open"));
-  menu.addEventListener("click", (e)=>{
-    if(e.target === menu) menu.classList.remove("open");
-  });
-
-  // Menu links + top nav links
-  document.querySelectorAll("[data-goto]").forEach(a=>{
-    a.addEventListener("click",(e)=>{
-      e.preventDefault();
-      menu.classList.remove("open");
-      const idx = parseInt(a.getAttribute("data-goto"),10);
-      goTo(idx);
+  <script>
+    // Force autoplay (some browsers need a nudge)
+    window.addEventListener("load", () => {
+      const v = document.getElementById("bgVideo");
+      if (!v) return;
+      v.muted = true;
+      const p = v.play();
+      if (p && typeof p.then === "function") p.catch(()=>{});
     });
-  });
 
-  // Optional: keyboard arrows
-  window.addEventListener("keydown",(e)=>{
-    if(e.key === "ArrowRight") goTo(current+1);
-    if(e.key === "ArrowLeft") goTo(current-1);
-  });
+    const stage = document.getElementById("stage");
+    const track = document.getElementById("track");
+    const slides = 5;
 
-  // Optional: swipe (mobile)
-  let sx=0, dx=0;
-  window.addEventListener("touchstart",(e)=>{ sx = e.touches[0].clientX; }, {passive:true});
-  window.addEventListener("touchmove",(e)=>{ dx = e.touches[0].clientX - sx; }, {passive:true});
-  window.addEventListener("touchend",()=>{
-    if(Math.abs(dx) > 60){
-      if(dx < 0) goTo(current+1);
-      else goTo(current-1);
+    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+    function onScroll(){
+      const rect = stage.getBoundingClientRect();
+      const stageTop = window.scrollY + rect.top;
+      const stageHeight = stage.offsetHeight;
+      const view = window.innerHeight;
+
+      // progress 0..1 while scrolling inside stage
+      const y = window.scrollY - stageTop;
+      const max = stageHeight - view;
+      const t = max > 0 ? clamp(y / max, 0, 1) : 0;
+
+      const x = -t * (slides - 1) * window.innerWidth;
+      track.style.transform = `translate3d(${x}px,0,0)`;
     }
-    sx=0; dx=0;
-  });
-</script>
 
+    window.addEventListener("scroll", onScroll, { passive:true });
+    window.addEventListener("resize", onScroll);
+    onScroll();
+
+    // Burger menu
+    const menu = document.getElementById("menu");
+    document.getElementById("burger").addEventListener("click", ()=> menu.classList.add("open"));
+    document.getElementById("closeMenu").addEventListener("click", ()=> menu.classList.remove("open"));
+    menu.addEventListener("click", (e)=>{ if(e.target === menu) menu.classList.remove("open"); });
+
+    // Menu jump to slide
+    document.querySelectorAll("[data-goto]").forEach(link=>{
+      link.addEventListener("click",(e)=>{
+        e.preventDefault();
+        const idx = parseInt(link.getAttribute("data-goto"), 10);
+        menu.classList.remove("open");
+
+        // Scroll to correct progress inside the stage
+        const rect = stage.getBoundingClientRect();
+        const stageTop = window.scrollY + rect.top;
+        const stageHeight = stage.offsetHeight;
+        const view = window.innerHeight;
+        const max = stageHeight - view;
+
+        const t = clamp(idx / (slides - 1), 0, 1);
+        window.scrollTo({ top: stageTop + t * max, behavior: "smooth" });
+      });
+    });
+  </script>
 </body>
 </html>
