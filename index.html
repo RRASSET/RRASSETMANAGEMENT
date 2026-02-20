@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RR Asset Management</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;}
+.wrapper{width:100vw;height:100vh;overflow:hidden;}
+.track{display:flex;width:500vw;height:100vh;transition:transform 0.9s ease;}
+.panel{width:100vw;height:100vh;background-size:cover;background-position:center;}
+.panel:nth-child(1){background:#111;}
+.panel:nth-child(2){background:#333;}
+.panel:nth-child(3){background:#555;}
+.panel:nth-child(4){background:#777;}
+.panel:nth-child(5){background:#999;}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+<div class="track" id="track">
+<div class="panel"></div>
+<div class="panel"></div>
+<div class="panel"></div>
+<div class="panel"></div>
+<div class="panel"></div>
+</div>
+</div>
+
+<script>
+let current=0;
+const total=5;
+const track=document.getElementById("track");
+
+window.addEventListener("wheel",(e)=>{
+if(e.deltaY>0 && current<total-1){current++;}
+else if(e.deltaY<0 && current>0){current--;}
+track.style.transform=`translateX(-${current*100}vw)`;
+});
+</script>
+
+</body>
+</html>
