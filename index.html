@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,19 +7,85 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;}
-.wrapper{width:100vw;height:100vh;overflow:hidden;}
-.track{display:flex;width:500vw;height:100vh;transition:transform 0.9s ease;}
-.panel{width:100vw;height:100vh;background-size:cover;background-position:center;}
-.panel:nth-child(1){background:#111;}
-.panel:nth-child(2){background:#333;}
-.panel:nth-child(3){background:#555;}
-.panel:nth-child(4){background:#777;}
-.panel:nth-child(5){background:#999;}
+html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;background:#000;}
+
+/* Background Video */
+.bg{
+position:fixed;
+inset:0;
+z-index:0;
+overflow:hidden;
+}
+.bg video{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+.bg::after{
+content:"";
+position:absolute;
+inset:0;
+background:rgba(0,0,0,0.45);
+}
+
+/* Horizontal Scroll */
+.wrapper{
+position:relative;
+z-index:2;
+width:100vw;
+height:100vh;
+overflow:hidden;
+}
+.track{
+display:flex;
+width:500vw;
+height:100vh;
+transition:transform 0.9s cubic-bezier(.77,0,.18,1);
+}
+.panel{
+width:100vw;
+height:100vh;
+background-size:cover;
+background-position:center;
+position:relative;
+}
+
+/* Your Images */
+.panel:nth-child(1){background-image:url("Green_Leaves.jpg");}
+.panel:nth-child(2){background-image:url("WhatsApp_Image.jpg");}
+.panel:nth-child(3){background-image:url("3.jpg");}
+.panel:nth-child(4){background-image:url("4.jpg");}
+.panel:nth-child(5){background-image:url("5.jpg");}
+
+/* Top Bar */
+.topbar{
+position:fixed;
+top:0;
+left:0;
+right:0;
+z-index:5;
+padding:25px 40px;
+display:flex;
+justify-content:space-between;
+color:white;
+font-size:13px;
+letter-spacing:2px;
+text-transform:uppercase;
+}
 </style>
 </head>
 
 <body>
+
+<div class="bg">
+<video autoplay muted loop playsinline>
+<source src="bg.mp4" type="video/mp4">
+</video>
+</div>
+
+<div class="topbar">
+RR Asset Management
+</div>
 
 <div class="wrapper">
 <div class="track" id="track">
@@ -35,10 +101,14 @@ html,body{height:100%;overflow:hidden;font-family:Arial,sans-serif;}
 let current=0;
 const total=5;
 const track=document.getElementById("track");
+let locked=false;
 
 window.addEventListener("wheel",(e)=>{
-if(e.deltaY>0 && current<total-1){current++;}
-else if(e.deltaY<0 && current>0){current--;}
+if(locked)return;
+locked=true;
+setTimeout(()=>locked=false,700);
+if(e.deltaY>0&&current<total-1)current++;
+if(e.deltaY<0&&current>0)current--;
 track.style.transform=`translateX(-${current*100}vw)`;
 });
 </script>
