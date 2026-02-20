@@ -34,7 +34,7 @@
     /* ===== Intro logo (Auberry-like) ===== */
     .intro{
       position:fixed; inset:0;
-      z-index:80;
+      z-index:20;
       display:flex; align-items:center; justify-content:center;
       pointer-events:none;
     }
@@ -46,11 +46,7 @@
       animation-delay: 0.4s;
       filter: drop-shadow(0 18px 40px rgba(0,0,0,0.35));
     }
-    /* fade logo away after it appears */
-    .intro.hide{
-      opacity:0;
-      transition: opacity 900ms ease;
-    }
+    
 
     @keyframes logoIn{
       to{ opacity:1; transform:translateY(0); }
@@ -58,19 +54,27 @@
 
     /* ===== Burger menu (middle-left, always visible) ===== */
     .burger{
-      position:fixed;
-      top:50%;
-      left:18px;
-      transform:translateY(-50%);
-      z-index:90;
-      width:50px; height:50px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.18);
-      background:rgba(0,0,0,0.20);
-      backdrop-filter: blur(10px);
-      display:grid; place-items:center;
-      cursor:pointer;
-    }
+  position:fixed;
+  top:50%;
+  left:18px;
+  transform:translateY(-50%);
+  z-index:90;
+  width:50px; height:50px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.18);
+  background:rgba(0,0,0,0.20);
+  backdrop-filter: blur(10px);
+  display:grid; place-items:center;
+  cursor:pointer;
+
+  opacity:0;
+  animation: burgerFade 1.5s ease forwards;
+  animation-delay: 1.2s;
+}
+
+@keyframes burgerFade{
+  to { opacity:1; }
+}
     .burger i{
       width:18px; height:1.6px;
       background:rgba(255,255,255,0.92);
@@ -132,7 +136,7 @@
     /* ===== Auberry scroll stage ===== */
     .scroll-stage{
       position:relative;
-      z-index:10;
+      z-index:40;
       height:500vh; /* 5 slides */
     }
     .sticky{
@@ -346,8 +350,7 @@
     const track = document.getElementById("track");
     const slides = 5;
 
-    // Hide intro after it fades in (logo stays a moment)
-    setTimeout(()=> intro.classList.add("hide"), 2600);
+   
 
     function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
 
