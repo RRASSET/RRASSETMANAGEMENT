@@ -417,7 +417,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
 
 <!-- Bottom slider -->
 <div class="nav-slider" aria-label="Slide navigation">
-  <input id="navSlider" type="range" min="0" max="10" step="1" value="0">
+  <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
 </div>
 
 <!-- Horizontal panels -->
@@ -477,7 +477,6 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
         </div>
 
         <div class="split-right">
-          <!-- uses your next image so it looks like Auberry -->
           <img class="panel-img" src="./firstpagefourthpic.png" alt="Reputation">
         </div>
       </div>
@@ -487,6 +486,10 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
     <section class="panel"><img class="panel-img" src="./firstpagefifthpic.png" alt="Slide 4"></section>
     <section class="panel"><img class="panel-img" src="./firstpagesixthpic.png" alt="Slide 5"></section>
     <section class="panel"><img class="panel-img" src="./firstpageseventhpic.png" alt="Slide 6"></section>
+
+    <!-- ✅ ADDED: 8th and 9th images -->
+    <section class="panel"><img class="panel-img" src="./firstpageeighthpic.png" alt="Slide 7"></section>
+    <section class="panel"><img class="panel-img" src="./firstpageninethpic.png" alt="Slide 8"></section>
 
     <!-- END SLIDE -->
     <section class="panel panel--end">
@@ -579,7 +582,6 @@ let isUserSliding = false;
 function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 
 function totalWidth(){
-  // Sum of all panel widths (works with variable widths)
   return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0);
 }
 function maxScroll(){
@@ -593,7 +595,6 @@ function raf(){
   currentX += (targetX - currentX) * 0.08;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
 
-  // slider reflects progress across total width
   const maxS = maxScroll();
   navSlider.max = String(panels.length - 1);
 
@@ -659,7 +660,6 @@ document.querySelectorAll('[data-goto]').forEach(a=>{
 });
 
 window.addEventListener("resize", ()=>{
-  // refresh panels list (safe) + clamp
   panels = Array.from(track.querySelectorAll(".panel"));
   targetX = clamp(targetX, 0, maxScroll());
   currentX = clamp(currentX, 0, maxScroll());
