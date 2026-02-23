@@ -20,9 +20,9 @@ body{
 .bg{ position:fixed; inset:0; z-index:0; overflow:hidden; background:#000; }
 .bg video{ width:100%; height:100%; object-fit:cover; object-position:center; }
 
-/* ================= INTRO LOGO (BEHIND SLIDES) ================= */
+/* ================= INTRO LOGO (FADE OUT ON SCROLL) ================= */
 .intro{
-  position:fixed; inset:0; z-index:40;   /* behind slides */
+  position:fixed; inset:0; z-index:40;
   display:flex; align-items:center; justify-content:center;
   pointer-events:none;
   transition:opacity .6s ease;
@@ -81,25 +81,26 @@ body{
   transform:translate3d(0,0,0);
 }
 
-/* Variable-width panels (NO forced 100vw, so no fake “gaps”) */
+/* ================= PANELS (FULLSCREEN = NO GAPS) ================= */
 .panel{
   height:100vh;
-  flex:0 0 auto;
-  width:auto;
+  flex:0 0 100vw;
+  width:100vw;
   display:flex;
   align-items:center;
   justify-content:center;
   position:relative;
-  background:transparent;
+  background:#000; /* prevents any “white gap” feeling */
   padding:0;
 }
 
-/* Image slides: full height, auto width (NO crop, NO stretch) */
+/* Full-bleed image slides (Auberry feel) */
 .panel-img{
-  height:100vh;
-  width:auto;
+  width:100%;
+  height:100%;
   max-width:none;
-  object-fit:contain;
+  max-height:none;
+  object-fit:cover;
   object-position:center;
   display:block;
 }
@@ -108,6 +109,7 @@ body{
 .panel--home{
   flex:0 0 100vw;
   width:100vw;
+  background:transparent;
 }
 
 /* ================= AUBERRY STYLE TEXT + IMAGE SPLIT SLIDE ================= */
@@ -121,11 +123,11 @@ body{
   width:100%;
   height:100%;
   display:grid;
-  grid-template-columns: 42% 58%;   /* better proportion like Auberry */
+  grid-template-columns: 42% 58%;
 }
 
 .split-left{
-  padding:120px 80px 120px 160px;  /* more breathing space */
+  padding:120px 80px 120px 160px;
   color:#1a1a1a;
   display:flex;
   flex-direction:column;
@@ -135,9 +137,9 @@ body{
 .aub-heading{
   font-family:'Cormorant Garamond', serif;
   font-weight:400;
-  line-height:1.05;
+  line-height:1.02;
   letter-spacing:0.2px;
-  margin-bottom:28px;
+  margin-bottom:22px;
 }
 
 .aub-heading .small{
@@ -155,10 +157,10 @@ body{
 }
 
 .aub-line{
-  width:52px;
+  width:56px;
   height:1px;
   background:#c6b67a;
-  margin:0 0 40px 0;
+  margin:0 0 34px 0;
 }
 
 .aub-text{
@@ -169,7 +171,7 @@ body{
   max-width:440px;
   color:#1f1f1f;
 }
-.aub-text p{ margin-bottom:26px; }
+.aub-text p{ margin-bottom:24px; }
 
 .split-right{ position:relative; overflow:hidden; }
 
@@ -213,30 +215,34 @@ body{
   letter-spacing:0.2px;
 }
 
-/* ================= END SLIDE (RIGHT WHITE PANEL ONLY — VIDEO BEHIND) ================= */
+/* ================= END SLIDE (NO GAP AFTER 9TH IMAGE) ================= */
+/* Keep it a normal full panel (same width as images), with clean right panel */
 .panel--end{
   flex:0 0 100vw;
   width:100vw;
+  height:100vh;
   position:relative;
   overflow:hidden;
-  background:transparent; /* IMPORTANT: show bg video behind */
+  background:#000; /* fallback (images are already full-bleed) */
 }
-/* removed end-bg & overlay to avoid “End background” problem */
+
+/* Clean Auberry-like right panel */
 .end-card{
   position:absolute;
   top:0;
   right:0;
   height:100%;
-  width:min(520px, 42vw);          /* slightly slimmer like Auberry */
-  background:#f4f4f2;              /* flat background (no glass) */
+  width:min(520px, 42vw);
+  background:#f4f4f2;
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding:110px 60px;              /* more vertical breathing room */
+  padding:110px 60px;
   border-left:1px solid rgba(0,0,0,0.08);
-  box-shadow:none;                 /* remove “card” feeling */
-  backdrop-filter:none;            /* remove blur */
+  box-shadow:none;
+  backdrop-filter:none;
+  z-index:2;
 }
 
 .end-inner{ width:100%; max-width:520px; }
@@ -245,10 +251,10 @@ body{
 .end-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
-  font-size:30px;
-  margin:18px 0;
+  font-size:28px;
+  margin:14px 0;
   text-decoration:none;
-  color:#222;
+  color:#1a1a1a;
   transition:opacity .25s ease;
 }
 .end-links a:hover{ opacity:.6; }
@@ -262,11 +268,11 @@ body{
 
 .end-footer{
   font-family:'Cormorant Garamond', serif;
-  font-size:22px;
-  line-height:1.6;
-  color:#222;
+  font-size:20px;
+  line-height:1.7;
+  color:#1a1a1a;
 }
-.end-footer .contact{ margin-top:14px; font-size:20px; }
+.end-footer .contact{ margin-top:12px; font-size:18px; }
 
 .end-privacy{
   margin-top:22px;
@@ -464,7 +470,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
       </div>
     </section>
 
-    <!-- Image slides (NO CROP) -->
+    <!-- Image slides (FULL-BLEED) -->
     <section class="panel"><img class="panel-img" src="./firstpagesecondpic.png" alt="Slide 2"></section>
     <section class="panel"><img class="panel-img" src="./firstpagethirdpic.png" alt="Slide 3"></section>
 
@@ -512,7 +518,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
     <section class="panel"><img class="panel-img" src="./firstpageeighthpic.png" alt="Slide 7"></section>
     <section class="panel"><img class="panel-img" src="./firstpageninethpic.png" alt="Slide 8"></section>
 
-    <!-- END SLIDE (logo card only on right; video stays behind) -->
+    <!-- END SLIDE (logo card only on right; no gap after 9th image) -->
     <section class="panel panel--end">
       <div class="end-card">
         <div class="end-inner">
@@ -589,11 +595,11 @@ burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
 document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
 
-/* ===== HORIZONTAL SCROLL (variable-width panels) ===== */
+/* ===== HORIZONTAL SCROLL ===== */
 const track = document.getElementById("track");
 let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
-  const intro = document.querySelector(".intro");
+const intro = document.querySelector(".intro");
 
 let currentX = 0;
 let targetX = 0;
@@ -614,14 +620,15 @@ function xForIndex(idx){
 function raf(){
   currentX += (targetX - currentX) * 0.08;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
+
   // Fade logo out after scroll begins (Auberry-like)
-if (intro) {
-  const fadeStart = 40;   // when fade starts
-  const fadeEnd   = 260;  // fully gone
-  const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
-  const opacity = 1 - Math.max(0, Math.min(1, t));
-  intro.style.opacity = String(opacity);
-}
+  if (intro) {
+    const fadeStart = 40;
+    const fadeEnd   = 260;
+    const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
+    const opacity = 1 - Math.max(0, Math.min(1, t));
+    intro.style.opacity = String(opacity);
+  }
 
   const maxS = maxScroll();
   navSlider.max = String(panels.length - 1);
