@@ -40,6 +40,7 @@ body{
   position:fixed; top:0; left:0;
   width:80px; height:100vh;
   background:rgba(255,255,255,0.92);
+  backdrop-filter: blur(8px);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -76,6 +77,7 @@ body{
   height:100%;
   display:flex;
   will-change:transform;
+  transform:translate3d(0,0,0);
 }
 .panel{
   height:100vh;
@@ -91,6 +93,7 @@ body{
   width:100%;
   height:100%;
   object-fit:cover;
+  display:block;
 }
 
 /* ================= SPLIT SLIDE ================= */
@@ -114,13 +117,17 @@ body{
   margin-bottom:28px;
 }
 .aub-heading .small{
+  display:block;
   font-style:italic;
   font-size:38px;
+  font-weight:400;
 }
 .aub-heading .big{
   display:block;
   font-size:58px;
   text-transform:uppercase;
+  font-weight:400;
+  letter-spacing:.6px;
 }
 .aub-line{
   width:52px;
@@ -133,16 +140,19 @@ body{
   font-size:18px;
   line-height:1.85;
   max-width:460px;
+  font-weight:300;
 }
 .aub-text p{ margin-bottom:26px; }
 
+.split-right{ overflow:hidden; }
 .split-right img{
   width:100%;
   height:100%;
   object-fit:cover;
+  display:block;
 }
 
-/* ================= END WHITE SLIDE ================= */
+/* ================= END WHITE SLIDE (SEPARATE) ================= */
 .panel--end{ background:#f4f4f2; }
 
 .end-wrap{
@@ -153,13 +163,12 @@ body{
   justify-content:center;
   padding:80px 40px 80px 120px;
   text-align:center;
+  color:#222;
 }
 .end-inner{ width:min(520px, 92vw); }
 
-.end-logo img{
-  width:170px;
-  margin-bottom:44px;
-}
+.end-logo img{ width:170px; margin-bottom:44px; }
+
 .end-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
@@ -167,7 +176,10 @@ body{
   margin:18px 0;
   text-decoration:none;
   color:#222;
+  transition:opacity .25s ease;
 }
+.end-links a:hover{ opacity:.6; }
+
 .end-divider{
   width:200px;
   height:1px;
@@ -191,7 +203,7 @@ body{
   text-decoration:none;
 }
 
-/* ================= BOTTOM SCROLLBAR ================= */
+/* ================= BOTTOM THIN SCROLLBAR SLIDER ================= */
 .nav-slider{
   position:fixed;
   left:96px;
@@ -199,50 +211,161 @@ body{
   bottom:14px;
   z-index:92;
 }
-.nav-slider input{
+.nav-slider input[type="range"]{
   width:100%;
   -webkit-appearance:none;
   appearance:none;
   height:6px;
-  background:rgba(255,255,255,0.6);
+  background:rgba(255,255,255,0.60);
   border-radius:999px;
+  outline:none;
 }
-.nav-slider input::-webkit-slider-thumb{
+.nav-slider input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance:none;
+  appearance:none;
   width:80px;
   height:6px;
   border-radius:999px;
-  background:rgba(0,0,0,0.6);
+  background:rgba(0,0,0,0.60);
   cursor:pointer;
+}
+.nav-slider input[type="range"]::-moz-range-thumb{
+  width:80px;
+  height:6px;
+  border-radius:999px;
+  background:rgba(0,0,0,0.60);
+  cursor:pointer;
+  border:none;
+}
+
+/* ================= SLIDING MENU PANEL (THIS WAS MISSING) ================= */
+.menu{
+  position:fixed;
+  top:0; left:0;
+  height:100vh;
+  width:420px;
+  background:#f4f4f2;
+  z-index:95;
+  transform:translateX(-100%);
+  transition:transform 0.9s cubic-bezier(.77,0,.18,1);
+}
+.menu.open{ transform:translateX(0); }
+
+.menu-panel{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:60px 30px;
+  position:relative;
+}
+
+.back-arrow{
+  position:absolute;
+  left:40px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:28px;
+  cursor:pointer;
+  color:#222;
+}
+
+.menu-logo img{
+  width:180px;
+  margin-bottom:50px;
+}
+
+.menu-links a{
+  display:block;
+  font-family:'Cormorant Garamond', serif;
+  font-size:30px;
+  margin:18px 0;
+  text-decoration:none;
+  color:#222;
+  transition:opacity 0.3s ease;
+}
+.menu-links a:hover{ opacity:0.6; }
+
+.divider{
+  width:200px;
+  height:1px;
+  background:#c6b67a;
+  margin:50px auto 30px auto;
+}
+
+.menu-footer{
+  font-family:'Cormorant Garamond', serif;
+  font-size:22px;
+  line-height:1.6;
+  color:#222;
+}
+.menu-footer .contact{
+  margin-top:15px;
+  font-size:20px;
+}
+.privacy{
+  margin-top:20px;
+  display:inline-block;
+  font-family:'Montserrat', sans-serif;
+  font-size:12px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:#c6b67a;
+  text-decoration:none;
+}
+
+/* Prevent clicks behind menu + slider when open */
+body.menu-open .hwrap{ pointer-events:none; }
+body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
+
+/* Mobile tweaks */
+@media (max-width: 900px){
+  .split{
+    grid-template-columns:1fr;
+    grid-template-rows:auto 55vh;
+  }
+  .split-left{ padding:80px 24px 40px 24px; }
+  .end-wrap{ padding:70px 24px; }
+  .nav-slider{ left:24px; right:24px; bottom:12px; }
+  .menu{ width:min(420px, 92vw); }
 }
 </style>
 </head>
 
 <body>
 
+<!-- Background video -->
 <div class="bg">
   <video autoplay muted loop playsinline>
     <source src="./Bg.mp4" type="video/mp4">
   </video>
 </div>
 
+<!-- Intro logo -->
 <div class="intro">
   <img src="./logo.png" alt="RR Logo">
 </div>
 
-<div class="side-bar" id="burger">
+<!-- Burger -->
+<div class="side-bar" id="burger" aria-label="Open menu">
   <div class="burger-lines"><i></i></div>
 </div>
 
-<div class="nav-slider">
+<!-- Bottom thin slider -->
+<div class="nav-slider" aria-label="Slide navigation">
   <input id="navSlider" type="range" min="0" max="10" step="1" value="0">
 </div>
 
+<!-- Horizontal panels -->
 <div class="hwrap">
   <div class="htrack" id="track">
 
+    <!-- Panel 0: video only -->
     <section class="panel"></section>
 
+    <!-- Panel 1: split text + image -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -261,39 +384,46 @@ body{
           </div>
         </div>
         <div class="split-right">
-          <img src="firstpagefirstpic.png" alt="">
+          <img class="panel-img" src="./firstpagefirstpic.png" alt="Slide 1">
         </div>
       </div>
     </section>
 
-    <section class="panel"><img class="panel-img" src="./image2.jpg"></section>
-    <section class="panel"><img class="panel-img" src="./image3.jpg"></section>
-    <section class="panel"><img class="panel-img" src="./image4.jpg"></section>
-    <section class="panel"><img class="panel-img" src="./image5.jpg"></section>
-    <section class="panel"><img class="panel-img" src="./image6.jpg"></section>
-    <section class="panel"><img class="panel-img" src="./image7.jpg"></section>
-    <section class="panel"><img class="panel-img" src="./image8.jpg"></section>
-    <section class="panel"><img class="panel-img" src="./image9.jpg"></section>
+    <!-- Image slides -->
+    <section class="panel"><img class="panel-img" src="./image2.jpg" alt="Slide 2"></section>
+    <section class="panel"><img class="panel-img" src="./image3.jpg" alt="Slide 3"></section>
+    <section class="panel"><img class="panel-img" src="./image4.jpg" alt="Slide 4"></section>
+    <section class="panel"><img class="panel-img" src="./image5.jpg" alt="Slide 5"></section>
+    <section class="panel"><img class="panel-img" src="./image6.jpg" alt="Slide 6"></section>
+    <section class="panel"><img class="panel-img" src="./image7.jpg" alt="Slide 7"></section>
+    <section class="panel"><img class="panel-img" src="./image8.jpg" alt="Slide 8"></section>
+    <section class="panel"><img class="panel-img" src="./image9.jpg" alt="Slide 9"></section>
 
+    <!-- End slide (separate white) -->
     <section class="panel panel--end">
       <div class="end-wrap">
         <div class="end-inner">
+
           <div class="end-logo">
-            <img src="./logo.png" alt="">
+            <img src="./logo.png" alt="RR Logo">
           </div>
+
           <nav class="end-links">
             <a href="#" data-goto="0">Home</a>
             <a href="expertise.html">Expertise</a>
-            <a href="https://rrasset.github.io/RRASSETMANAGEMENT/interior-projects.html">Interior Projects</a>
+            <a href="interior-projects.html">Interior Projects</a>
             <a href="press.html">Press</a>
           </nav>
+
           <div class="end-divider"></div>
+
           <div class="end-footer">
             SUN HOUSE, 428 LONG DRIVE,<br>
             GREENFORD, UB6 8UH
             <div class="contact">+44 (0) 20 8575 3700</div>
             <a class="end-privacy" href="#">Privacy Policy</a>
           </div>
+
         </div>
       </div>
     </section>
@@ -301,34 +431,126 @@ body{
   </div>
 </div>
 
+<!-- Sliding menu panel -->
+<div class="menu" id="menu" aria-label="Menu">
+  <div class="menu-panel">
+    <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
+
+    <div class="menu-logo">
+      <img src="./logo.png" alt="RR Asset Management Logo">
+    </div>
+
+    <nav class="menu-links">
+      <a href="#" data-goto="0">Home</a>
+      <a href="expertise.html">Expertise</a>
+      <a href="interior-projects.html">Interior Projects</a>
+      <a href="press.html">Press</a>
+    </nav>
+
+    <div class="divider"></div>
+
+    <div class="menu-footer">
+      SUN HOUSE, 428 LONG DRIVE,<br>
+      GREENFORD, UB6 8UH
+      <div class="contact">+44 (0) 20 8575 3700</div>
+      <a href="#" class="privacy">Privacy Policy</a>
+    </div>
+  </div>
+</div>
+
 <script>
+/* ===== MENU (THIS WAS MISSING) ===== */
+const menu = document.getElementById("menu");
+const burger = document.getElementById("burger");
+const closeMenu = document.getElementById("closeMenu");
+
+function openMenu(){
+  menu.classList.add("open");
+  document.body.classList.add("menu-open");
+}
+function closeMenuFn(){
+  menu.classList.remove("open");
+  document.body.classList.remove("menu-open");
+}
+
+burger.addEventListener("click", openMenu);
+closeMenu.addEventListener("click", closeMenuFn);
+document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
+
+/* ===== HORIZONTAL SCROLL (wheel + drag + touch + slider) ===== */
 const track = document.getElementById("track");
 const panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
 
 let currentX = 0;
 let targetX = 0;
+let isUserSliding = false;
 
-function maxScroll(){
-  return (panels.length - 1) * window.innerWidth;
-}
-function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
+function maxScroll(){ return (panels.length - 1) * window.innerWidth; }
+function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 
-function animate(){
+function raf(){
   currentX += (targetX - currentX) * 0.08;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
-  navSlider.max = panels.length - 1;
-  navSlider.value = Math.round(currentX / window.innerWidth);
-  requestAnimationFrame(animate);
-}
-animate();
 
-window.addEventListener("wheel", e=>{
+  navSlider.max = String(panels.length - 1);
+  if(!isUserSliding){
+    navSlider.value = String(Math.round(currentX / window.innerWidth));
+  }
+
+  requestAnimationFrame(raf);
+}
+raf();
+
+window.addEventListener("wheel", (e)=>{
+  if(document.body.classList.contains("menu-open")) return;
   targetX = clamp(targetX + e.deltaY, 0, maxScroll());
+},{passive:true});
+
+/* Drag / touch */
+let isDown=false, startX=0, startTarget=0;
+
+function pointerDown(x){
+  if(document.body.classList.contains("menu-open")) return;
+  isDown=true; startX=x; startTarget=targetX;
+}
+function pointerMove(x){
+  if(!isDown) return;
+  const dx = x - startX;
+  targetX = clamp(startTarget - dx, 0, maxScroll());
+}
+function pointerUp(){ isDown=false; }
+
+window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
+window.addEventListener("mousemove",(e)=>pointerMove(e.clientX));
+window.addEventListener("mouseup",pointerUp);
+
+window.addEventListener("touchstart",(e)=>pointerDown(e.touches[0].clientX),{passive:true});
+window.addEventListener("touchmove",(e)=>pointerMove(e.touches[0].clientX),{passive:true});
+window.addEventListener("touchend",pointerUp);
+
+/* Slider */
+navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
+navSlider.addEventListener("pointerup", ()=>{
+  isUserSliding = false;
+  targetX = clamp(Number(navSlider.value) * window.innerWidth, 0, maxScroll());
+});
+navSlider.addEventListener("input", ()=>{
+  targetX = clamp(Number(navSlider.value) * window.innerWidth, 0, maxScroll());
 });
 
-navSlider.addEventListener("input", ()=>{
-  targetX = clamp(navSlider.value * window.innerWidth, 0, maxScroll());
+/* data-goto links: slide within same page */
+document.querySelectorAll('[data-goto]').forEach(a=>{
+  a.addEventListener('click', (e)=>{
+    e.preventDefault();
+    targetX = clamp(Number(a.dataset.goto) * window.innerWidth, 0, maxScroll());
+    closeMenuFn();
+  });
+});
+
+window.addEventListener("resize", ()=>{
+  targetX = clamp(targetX, 0, maxScroll());
+  currentX = clamp(currentX, 0, maxScroll());
 });
 </script>
 
