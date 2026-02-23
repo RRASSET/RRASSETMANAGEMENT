@@ -20,9 +20,9 @@ body{
 .bg{ position:fixed; inset:0; z-index:0; overflow:hidden; background:#000; }
 .bg video{ width:100%; height:100%; object-fit:cover; object-position:center; }
 
-/* ================= INTRO LOGO ================= */
+/* ================= INTRO LOGO (BEHIND SLIDES) ================= */
 .intro{
-  position:fixed; inset:0; z-index:20;
+  position:fixed; inset:0; z-index:5;   /* behind slides */
   display:flex; align-items:center; justify-content:center;
   pointer-events:none;
 }
@@ -68,7 +68,7 @@ body{
 /* ================= HORIZONTAL SCROLL AREA ================= */
 .hwrap{
   position:relative;
-  z-index:30;
+  z-index:30; /* slides above logo */
   height:100vh;
   width:100vw;
   overflow:hidden;
@@ -87,17 +87,17 @@ body{
   align-items:center;
   justify-content:center;
   padding:0;
+  position:relative;
+  background:transparent; /* allow bg video + logo to show in empty space */
 }
 
-/* Full image slides - DO NOT CROP */
-.panel{
-  background:#000; /* clean background around images */
-}
-
+/* ================= IMAGE SLIDES (NO CROP, NO STRETCH) ================= */
 .panel-img{
-  width:100%;
-  height:100%;
-  object-fit:contain;   /* this prevents cropping */
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+  object-fit:contain;       /* show full image */
   object-position:center;
   display:block;
 }
@@ -160,26 +160,29 @@ body{
 .aub-text p{ margin-bottom:26px; }
 
 .split-right{ position:relative; overflow:hidden; }
-.split-right img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-/* ================= END SLIDE (LUXURY: IMAGE BACK + CENTER WHITE PANEL) ================= */
-.panel--end{
-  position:relative;
-  overflow:hidden;
+/* Split slide image must stay full-bleed (cover) */
+.panel--split .panel-img{
+  width:100%;
+  height:100%;
+  max-width:none;
+  max-height:none;
+  object-fit:cover;
+  display:block;
 }
 
-/* background image behind the end content */
+/* ================= END SLIDE (IMAGE BACK + RIGHT WHITE PANEL) ================= */
+.panel--end{ position:relative; overflow:hidden; }
+
 .end-bg{
   position:absolute;
   inset:0;
   width:100%;
   height:100%;
   object-fit:cover;
-  transform:scale(1.02);
   z-index:0;
 }
 
-/* subtle darkening so panel feels premium */
 .panel--end::after{
   content:"";
   position:absolute;
@@ -189,13 +192,13 @@ body{
   pointer-events:none;
 }
 
-/* centered panel (NOT full page) */
+/* fixed right panel like luxury menu */
 .end-card{
-    position:absolute;
+  position:absolute;
   top:0;
   right:0;
   height:100%;
-  width:min(560px, 46vw);   /* panel width like luxury menu */
+  width:min(560px, 46vw);
   background:rgba(244,244,242,0.94);
   backdrop-filter: blur(8px);
   display:flex;
@@ -249,7 +252,7 @@ body{
   text-decoration:none;
 }
 
-/* ================= BOTTOM SCROLLBAR-STYLE SLIDER ================= */
+/* ================= BOTTOM THIN SLIDER ================= */
 .nav-slider{
   position:fixed;
   left:96px;
@@ -365,10 +368,9 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
   }
   .split-left{ padding:80px 24px 40px 24px; }
 
-  /* end panel becomes full width on mobile (luxury still) */
   .end-card{
     width:100%;
-    margin-left:0;
+    right:0;
     padding:70px 24px;
   }
 
@@ -387,7 +389,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
   </video>
 </div>
 
-<!-- Intro logo -->
+<!-- Logo (between bg video and slides) -->
 <div class="intro">
   <img src="./logo.png" alt="RR Logo">
 </div>
@@ -433,48 +435,45 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
       </div>
     </section>
 
-   <!-- Image slides -->
-<section class="panel"><img class="panel-img" src="./firstpagesecondpic.png" alt="Slide 2"></section>
-<section class="panel"><img class="panel-img" src="./firstpagethirdpic.png" alt="Slide 3"></section>
-<section class="panel"><img class="panel-img" src="./image4.jpg" alt="Slide 4"></section>
-<section class="panel"><img class="panel-img" src="./image5.jpg" alt="Slide 5"></section>
-<section class="panel"><img class="panel-img" src="./image6.jpg" alt="Slide 6"></section>
-<section class="panel"><img class="panel-img" src="./image7.jpg" alt="Slide 7"></section>
-<section class="panel"><img class="panel-img" src="./image8.jpg" alt="Slide 8"></section>
+    <!-- Image slides (NO CROP) -->
+    <section class="panel"><img class="panel-img" src="./image2.jpg" alt="Slide 2"></section>
+    <section class="panel"><img class="panel-img" src="./image3.jpg" alt="Slide 3"></section>
+    <section class="panel"><img class="panel-img" src="./image4.jpg" alt="Slide 4"></section>
+    <section class="panel"><img class="panel-img" src="./image5.jpg" alt="Slide 5"></section>
+    <section class="panel"><img class="panel-img" src="./image6.jpg" alt="Slide 6"></section>
+    <section class="panel"><img class="panel-img" src="./image7.jpg" alt="Slide 7"></section>
+    <section class="panel"><img class="panel-img" src="./image8.jpg" alt="Slide 8"></section>
 
-<!-- END SLIDE (ONLY HERE – DO NOT duplicate image9 above) -->
-<section class="panel panel--end">
+    <!-- END SLIDE -->
+    <section class="panel panel--end">
+      <img class="end-bg" src="./image9.jpg" alt="End background">
 
-  <!-- Background image for end slide -->
-  <img class="end-bg" src="./image9.jpg" alt="End background">
+      <div class="end-card">
+        <div class="end-inner">
 
-  <div class="end-card">
-    <div class="end-inner">
+          <div class="end-logo">
+            <img src="./logo.png" alt="RR Logo">
+          </div>
 
-      <div class="end-logo">
-        <img src="./logo.png" alt="RR Logo">
+          <nav class="end-links">
+            <a href="#" data-goto="0">Home</a>
+            <a href="expertise.html">Expertise</a>
+            <a href="https://rrasset.github.io/RRASSETMANAGEMENT/interior-projects.html">Interior Projects</a>
+            <a href="press.html">Press</a>
+          </nav>
+
+          <div class="end-divider"></div>
+
+          <div class="end-footer">
+            SUN HOUSE, 428 LONG DRIVE,<br>
+            GREENFORD, UB6 8UH
+            <div class="contact">+44 (0) 20 8575 3700</div>
+            <a class="end-privacy" href="#">Privacy Policy</a>
+          </div>
+
+        </div>
       </div>
-
-      <nav class="end-links">
-        <a href="#" data-goto="0">Home</a>
-        <a href="expertise.html">Expertise</a>
-        <a href="https://rrasset.github.io/RRASSETMANAGEMENT/interior-projects.html">Interior Projects</a>
-        <a href="press.html">Press</a>
-      </nav>
-
-      <div class="end-divider"></div>
-
-      <div class="end-footer">
-        SUN HOUSE, 428 LONG DRIVE,<br>
-        GREENFORD, UB6 8UH
-        <div class="contact">+44 (0) 20 8575 3700</div>
-        <a class="end-privacy" href="#">Privacy Policy</a>
-      </div>
-
-    </div>
-  </div>
-
-</section>
+    </section>
 
   </div>
 </div>
