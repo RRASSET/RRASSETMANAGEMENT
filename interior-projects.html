@@ -1,1 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Interior Projects — RR Asset Management</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:#111;
+    overflow:hidden;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  /* Left burger bar (same vibe) */
+  .side-bar{
+    position:fixed; top:0; left:0;
+    width:80px; height:100vh;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(8px);
+    display:flex; align-items:center; justify-content:center;
+    z-index:50;
+    cursor:pointer;
+  }
+  .burger-lines i{
+    width:24px;height:1.6px;background:#111;position:relative;display:block;
+  }
+  .burger-lines i::before,
+  .burger-lines i::after{
+    content:"";position:absolute;left:0;width:24px;height:1.6px;background:#111;
+  }
+  .burger-lines i::before{top:-8px;}
+  .burger-lines i::after{top:8px;}
+
+  /* Sliding menu (same styling as before, simplified) */
+  .menu{
+    position:fixed; top:0; left:0;
+    height:100vh; width:420px;
+    background:#f4f4f2;
+    z-index:95;
+    transform:translateX(-100%);
+    transition:transform .9s cubic-bezier(.77,0,.18,1);
+  }
+  .menu.open{ transform:translateX(0); }
+
+  .menu-panel{
+    height:100%;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center; padding:60px 30px;
+    position:relative;
+  }
+  .back-arrow{
+    position:absolute; left:40px; top:50%;
+    transform:translateY(-50%);
+    font-size:28px;
+    cursor:pointer; color:#222;
+  }
+  .menu-logo img{ width:180px; margin-bottom:50px; }
+  .menu-links a{
+    display:block;
+    font-family:'Cormorant Garamond', serif;
+    font-size:30px;
+    margin:18px 0;
+    text-decoration:none;
+    color:#222;
+    transition:opacity .25s ease;
+  }
+  .menu-links a:hover{ opacity:.6; }
+
+  .divider{
+    width:200px;height:1px;background:#c6b67a;
+    margin:50px auto 30px auto;
+  }
+  .menu-footer{
+    font-family:'Cormorant Garamond', serif;
+    font-size:22px; line-height:1.6; color:#222;
+  }
+
+  /* ====== PROJECT STRIP LAYOUT ====== */
+  .projects{
+    position:relative;
+    height:100vh;
+    width:100vw;
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-left:80px; /* room for burger bar */
+  }
+
+  .project{
+    position:relative;
+    overflow:hidden;
+    text-decoration:none;
+    color:#fff;
+    display:block;
+  }
+
+  .project img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform:scale(1.02);
+    transition:transform .9s cubic-bezier(.2,.8,.2,1);
+    display:block;
+  }
+
+  /* Base title always visible (like first screenshot) */
+  .title{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    font-size:22px;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+    white-space:nowrap;
+    text-shadow:0 8px 30px rgba(0,0,0,.35);
+    opacity:.95;
+    transition:opacity .35s ease;
+    z-index:3;
+  }
+
+  /* Hover overlay (like second screenshot) */
+  .overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    opacity:0;
+    transition:opacity .35s ease;
+    z-index:2;
+  }
+
+  .cta{
+    position:absolute;
+    left:50%;
+    top:62%;
+    transform:translate(-50%,-50%);
+    font-family:'Montserrat', sans-serif;
+    font-size:12px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    opacity:0;
+    transition:opacity .35s ease, transform .35s ease;
+    z-index:4;
+  }
+
+  .cta::after{
+    content:"";
+    display:block;
+    width:120px;
+    height:1px;
+    background:rgba(255,255,255,.55);
+    margin:14px auto 0;
+  }
+
+  /* Hover behaviour */
+  .project:hover img{
+    transform:scale(1.07);
+  }
+  .project:hover .overlay{
+    opacity:1;
+  }
+  .project:hover .cta{
+    opacity:1;
+    transform:translate(-50%,-50%);
+  }
+
+  /* Optional: make title slightly dim on hover (still visible) */
+  .project:hover .title{
+    opacity:1;
+  }
+
+  /* Mobile: stack */
+  @media (max-width: 900px){
+    body{ overflow:auto; }
+    .projects{
+      margin-left:0;
+      grid-template-columns: 1fr;
+      height:auto;
+    }
+    .side-bar{ position:sticky; top:0; height:80px; width:100%; }
+    .projects{ margin-top:0; }
+    .project{ height:70vh; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- Burger -->
+<div class="side-bar" id="burger">
+  <div class="burger-lines"><i></i></div>
+</div>
+
+<!-- Projects (change images + links here) -->
+<main class="projects">
+  <a class="project" href="project-eaton-square.html">
+    <img src="./homepagefirstpics.png" alt="Eaton Square">
+    <div class="overlay"></div>
+    <div class="title">EATON SQUARE</div>
+    <div class="cta">VIEW PROJECT</div>
+  </a>
+
+  <a class="project" href="project-shepherds-street.html">
+    <img src="./homepagefirstpics.png" alt="Shepherds Street">
+    <div class="overlay"></div>
+    <div class="title">SHEPHERDS STREET</div>
+    <div class="cta">VIEW PROJECT</div>
+  </a>
+
+  <a class="project" href="project-carlos-place.html">
+    <img src="./homepagefirstpics.png" alt="Carlos Place">
+    <div class="overlay"></div>
+    <div class="title">CARLOS PLACE</div>
+    <div class="cta">VIEW PROJECT</div>
+  </a>
+
+  <a class="project" href="project-beaufort-street.html">
+    <img src="./homepagefirstpics.png" alt="Beaufort Street">
+    <div class="overlay"></div>
+    <div class="title">BEAUFORT STREET</div>
+    <div class="cta">VIEW PROJECT</div>
+  </a>
+</main>
+
+<!-- Sliding Menu -->
+<div class="menu" id="menu">
+  <div class="menu-panel">
+    <div class="back-arrow" id="closeMenu">←</div>
+
+    <div class="menu-logo">
+      <img src="./logo.png" alt="R&R Logo">
+    </div>
+
+    <nav class="menu-links">
+      <a href="index.html">Home</a>
+      <a href="expertise.html">Expertise</a>
+      <a href="interior-projects.html">Interior Projects</a>
+      <a href="press.html">Press</a>
+    </nav>
+
+    <div class="divider"></div>
+
+    <div class="menu-footer">
+      SUN HOUSE, 428 LONG DRIVE,<br>
+      GREENFORD, UB6 8UH
+    </div>
+  </div>
+</div>
+
+<script>
+  const menu = document.getElementById("menu");
+  const burger = document.getElementById("burger");
+  const closeMenu = document.getElementById("closeMenu");
+
+  burger.addEventListener("click", () => menu.classList.add("open"));
+  closeMenu.addEventListener("click", () => menu.classList.remove("open"));
+
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape") menu.classList.remove("open");
+  });
+</script>
+
+</body>
+</html>
