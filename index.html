@@ -79,14 +79,12 @@ body{
   width:100vw;
   overflow:hidden;
 }
-
 .htrack{
   height:100%;
   display:flex;
   will-change:transform;
   transform:translate3d(0,0,0);
 }
-
 .panel{
   height:100vh;
   width:100vw;
@@ -116,9 +114,7 @@ body{
   grid-template-columns: 36% 64%;
 }
 
-/* Left column: match the “airy” Auberry spacing */
 .split-left{
-  /* space from left + burger and generous breathing room */
   padding: clamp(64px, 7vw, 92px) clamp(44px, 5vw, 70px) clamp(70px, 6vw, 90px) clamp(120px, 10vw, 150px);
   color:#1a1a1a;
   display:flex;
@@ -176,7 +172,7 @@ body{
   display:block;
 }
 
-/* Optional vertical side label like Auberry */
+/* Optional vertical side label */
 .side-label{
   position:absolute;
   left:24px;
@@ -190,22 +186,46 @@ body{
   color:rgba(198,182,122,0.95);
 }
 
-/* ================= LAST SLIDE (LOGO + LINKS ONLY, NO IMAGE) ================= */
-.panel--end{ background:#f4f4f2; }
+/* ================= END SLIDE (AUBERRY STYLE: IMAGE LEFT + WHITE PANEL RIGHT) ================= */
+.panel--end{
+  background:#f4f4f2;
+}
 
-.end-wrap{
+/* end layout: left image strip + right content */
+.end-split{
   width:100%;
   height:100%;
+  display:grid;
+  grid-template-columns: 30% 70%;
+}
+
+.end-left{
+  position:relative;
+  overflow:hidden;
+}
+.end-left img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.end-right{
+  background:#f4f4f2;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:80px 40px 80px 120px;
+  padding:80px 40px;
   text-align:center;
   color:#222;
 }
+
 .end-inner{ width:min(520px, 92vw); }
 
-.end-logo img{ width:170px; margin-bottom:44px; }
+.end-logo img{
+  width:170px;
+  margin-bottom:44px;
+}
 
 .end-links a{
   display:block;
@@ -230,7 +250,11 @@ body{
   font-size:22px;
   line-height:1.6;
 }
-.end-footer .contact{ margin-top:14px; font-size:20px; }
+
+.end-footer .contact{
+  margin-top:14px;
+  font-size:20px;
+}
 
 .end-privacy{
   margin-top:22px;
@@ -273,7 +297,10 @@ body{
   color:#222;
 }
 
-.menu-logo img{ width:180px; margin-bottom:50px; }
+.menu-logo img{
+  width:180px;
+  margin-bottom:50px;
+}
 
 .menu-links a{
   display:block;
@@ -299,7 +326,10 @@ body{
   line-height:1.6;
   color:#222;
 }
-.menu-footer .contact{ margin-top:15px; font-size:20px; }
+.menu-footer .contact{
+  margin-top:15px;
+  font-size:20px;
+}
 
 .privacy{
   margin-top:20px;
@@ -315,58 +345,49 @@ body{
 /* When menu open, prevent interactions behind it */
 body.menu-open .hwrap{ pointer-events:none; }
 
-/* ================= BOTTOM SLIDER (scroll + slider) ================= */
+/* ================= BOTTOM SCROLLBAR-STYLE SLIDER (LIKE YOUR 3RD IMAGE) ================= */
 .nav-slider{
   position:fixed;
-  left:50%;
-  transform:translateX(-50%);
-  bottom:22px;
-  z-index:92; /* above slides, below menu (menu is 95) */
-  width:min(520px, 56vw);
-  padding:10px 14px;
-  border-radius:999px;
-  background:rgba(255,255,255,0.72);
-  backdrop-filter: blur(10px);
+  left:96px;             /* leave space for burger bar */
+  right:28px;
+  bottom:14px;
+  z-index:92;
+  height:16px;
   display:flex;
   align-items:center;
-  gap:12px;
+  pointer-events:auto;
 }
-.nav-slider .count{
-  font-family:'Montserrat', sans-serif;
-  font-size:11px;
-  letter-spacing:1.4px;
-  text-transform:uppercase;
-  color:#222;
-  white-space:nowrap;
-  opacity:.85;
-}
+
 .nav-slider input[type="range"]{
   width:100%;
   -webkit-appearance:none;
   appearance:none;
-  height:2px;
-  background:rgba(0,0,0,0.35);
+  height:6px;
+  background:rgba(255,255,255,0.55);
   border-radius:999px;
   outline:none;
+  backdrop-filter: blur(6px);
 }
+
+/* thumb like a small “handle” */
 .nav-slider input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance:none;
   appearance:none;
-  width:14px;
-  height:14px;
-  border-radius:50%;
-  background:#222;
-  border:2px solid rgba(255,255,255,0.85);
+  width:80px;
+  height:6px;
+  border-radius:999px;
+  background:rgba(0,0,0,0.55);
   cursor:pointer;
 }
 .nav-slider input[type="range"]::-moz-range-thumb{
-  width:14px;
-  height:14px;
-  border-radius:50%;
-  background:#222;
-  border:2px solid rgba(255,255,255,0.85);
+  width:80px;
+  height:6px;
+  border-radius:999px;
+  background:rgba(0,0,0,0.55);
   cursor:pointer;
+  border:none;
 }
+
 body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
 
 /* Mobile tweaks */
@@ -377,8 +398,20 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
   }
   .split-left{ padding:80px 24px 40px 24px; }
   .side-label{ display:none; }
-  .end-wrap{ padding:70px 24px; }
-  .nav-slider{ width:min(520px, 88vw); bottom:16px; }
+
+  .end-split{
+    grid-template-columns: 1fr;
+    grid-template-rows: 38vh auto;
+  }
+  .end-right{ padding:60px 24px; }
+
+  .nav-slider{
+    left:24px;
+    right:24px;
+    bottom:12px;
+  }
+  .nav-slider input[type="range"]::-webkit-slider-thumb{ width:62px; }
+  .nav-slider input[type="range"]::-moz-range-thumb{ width:62px; }
 }
 </style>
 </head>
@@ -388,7 +421,6 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
 <!-- Background video -->
 <div class="bg">
   <video autoplay muted loop playsinline>
-    <!-- IMPORTANT: file name is case-sensitive on GitHub Pages -->
     <source src="./Bg.mp4" type="video/mp4">
   </video>
 </div>
@@ -403,9 +435,8 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
   <div class="burger-lines"><i></i></div>
 </div>
 
-<!-- Bottom slider (scroll + slider together) -->
-<div class="nav-slider" id="navSliderWrap" aria-label="Slide navigation">
-  <div class="count" id="slideCount">01 / 11</div>
+<!-- Bottom scrollbar-style slider -->
+<div class="nav-slider" aria-label="Slide navigation">
   <input id="navSlider" type="range" min="0" max="10" step="1" value="0" />
 </div>
 
@@ -439,7 +470,6 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
         </div>
 
         <div class="split-right">
-          <!-- FIRST PICTURE -->
           <img class="panel-img" src="firstpagefirstpic.png" alt="Slide 1">
           <div class="side-label">SUPER-PRIME RESIDENTIAL</div>
         </div>
@@ -447,7 +477,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
       </div>
     </section>
 
-    <!-- 9 PICTURES TOTAL (image1 used above). These are image2..image9 -->
+    <!-- image slides -->
     <section class="panel"><img class="panel-img" src="./image2.jpg" alt="Slide 2"></section>
     <section class="panel"><img class="panel-img" src="./image3.jpg" alt="Slide 3"></section>
     <section class="panel"><img class="panel-img" src="./image4.jpg" alt="Slide 4"></section>
@@ -457,37 +487,44 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
     <section class="panel"><img class="panel-img" src="./image8.jpg" alt="Slide 8"></section>
     <section class="panel"><img class="panel-img" src="./image9.jpg" alt="Slide 9"></section>
 
-    <!-- LAST PANEL: LOGO + LINKS + TEXT ONLY (NO IMAGE) -->
+    <!-- END PANEL: image strip left + logo/links right (like your 2nd image) -->
     <section class="panel panel--end">
-      <div class="end-wrap">
-        <div class="end-inner">
+      <div class="end-split">
 
-          <div class="end-logo">
-            <img src="./logo.png" alt="RR Logo">
-          </div>
-
-          <nav class="end-links">
-            <!-- Keep Home sliding within this page -->
-            <a href="#" data-goto="0">Home</a>
-
-            <!-- If/when you create these pages, update hrefs -->
-            <a href="expertise.html">Expertise</a>
-            <a href="interior-projects.html">Interior Projects</a>
-            <a href="press.html">Press</a>
-          </nav>
-
-          <div class="end-divider"></div>
-
-          <div class="end-footer">
-            SUN HOUSE, 428 LONG DRIVE,<br>
-            GREENFORD, UB6 8UH
-
-            <div class="contact">+44 (0) 20 8575 3700</div>
-
-            <a class="end-privacy" href="#">Privacy Policy</a>
-          </div>
-
+        <!-- LEFT STRIP IMAGE:
+             If you want a DIFFERENT image here, replace ./image9.jpg with ./end.jpg -->
+        <div class="end-left">
+          <img src="./image9.jpg" alt="End image">
         </div>
+
+        <div class="end-right">
+          <div class="end-inner">
+
+            <div class="end-logo">
+              <img src="./logo.png" alt="RR Logo">
+            </div>
+
+            <nav class="end-links">
+              <a href="#" data-goto="0">Home</a>
+              <a href="expertise.html">Expertise</a>
+              <a href="interior-projects.html">Interior Projects</a>
+              <a href="press.html">Press</a>
+            </nav>
+
+            <div class="end-divider"></div>
+
+            <div class="end-footer">
+              SUN HOUSE, 428 LONG DRIVE,<br>
+              GREENFORD, UB6 8UH
+
+              <div class="contact">+44 (0) 20 8575 3700</div>
+
+              <a class="end-privacy" href="#">Privacy Policy</a>
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -543,9 +580,7 @@ document.addEventListener("keydown", e => { if(e.key === "Escape") closeMenuFn()
 /* ===== HORIZONTAL SCROLL (wheel + touch + drag + slider) ===== */
 const track = document.getElementById("track");
 const panels = Array.from(track.querySelectorAll(".panel"));
-
 const navSlider = document.getElementById("navSlider");
-const slideCount = document.getElementById("slideCount");
 
 let currentX = 0;
 let targetX = 0;
@@ -558,28 +593,19 @@ function clamp(v, min, max){
   return Math.max(min, Math.min(max, v));
 }
 function nearestIndexFromX(x){
-  const idx = Math.round(x / window.innerWidth);
-  return clamp(idx, 0, panels.length - 1);
+  return clamp(Math.round(x / window.innerWidth), 0, panels.length - 1);
 }
-function formatCount(i, total){
-  const a = String(i+1).padStart(2,'0');
-  const b = String(total).padStart(2,'0');
-  return `${a} / ${b}`;
-}
-
-function syncSliderAndCount(){
-  const idx = nearestIndexFromX(currentX);
-  slideCount.textContent = formatCount(idx, panels.length);
+function syncSlider(){
   navSlider.max = String(panels.length - 1);
   if(!isUserSliding){
-    navSlider.value = String(idx);
+    navSlider.value = String(nearestIndexFromX(currentX));
   }
 }
 
 function raf(){
   currentX += (targetX - currentX) * 0.08;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
-  syncSliderAndCount();
+  syncSlider();
   requestAnimationFrame(raf);
 }
 raf();
@@ -611,7 +637,7 @@ window.addEventListener("touchstart", (e)=>pointerDown(e.touches[0].clientX), {p
 window.addEventListener("touchmove", (e)=>pointerMove(e.touches[0].clientX), {passive:true});
 window.addEventListener("touchend", pointerUp);
 
-// Slider control (click + drag)
+// Slider control
 navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
 navSlider.addEventListener("pointerup", ()=>{
   isUserSliding = false;
@@ -619,7 +645,6 @@ navSlider.addEventListener("pointerup", ()=>{
   targetX = clamp(idx * window.innerWidth, 0, maxScroll());
 });
 navSlider.addEventListener("input", ()=>{
-  // while dragging, update target immediately
   const idx = Number(navSlider.value);
   targetX = clamp(idx * window.innerWidth, 0, maxScroll());
 });
@@ -628,10 +653,10 @@ window.addEventListener("resize", ()=>{
   targetX = clamp(targetX, 0, maxScroll());
   currentX = clamp(currentX, 0, maxScroll());
   navSlider.max = String(panels.length - 1);
-  syncSliderAndCount();
+  syncSlider();
 });
 
-// Make only the "Home" link (data-goto) slide; other links behave normally
+// data-goto slide links
 document.querySelectorAll('[data-goto]').forEach(a=>{
   a.addEventListener('click', (e)=>{
     e.preventDefault();
