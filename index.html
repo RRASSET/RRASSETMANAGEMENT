@@ -13,7 +13,7 @@ html,body{height:100%}
 body{
   font-family: Arial, sans-serif;
   background:#000;
-  overflow:hidden;
+  overflow:hidden; /* we control scroll */
 }
 
 /* ================= BACKGROUND VIDEO ================= */
@@ -65,7 +65,7 @@ body{
 .burger-lines i::before{ top:-8px; }
 .burger-lines i::after{ top:8px; }
 
-/* ================= HORIZONTAL SCROLL ================= */
+/* ================= HORIZONTAL SCROLL AREA ================= */
 .hwrap{
   position:relative;
   z-index:30;
@@ -86,9 +86,10 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
+  padding:0;
 }
 
-/* Image slides */
+/* Full image slides */
 .panel-img{
   width:100%;
   height:100%;
@@ -96,76 +97,113 @@ body{
   display:block;
 }
 
-/* ================= SPLIT SLIDE ================= */
+/* ================= AUBERRY STYLE TEXT + IMAGE SPLIT SLIDE ================= */
 .panel--split{ background:#f4f4f2; }
+
 .split{
   width:100%;
   height:100%;
   display:grid;
   grid-template-columns: 36% 64%;
 }
+
 .split-left{
   padding:90px 70px 90px 140px;
+  color:#1a1a1a;
   display:flex;
   flex-direction:column;
   justify-content:center;
-  color:#1a1a1a;
 }
+
 .aub-heading{
   font-family:'Cormorant Garamond', serif;
+  font-weight:400;
   line-height:1.05;
+  letter-spacing:0.2px;
   margin-bottom:28px;
 }
+
 .aub-heading .small{
   display:block;
   font-style:italic;
   font-size:38px;
-  font-weight:400;
 }
+
 .aub-heading .big{
   display:block;
+  font-style:normal;
   font-size:58px;
   text-transform:uppercase;
-  font-weight:400;
-  letter-spacing:.6px;
+  letter-spacing:0.6px;
 }
+
 .aub-line{
   width:52px;
   height:1px;
   background:#c6b67a;
   margin:0 0 40px 0;
 }
+
 .aub-text{
   font-family:'Cormorant Garamond', serif;
+  font-weight:300;
   font-size:18px;
   line-height:1.85;
   max-width:460px;
-  font-weight:300;
+  color:#1f1f1f;
 }
 .aub-text p{ margin-bottom:26px; }
 
-.split-right{ overflow:hidden; }
-.split-right img{
+.split-right{ position:relative; overflow:hidden; }
+.split-right img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+/* ================= END SLIDE (LUXURY: IMAGE BACK + CENTER WHITE PANEL) ================= */
+.panel--end{
+  position:relative;
+  overflow:hidden;
+}
+
+/* background image behind the end content */
+.end-bg{
+  position:absolute;
+  inset:0;
   width:100%;
   height:100%;
   object-fit:cover;
-  display:block;
+  transform:scale(1.02);
+  z-index:0;
 }
 
-/* ================= END WHITE SLIDE (SEPARATE) ================= */
-.panel--end{ background:#f4f4f2; }
+/* subtle darkening so panel feels premium */
+.panel--end::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to right, rgba(0,0,0,0.22), rgba(0,0,0,0.08), rgba(0,0,0,0.22));
+  z-index:1;
+  pointer-events:none;
+}
 
-.end-wrap{
-  width:100%;
+/* centered panel (NOT full page) */
+.end-card{
+  position:relative;
+  z-index:2;
   height:100%;
+  width:min(560px, 74vw);
+  margin-left:80px; /* keeps away from burger bar area */
+  background:rgba(244,244,242,0.94);
+  backdrop-filter: blur(8px);
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:80px 40px 80px 120px;
   text-align:center;
-  color:#222;
+  padding:80px 44px;
+  box-shadow:0 18px 60px rgba(0,0,0,0.22);
+  border-left:1px solid rgba(0,0,0,0.04);
+  border-right:1px solid rgba(0,0,0,0.04);
 }
-.end-inner{ width:min(520px, 92vw); }
+
+.end-inner{ width:100%; max-width:520px; }
 
 .end-logo img{ width:170px; margin-bottom:44px; }
 
@@ -186,12 +224,15 @@ body{
   background:#c6b67a;
   margin:50px auto 30px auto;
 }
+
 .end-footer{
   font-family:'Cormorant Garamond', serif;
   font-size:22px;
   line-height:1.6;
+  color:#222;
 }
 .end-footer .contact{ margin-top:14px; font-size:20px; }
+
 .end-privacy{
   margin-top:22px;
   display:inline-block;
@@ -203,7 +244,7 @@ body{
   text-decoration:none;
 }
 
-/* ================= BOTTOM THIN SCROLLBAR SLIDER ================= */
+/* ================= BOTTOM SCROLLBAR-STYLE SLIDER ================= */
 .nav-slider{
   position:fixed;
   left:96px;
@@ -238,12 +279,10 @@ body{
   border:none;
 }
 
-/* ================= SLIDING MENU PANEL (THIS WAS MISSING) ================= */
+/* ================= SLIDING MENU PANEL ================= */
 .menu{
-  position:fixed;
-  top:0; left:0;
-  height:100vh;
-  width:420px;
+  position:fixed; top:0; left:0;
+  height:100vh; width:420px;
   background:#f4f4f2;
   z-index:95;
   transform:translateX(-100%);
@@ -253,10 +292,8 @@ body{
 
 .menu-panel{
   height:100%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
   text-align:center;
   padding:60px 30px;
   position:relative;
@@ -272,10 +309,7 @@ body{
   color:#222;
 }
 
-.menu-logo img{
-  width:180px;
-  margin-bottom:50px;
-}
+.menu-logo img{ width:180px; margin-bottom:50px; }
 
 .menu-links a{
   display:block;
@@ -301,10 +335,8 @@ body{
   line-height:1.6;
   color:#222;
 }
-.menu-footer .contact{
-  margin-top:15px;
-  font-size:20px;
-}
+.menu-footer .contact{ margin-top:15px; font-size:20px; }
+
 .privacy{
   margin-top:20px;
   display:inline-block;
@@ -316,18 +348,25 @@ body{
   text-decoration:none;
 }
 
-/* Prevent clicks behind menu + slider when open */
+/* When menu open, prevent interactions behind it */
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
 
 /* Mobile tweaks */
 @media (max-width: 900px){
   .split{
-    grid-template-columns:1fr;
-    grid-template-rows:auto 55vh;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 55vh;
   }
   .split-left{ padding:80px 24px 40px 24px; }
-  .end-wrap{ padding:70px 24px; }
+
+  /* end panel becomes full width on mobile (luxury still) */
+  .end-card{
+    width:100%;
+    margin-left:0;
+    padding:70px 24px;
+  }
+
   .nav-slider{ left:24px; right:24px; bottom:12px; }
   .menu{ width:min(420px, 92vw); }
 }
@@ -353,7 +392,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
   <div class="burger-lines"><i></i></div>
 </div>
 
-<!-- Bottom thin slider -->
+<!-- Bottom slider -->
 <div class="nav-slider" aria-label="Slide navigation">
   <input id="navSlider" type="range" min="0" max="10" step="1" value="0">
 </div>
@@ -397,11 +436,16 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
     <section class="panel"><img class="panel-img" src="./image6.jpg" alt="Slide 6"></section>
     <section class="panel"><img class="panel-img" src="./image7.jpg" alt="Slide 7"></section>
     <section class="panel"><img class="panel-img" src="./image8.jpg" alt="Slide 8"></section>
+
+    <!-- LAST IMAGE SLIDE (optional - keep if you want) -->
     <section class="panel"><img class="panel-img" src="./image9.jpg" alt="Slide 9"></section>
 
-    <!-- End slide (separate white) -->
+    <!-- END SLIDE: image behind + centered luxury panel -->
     <section class="panel panel--end">
-      <div class="end-wrap">
+      <!-- choose your end background image here -->
+      <img class="end-bg" src="./image9.jpg" alt="End background">
+
+      <div class="end-card">
         <div class="end-inner">
 
           <div class="end-logo">
@@ -411,7 +455,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
           <nav class="end-links">
             <a href="#" data-goto="0">Home</a>
             <a href="expertise.html">Expertise</a>
-            <a href="interior-projects.html">Interior Projects</a>
+            <a href="https://rrasset.github.io/RRASSETMANAGEMENT/interior-projects.html">Interior Projects</a>
             <a href="press.html">Press</a>
           </nav>
 
@@ -431,7 +475,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
   </div>
 </div>
 
-<!-- Sliding menu panel -->
+<!-- Sliding menu -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
     <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
@@ -459,7 +503,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
 </div>
 
 <script>
-/* ===== MENU (THIS WAS MISSING) ===== */
+/* ===== MENU ===== */
 const menu = document.getElementById("menu");
 const burger = document.getElementById("burger");
 const closeMenu = document.getElementById("closeMenu");
@@ -472,12 +516,11 @@ function closeMenuFn(){
   menu.classList.remove("open");
   document.body.classList.remove("menu-open");
 }
-
 burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
 document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
 
-/* ===== HORIZONTAL SCROLL (wheel + drag + touch + slider) ===== */
+/* ===== HORIZONTAL SCROLL (wheel + touch + drag + slider) ===== */
 const track = document.getElementById("track");
 const panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
@@ -497,7 +540,6 @@ function raf(){
   if(!isUserSliding){
     navSlider.value = String(Math.round(currentX / window.innerWidth));
   }
-
   requestAnimationFrame(raf);
 }
 raf();
@@ -539,7 +581,7 @@ navSlider.addEventListener("input", ()=>{
   targetX = clamp(Number(navSlider.value) * window.innerWidth, 0, maxScroll());
 });
 
-/* data-goto links: slide within same page */
+/* data-goto links */
 document.querySelectorAll('[data-goto]').forEach(a=>{
   a.addEventListener('click', (e)=>{
     e.preventDefault();
