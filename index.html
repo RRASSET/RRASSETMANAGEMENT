@@ -1,19 +1,782 @@
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>RRASSET Management</title>
-  <style>
-    .panel--end {
-      background-color: #f4f4f2; /* Updated background color */
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>RR Asset Management</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family: Arial, sans-serif;
+  background:#000;
+  overflow:hidden; /* we control scroll */
+}
+
+/* ================= BACKGROUND VIDEO ================= */
+.bg{ position:fixed; inset:0; z-index:0; overflow:hidden; background:#000; }
+.bg video{ width:100%; height:100%; object-fit:cover; object-position:center; }
+
+/* ================= INTRO LOGO (FADE OUT ON SCROLL) ================= */
+.intro{
+  position:fixed; inset:0; z-index:40;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+  transition:opacity .75s ease;
+}
+.intro img{
+  width:min(240px,55vw);
+  opacity:0;
+  transform:translateY(12px);
+  animation:logoIn 2.2s cubic-bezier(.22,1,.36,1) forwards;
+  animation-delay:0.55s;
+}
+@keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
+
+/* ================= LEFT BURGER (NARROWER + SLOWER) ================= */
+.side-bar{
+  position:fixed; top:0; left:0;
+  width:64px;
+  height:100vh;
+  background:rgba(255,255,255,0.88);
+  backdrop-filter: blur(10px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:90;
+  cursor:pointer;
+  transition:background .6s ease;
+}
+.side-bar:hover{ background:rgba(255,255,255,0.94); }
+
+.burger-lines{
+  opacity:0;
+  transform:translateY(8px);
+  animation:burgerIn 1.8s cubic-bezier(.22,1,.36,1) forwards;
+  animation-delay:0.85s;
+}
+@keyframes burgerIn{ to{opacity:1; transform:translateY(0);} }
+
+.burger-lines i{
+  width:22px; height:1.6px;
+  background:#111;
+  position:relative;
+  display:block;
+}
+.burger-lines i::before,
+.burger-lines i::after{
+  content:"";
+  position:absolute;
+  left:0;
+  width:22px;
+  height:1.6px;
+  background:#111;
+}
+.burger-lines i::before{ top:-7px; }
+.burger-lines i::after{ top:7px; }
+
+/* ================= HORIZONTAL SCROLL AREA ================= */
+.hwrap{
+  position:relative;
+  z-index:30; /* slides above logo */
+  height:100vh;
+  width:100vw;
+  overflow:hidden;
+}
+.htrack{
+  height:100%;
+  display:flex;
+  will-change:transform;
+  transform:translate3d(0,0,0);
+}
+
+/* ================= PANELS (VARIABLE WIDTH, NO CROP) ================= */
+.panel{
+  height:100vh;
+  flex:0 0 auto;
+  width:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  background:transparent;
+  padding:0;
+  overflow:hidden;
+}
+
+/* Image slides: NO CROP, NO STRETCH */
+.panel-img{
+  height:100vh;
+  width:auto;
+  object-fit:contain;
+  object-position:center;
+  display:block;
+}
+
+/* Home slide must always be full screen so you see video + logo first */
+.panel--home{
+  flex:0 0 100vw;
+  width:100vw;
+  background:transparent;
+}
+
+/* ================= AUBERRY STYLE TEXT + IMAGE SPLIT SLIDE ================= */
+.panel--split{
+  flex:0 0 100vw;
+  width:100vw;
+  background:#f4f4f2;
+}
+
+.split{
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-columns: 42% 58%;
+}
+
+.split-left{
+  padding:120px 80px 120px 160px;
+  color:#1a1a1a;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.aub-heading{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:400;
+  line-height:1.02;
+  letter-spacing:0.2px;
+  margin-bottom:22px;
+}
+.aub-heading .small{
+  display:block;
+  font-style:italic;
+  font-size:34px;
+}
+.aub-heading .big{
+  display:block;
+  font-style:normal;
+  font-size:64px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.aub-line{
+  width:56px;
+  height:1px;
+  background:#c6b67a;
+  margin:0 0 34px 0;
+}
+
+.aub-text{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:300;
+  font-size:19px;
+  line-height:1.9;
+  max-width:440px;
+  color:#1f1f1f;
+}
+.aub-text p{ margin-bottom:24px; }
+
+.split-right{ position:relative; overflow:hidden; background:#f4f4f2; }
+
+/* Split slide image: NO CROP */
+.panel--split .panel-img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  display:block;
+}
+
+/* ================= QUOTE TEXT SLIDE (Auberry-style) ================= */
+.panel--quote{
+  flex:0 0 100vw;
+  width:100vw;
+  background:#f4f4f2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.quote-wrap{
+  width:100%;
+  max-width:620px;
+  margin:0 auto;
+  padding:0 24px;
+}
+.quote-mark{
+  font-family:'Cormorant Garamond', serif;
+  font-size:80px;
+  line-height:1;
+  color:#c6b67a;
+  margin-bottom:10px;
+}
+.quote-text{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:300;
+  font-style:italic;
+  font-size:28px;
+  line-height:1.7;
+  color:#1f1f1f;
+  letter-spacing:0.2px;
+}
+
+/* ================= END SLIDE (IMAGE ATTACHED TO CARD — NO GAP) ================= */
+.panel--end{
+  flex:0 0 100vw;
+  width:100vw;
+  height:100vh;
+  display:flex;
+  align-items:stretch;
+  justify-content:flex-end;
+  background:transparent;
+  overflow:hidden;
+}
+
+/* Left side shows the LAST IMAGE and pushes it to touch the card */
+.end-left{
+  flex:1;
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  overflow:hidden;
+  background:transparent;
+}
+
+.end-img{
+  height:100vh;
+  width:auto;
+  max-width:100%;
+  object-fit:contain;
+  object-position:right center; /* hug the card edge */
+  display:block;
+}
+
+/* Right panel (logo card) */
+.end-card{
+  flex:0 0 min(520px, 42vw);
+  height:100%;
+  background:#f4f4f2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:110px 60px;
+  border-left:1px solid rgba(0,0,0,0.08);
+  box-shadow:none;
+}
+
+.end-inner{ width:100%; max-width:520px; }
+.end-logo img{ width:170px; margin-bottom:44px; }
+
+.end-links a{
+  display:block;
+  font-family:'Cormorant Garamond', serif;
+  font-size:28px;
+  margin:14px 0;
+  text-decoration:none;
+  color:#1a1a1a;
+  transition:opacity .25s ease;
+}
+.end-links a:hover{ opacity:.6; }
+
+.end-divider{
+  width:200px;
+  height:1px;
+  background:#c6b67a;
+  margin:50px auto 30px auto;
+}
+
+.end-footer{
+  font-family:'Cormorant Garamond', serif;
+  font-size:20px;
+  line-height:1.7;
+  color:#1a1a1a;
+}
+.end-footer .contact{ margin-top:12px; font-size:18px; }
+
+.end-privacy{
+  margin-top:22px;
+  display:inline-block;
+  font-family:'Montserrat', sans-serif;
+  font-size:12px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:#c6b67a;
+  text-decoration:none;
+}
+
+/* ================= BOTTOM THIN SLIDER ================= */
+.nav-slider{
+  position:fixed;
+  left:84px;          /* matches 64px burger + spacing */
+  right:28px;
+  bottom:14px;
+  z-index:92;
+  transition:opacity .35s ease;
+}
+.nav-slider input[type="range"]{
+  width:100%;
+  -webkit-appearance:none;
+  appearance:none;
+  height:6px;
+  background:rgba(255,255,255,0.60);
+  border-radius:999px;
+  outline:none;
+}
+.nav-slider input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  appearance:none;
+  width:80px;
+  height:6px;
+  border-radius:999px;
+  background:rgba(0,0,0,0.60);
+  cursor:pointer;
+}
+.nav-slider input[type="range"]::-moz-range-thumb{
+  width:80px;
+  height:6px;
+  border-radius:999px;
+  background:rgba(0,0,0,0.60);
+  cursor:pointer;
+  border:none;
+}
+
+/* ================= SLIDING MENU PANEL (SLOW + FADE CONTENT) ================= */
+.menu{
+  position:fixed; top:0; left:0;
+  height:100vh; width:380px;
+  background:#f4f4f2;
+  z-index:95;
+  transform:translateX(-100%);
+  transition:transform 1.15s cubic-bezier(.77,0,.18,1);
+  will-change:transform;
+}
+.menu.open{ transform:translateX(0); }
+
+.menu-panel{
+  height:100%;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center;
+  padding:60px 30px;
+  position:relative;
+
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity .9s ease, transform .9s ease;
+  transition-delay:.25s;
+}
+.menu.open .menu-panel{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.back-arrow{
+  position:absolute;
+  left:34px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:28px;
+  cursor:pointer;
+  color:#222;
+  opacity:.9;
+}
+
+.menu-logo img{
+  width:170px;
+  margin-bottom:46px;
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity .9s ease, transform .9s ease;
+  transition-delay:.35s;
+}
+.menu.open .menu-logo img{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.menu-links a{
+  display:block;
+  font-family:'Cormorant Garamond', serif;
+  font-size:30px;
+  margin:18px 0;
+  text-decoration:none;
+  color:#222;
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity .75s ease, transform .75s ease;
+}
+.menu.open .menu-links a{
+  opacity:1;
+  transform:translateY(0);
+}
+.menu.open .menu-links a:nth-child(1){ transition-delay:.45s; }
+.menu.open .menu-links a:nth-child(2){ transition-delay:.55s; }
+.menu.open .menu-links a:nth-child(3){ transition-delay:.65s; }
+.menu.open .menu-links a:nth-child(4){ transition-delay:.75s; }
+
+.menu-links a:hover{ opacity:0.6; }
+
+.divider{
+  width:200px;
+  height:1px;
+  background:#c6b67a;
+  margin:50px auto 30px auto;
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity .8s ease, transform .8s ease;
+  transition-delay:.8s;
+}
+.menu.open .divider{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.menu-footer{
+  font-family:'Cormorant Garamond', serif;
+  font-size:22px;
+  line-height:1.6;
+  color:#222;
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity .85s ease, transform .85s ease;
+  transition-delay:.9s;
+}
+.menu.open .menu-footer{
+  opacity:1;
+  transform:translateY(0);
+}
+.menu-footer .contact{ margin-top:15px; font-size:20px; }
+
+.privacy{
+  margin-top:20px;
+  display:inline-block;
+  font-family:'Montserrat', sans-serif;
+  font-size:12px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:#c6b67a;
+  text-decoration:none;
+}
+
+/* When menu open, prevent interactions behind it */
+body.menu-open .hwrap{ pointer-events:none; }
+body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
+
+/* Mobile tweaks */
+@media (max-width: 900px){
+  .split{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 55vh;
+  }
+  .split-left{ padding:80px 24px 40px 24px; }
+  .quote-wrap{ padding:0 24px; }
+
+  .end-left{ display:none; }
+  .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
+
+  .nav-slider{ left:24px; right:24px; bottom:12px; }
+  .menu{ width:min(380px, 92vw); }
+}
+</style>
 </head>
+
 <body>
-  <div class="panel--end">
-    <h1>Welcome to RRASSET Management</h1>
-    <p>Your content goes here.</p>
+
+<!-- Background video -->
+<div class="bg">
+  <video autoplay muted loop playsinline>
+    <source src="./Bg.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- Logo (between bg video and slides) -->
+<div class="intro">
+  <img src="./logo.png" alt="RR Logo">
+</div>
+
+<!-- Burger -->
+<div class="side-bar" id="burger" aria-label="Open menu">
+  <div class="burger-lines"><i></i></div>
+</div>
+
+<!-- Bottom slider -->
+<div class="nav-slider" aria-label="Slide navigation">
+  <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
+</div>
+
+<!-- Horizontal panels -->
+<div class="hwrap">
+  <div class="htrack" id="track">
+
+    <!-- Panel 0: video only -->
+    <section class="panel panel--home"></section>
+
+    <!-- Panel 1: split text + image -->
+    <section class="panel panel--split">
+      <div class="split">
+        <div class="split-left">
+          <div class="aub-heading">
+            <span class="small">A Distinguished</span>
+            <span class="big">INTERIORS<br>AGENCY</span>
+          </div>
+          <div class="aub-line"></div>
+          <div class="aub-text">
+            <p>
+              R&amp;R Mayfair is a premier real estate advisory specialising in luxury and ultra-prime properties in Dubai’s most prestigious and sought-after locations.
+            </p>
+            <p>
+              Acting as trusted advisors to discerning investors, families, and international clients, we are dedicated to delivering exceptional opportunities across Dubai’s high-end residential market and landmark developments.
+            </p>
+          </div>
+        </div>
+        <div class="split-right">
+          <img class="panel-img" src="./firstpagefirstpic.png" alt="Slide 1">
+        </div>
+      </div>
+    </section>
+
+    <!-- Image slides (NO CROP) -->
+    <section class="panel"><img class="panel-img" src="./firstpagesecondpic.png" alt="Slide 2"></section>
+    <section class="panel"><img class="panel-img" src="./firstpagethirdpic.png" alt="Slide 3"></section>
+
+    <!-- TEXT SECTION (after third picture) -->
+    <section class="panel panel--split">
+      <div class="split">
+        <div class="split-left">
+          <div class="aub-heading">
+            <span class="small">A Global Standard</span>
+            <span class="big">REPUTATION</span>
+          </div>
+          <div class="aub-line"></div>
+          <div class="aub-text">
+            <p>
+              Our multi-disciplinary team has earned a distinguished reputation for advising on exclusive private acquisitions and high-value luxury real estate across Dubai’s most prestigious addresses.
+            </p>
+            <p>
+              With deep market insight and refined strategic expertise in-house, we curate tailored solutions that align with each client’s vision - delivering seamless, considered, and highly personalised outcomes.
+            </p>
+          </div>
+        </div>
+
+        <div class="split-right">
+          <img class="panel-img" src="./firstpagefourthpic.png" alt="Reputation">
+        </div>
+      </div>
+    </section>
+
+    <!-- Continue images -->
+    <section class="panel"><img class="panel-img" src="./firstpagefifthpic.png" alt="Slide 4"></section>
+    <section class="panel"><img class="panel-img" src="./firstpagesixthpic.png" alt="Slide 5"></section>
+
+    <!-- QUOTE TEXT (after the sixth image) -->
+    <section class="panel panel--quote">
+      <div class="quote-wrap">
+        <div class="quote-mark">“</div>
+        <div class="quote-text">
+          R&amp;R Mayfair is a trusted advisory with a depth of experience across Dubai’s ultra-prime real estate — delivering discreet, strategic guidance and exceptional outcomes for our clients.
+        </div>
+      </div>
+    </section>
+
+    <!-- 7th, 8th, 9th images -->
+    <section class="panel"><img class="panel-img" src="./firstpageseventhpic.png" alt="Slide 6"></section>
+    <section class="panel"><img class="panel-img" src="./firstpageeighthpic.png" alt="Slide 7"></section>
+    <section class="panel"><img class="panel-img" src="./firstpageninethpic.png" alt="Slide 8"></section>
+
+    <!-- END SLIDE (LAST IMAGE ATTACHED TO LOGO CARD — NO GAP) -->
+    <section class="panel panel--end">
+      <div class="end-left">
+        <img class="end-img" src="./firstpageninethpic.png" alt="Last Slide Image">
+      </div>
+
+      <div class="end-card">
+        <div class="end-inner">
+
+          <div class="end-logo">
+            <img src="./logo.png" alt="RR Logo">
+          </div>
+
+          <nav class="end-links">
+            <a href="#" data-goto="0">Home</a>
+            <a href="expertise.html">Expertise</a>
+            <a href="https://rrasset.github.io/RRASSETMANAGEMENT/interior-projects.html">Interior Projects</a>
+            <a href="press.html">Press</a>
+          </nav>
+
+          <div class="end-divider"></div>
+
+          <div class="end-footer">
+            SUN HOUSE, 428 LONG DRIVE,<br>
+            GREENFORD, UB6 8UH
+            <div class="contact">+44 (0) 20 8575 3700</div>
+            <a class="end-privacy" href="#">Privacy Policy</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
   </div>
-  <div class="logo-card">
-    <img src="logo.png" alt="Logo">
+</div>
+
+<!-- Sliding menu -->
+<div class="menu" id="menu" aria-label="Menu">
+  <div class="menu-panel">
+    <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
+
+    <div class="menu-logo">
+      <img src="./logo.png" alt="RR Asset Management Logo">
+    </div>
+
+    <nav class="menu-links">
+      <a href="#" data-goto="0">Home</a>
+      <a href="expertise.html">Expertise</a>
+      <a href="interior-projects.html">Interior Projects</a>
+      <a href="press.html">Press</a>
+    </nav>
+
+    <div class="divider"></div>
+
+    <div class="menu-footer">
+      SUN HOUSE, 428 LONG DRIVE,<br>
+      GREENFORD, UB6 8UH
+      <div class="contact">+44 (0) 20 8575 3700</div>
+      <a href="#" class="privacy">Privacy Policy</a>
+    </div>
   </div>
+</div>
+
+<script>
+/* ===== MENU ===== */
+const menu = document.getElementById("menu");
+const burger = document.getElementById("burger");
+const closeMenu = document.getElementById("closeMenu");
+
+function openMenu(){
+  menu.classList.add("open");
+  document.body.classList.add("menu-open");
+}
+function closeMenuFn(){
+  menu.classList.remove("open");
+  document.body.classList.remove("menu-open");
+}
+burger.addEventListener("click", openMenu);
+closeMenu.addEventListener("click", closeMenuFn);
+document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
+
+/* ===== HORIZONTAL SCROLL (VARIABLE WIDTH PANELS) ===== */
+const track = document.getElementById("track");
+let panels = Array.from(track.querySelectorAll(".panel"));
+const navSlider = document.getElementById("navSlider");
+const intro = document.querySelector(".intro");
+
+let currentX = 0;
+let targetX = 0;
+let isUserSliding = false;
+
+function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+
+function totalWidth(){
+  return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0);
+}
+function maxScroll(){
+  return Math.max(0, totalWidth() - window.innerWidth);
+}
+function xForIndex(idx){
+  return panels.slice(0, idx).reduce((sum, p) => sum + p.getBoundingClientRect().width, 0);
+}
+
+function raf(){
+  currentX += (targetX - currentX) * 0.075;
+  track.style.transform = `translate3d(${-currentX}px,0,0)`;
+
+  /* Fade logo out after scroll begins */
+  if (intro) {
+    const fadeStart = 55;
+    const fadeEnd   = 320;
+    const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
+    const opacity = 1 - Math.max(0, Math.min(1, t));
+    intro.style.opacity = String(opacity);
+  }
+
+  const maxS = maxScroll();
+  navSlider.max = String(panels.length - 1);
+
+  if(!isUserSliding){
+    const ratio = maxS === 0 ? 0 : (currentX / maxS);
+    navSlider.value = String(Math.round(ratio * (panels.length - 1)));
+  }
+
+  requestAnimationFrame(raf);
+}
+raf();
+
+/* Wheel: smoother */
+window.addEventListener("wheel", (e)=>{
+  if(document.body.classList.contains("menu-open")) return;
+  const speed = 0.9;
+  targetX = clamp(targetX + e.deltaY * speed, 0, maxScroll());
+},{passive:true});
+
+/* Drag / touch */
+let isDown=false, startX=0, startTarget=0;
+
+function pointerDown(x){
+  if(document.body.classList.contains("menu-open")) return;
+  isDown=true; startX=x; startTarget=targetX;
+}
+function pointerMove(x){
+  if(!isDown) return;
+  const dx = x - startX;
+  targetX = clamp(startTarget - dx, 0, maxScroll());
+}
+function pointerUp(){ isDown=false; }
+
+window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
+window.addEventListener("mousemove",(e)=>pointerMove(e.clientX));
+window.addEventListener("mouseup",pointerUp);
+
+window.addEventListener("touchstart",(e)=>pointerDown(e.touches[0].clientX),{passive:true});
+window.addEventListener("touchmove",(e)=>pointerMove(e.touches[0].clientX),{passive:true});
+window.addEventListener("touchend",pointerUp);
+
+/* Slider */
+function sliderToTarget(){
+  const maxS = maxScroll();
+  const denom = (panels.length - 1) || 1;
+  const ratio = Number(navSlider.value) / denom;
+  targetX = clamp(ratio * maxS, 0, maxS);
+}
+
+navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
+navSlider.addEventListener("pointerup", ()=>{
+  isUserSliding = false;
+  sliderToTarget();
+});
+navSlider.addEventListener("input", sliderToTarget);
+
+/* data-goto links */
+document.querySelectorAll('[data-goto]').forEach(a=>{
+  a.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const idx = Number(a.dataset.goto);
+    targetX = clamp(xForIndex(idx), 0, maxScroll());
+    closeMenuFn();
+  });
+});
+
+window.addEventListener("resize", ()=>{
+  panels = Array.from(track.querySelectorAll(".panel"));
+  targetX = clamp(targetX, 0, maxScroll());
+  currentX = clamp(currentX, 0, maxScroll());
+});
+</script>
+
 </body>
 </html>
