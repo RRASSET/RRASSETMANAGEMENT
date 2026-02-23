@@ -195,8 +195,10 @@ body{
   justify-content:center;
 }
 .quote-wrap{
-  width:min(760px, 86vw);
-  padding-left:80px; /* keeps it away from burger visually */
+  width:100%;
+  max-width:620px;          /* narrower like Auberry */
+  margin:0 auto;            /* true centered column */
+  padding-left:0;           /* remove fake offset */
 }
 .quote-mark{
   font-family:'Cormorant Garamond', serif;
