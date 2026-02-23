@@ -74,7 +74,7 @@ body{
 /* ================= HORIZONTAL SCROLL AREA ================= */
 .hwrap{
   position:relative;
-  z-index:30; /* higher than intro so slides cover logo */
+  z-index:30;
   height:100vh;
   width:100vw;
   overflow:hidden;
@@ -106,11 +106,9 @@ body{
 }
 
 /* ================= AUBERRY STYLE TEXT + IMAGE SPLIT SLIDE ================= */
-/* One slide with left text column and right image */
 .panel--split{
   background:#f4f4f2;
 }
-
 .split{
   width:100%;
   height:100%;
@@ -118,8 +116,10 @@ body{
   grid-template-columns: 36% 64%;
 }
 
+/* Left column: match the “airy” Auberry spacing */
 .split-left{
-  padding:90px 70px 90px 140px; /* space from left + burger */
+  /* space from left + burger and generous breathing room */
+  padding: clamp(64px, 7vw, 92px) clamp(44px, 5vw, 70px) clamp(70px, 6vw, 90px) clamp(120px, 10vw, 150px);
   color:#1a1a1a;
   display:flex;
   flex-direction:column;
@@ -131,41 +131,39 @@ body{
   font-weight:400;
   line-height:1.02;
   letter-spacing:0.2px;
-  margin-bottom:34px;
+  margin-bottom: clamp(18px, 2.3vw, 30px);
 }
 
 .aub-heading .small{
   font-style:italic;
-  font-size:42px;
+  font-size: clamp(30px, 3.2vw, 44px);
   display:block;
 }
 
 .aub-heading .big{
   font-style:normal;
-  font-size:54px;
+  font-size: clamp(44px, 4.2vw, 62px);
   text-transform:uppercase;
   display:block;
+  letter-spacing:0.6px;
 }
 
 .aub-line{
-  width:46px;
+  width:52px;
   height:1px;
-  background:#c6b67a; /* gold-ish */
-  margin:0 0 40px 0;
+  background:#c6b67a;
+  margin: 0 0 clamp(24px, 3vw, 44px) 0;
 }
 
 .aub-text{
   font-family:'Cormorant Garamond', serif;
   font-weight:300;
-  font-size:18px;
-  line-height:1.75;
-  max-width:420px;
+  font-size: clamp(16px, 1.25vw, 18px);
+  line-height: 1.85;
+  max-width: 460px;
   color:#1f1f1f;
 }
-
-.aub-text p{
-  margin-bottom:26px;
-}
+.aub-text p{ margin-bottom: clamp(18px, 2vw, 28px); }
 
 .split-right{
   position:relative;
@@ -178,7 +176,7 @@ body{
   display:block;
 }
 
-/* Optional vertical side label like Auberry (you can remove if you don’t want) */
+/* Optional vertical side label like Auberry */
 .side-label{
   position:absolute;
   left:24px;
@@ -193,9 +191,7 @@ body{
 }
 
 /* ================= LAST SLIDE (LOGO + LINKS ONLY, NO IMAGE) ================= */
-.panel--end{
-  background:#f4f4f2;
-}
+.panel--end{ background:#f4f4f2; }
 
 .end-wrap{
   width:100%;
@@ -207,15 +203,9 @@ body{
   text-align:center;
   color:#222;
 }
+.end-inner{ width:min(520px, 92vw); }
 
-.end-inner{
-  width:min(520px, 92vw);
-}
-
-.end-logo img{
-  width:170px;
-  margin-bottom:44px;
-}
+.end-logo img{ width:170px; margin-bottom:44px; }
 
 .end-links a{
   display:block;
@@ -240,11 +230,7 @@ body{
   font-size:22px;
   line-height:1.6;
 }
-
-.end-footer .contact{
-  margin-top:14px;
-  font-size:20px;
-}
+.end-footer .contact{ margin-top:14px; font-size:20px; }
 
 .end-privacy{
   margin-top:22px;
@@ -263,7 +249,6 @@ body{
   height:100vh; width:420px;
   background:#f4f4f2;
   z-index:95;
-
   transform:translateX(-100%);
   transition:transform 0.9s cubic-bezier(.77,0,.18,1);
 }
@@ -288,10 +273,7 @@ body{
   color:#222;
 }
 
-.menu-logo img{
-  width:180px;
-  margin-bottom:50px;
-}
+.menu-logo img{ width:180px; margin-bottom:50px; }
 
 .menu-links a{
   display:block;
@@ -317,11 +299,7 @@ body{
   line-height:1.6;
   color:#222;
 }
-
-.menu-footer .contact{
-  margin-top:15px;
-  font-size:20px;
-}
+.menu-footer .contact{ margin-top:15px; font-size:20px; }
 
 .privacy{
   margin-top:20px;
@@ -337,17 +315,70 @@ body{
 /* When menu open, prevent interactions behind it */
 body.menu-open .hwrap{ pointer-events:none; }
 
+/* ================= BOTTOM SLIDER (scroll + slider) ================= */
+.nav-slider{
+  position:fixed;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:22px;
+  z-index:92; /* above slides, below menu (menu is 95) */
+  width:min(520px, 56vw);
+  padding:10px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.72);
+  backdrop-filter: blur(10px);
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.nav-slider .count{
+  font-family:'Montserrat', sans-serif;
+  font-size:11px;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  color:#222;
+  white-space:nowrap;
+  opacity:.85;
+}
+.nav-slider input[type="range"]{
+  width:100%;
+  -webkit-appearance:none;
+  appearance:none;
+  height:2px;
+  background:rgba(0,0,0,0.35);
+  border-radius:999px;
+  outline:none;
+}
+.nav-slider input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  appearance:none;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:#222;
+  border:2px solid rgba(255,255,255,0.85);
+  cursor:pointer;
+}
+.nav-slider input[type="range"]::-moz-range-thumb{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:#222;
+  border:2px solid rgba(255,255,255,0.85);
+  cursor:pointer;
+}
+body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
+
 /* Mobile tweaks */
 @media (max-width: 900px){
   .split{
     grid-template-columns: 1fr;
     grid-template-rows: auto 55vh;
   }
-  .split-left{
-    padding:80px 24px 40px 24px;
-  }
+  .split-left{ padding:80px 24px 40px 24px; }
   .side-label{ display:none; }
   .end-wrap{ padding:70px 24px; }
+  .nav-slider{ width:min(520px, 88vw); bottom:16px; }
 }
 </style>
 </head>
@@ -372,6 +403,12 @@ body.menu-open .hwrap{ pointer-events:none; }
   <div class="burger-lines"><i></i></div>
 </div>
 
+<!-- Bottom slider (scroll + slider together) -->
+<div class="nav-slider" id="navSliderWrap" aria-label="Slide navigation">
+  <div class="count" id="slideCount">01 / 11</div>
+  <input id="navSlider" type="range" min="0" max="10" step="1" value="0" />
+</div>
+
 <!-- Horizontal panels -->
 <div class="hwrap">
   <div class="htrack" id="track">
@@ -385,25 +422,18 @@ body.menu-open .hwrap{ pointer-events:none; }
 
         <div class="split-left">
           <div class="aub-heading">
-            <span class="small">A Leading</span>
-            <span class="big">PROPERTY<br>INVESTMENT<br>& DEVELOPMENT</span>
+            <span class="small">A Distinguished</span>
+            <span class="big">INTERIORS<br>AGENCY</span>
           </div>
 
           <div class="aub-line"></div>
 
-          <!-- You said: 3 texts (edit these 3 paragraphs) -->
           <div class="aub-text">
             <p>
-              R&amp;R Asset Management is a privately owned UK property investment and development company,
-              delivering high-end residential and commercial projects across London and beyond.
+              R&amp;R Mayfair is a premier real estate advisory specialising in luxury and ultra-prime properties in Dubai’s most prestigious and sought-after locations.
             </p>
             <p>
-              Operating across industrial, retail, leisure, office and mixed-use sectors, we combine
-              financial strength with proven delivery to create long-term value.
-            </p>
-            <p>
-              Notable developments include Mayfair, Moor Park and Greenford, with ongoing projects across
-              London and the UAE.
+              Acting as trusted advisors to discerning investors, families, and international clients, we are dedicated to delivering exceptional opportunities across Dubai’s high-end residential market and landmark developments.
             </p>
           </div>
         </div>
@@ -506,19 +536,20 @@ function closeMenuFn(){
   menu.classList.remove("open");
   document.body.classList.remove("menu-open");
 }
-
 burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
+document.addEventListener("keydown", e => { if(e.key === "Escape") closeMenuFn(); });
 
-document.addEventListener("keydown", e => {
-  if(e.key === "Escape") closeMenuFn();
-});
-
-/* ===== HORIZONTAL SCROLL (wheel + touch + drag) ===== */
+/* ===== HORIZONTAL SCROLL (wheel + touch + drag + slider) ===== */
 const track = document.getElementById("track");
 const panels = Array.from(track.querySelectorAll(".panel"));
+
+const navSlider = document.getElementById("navSlider");
+const slideCount = document.getElementById("slideCount");
+
 let currentX = 0;
 let targetX = 0;
+let isUserSliding = false;
 
 function maxScroll(){
   return (panels.length - 1) * window.innerWidth;
@@ -526,10 +557,29 @@ function maxScroll(){
 function clamp(v, min, max){
   return Math.max(min, Math.min(max, v));
 }
+function nearestIndexFromX(x){
+  const idx = Math.round(x / window.innerWidth);
+  return clamp(idx, 0, panels.length - 1);
+}
+function formatCount(i, total){
+  const a = String(i+1).padStart(2,'0');
+  const b = String(total).padStart(2,'0');
+  return `${a} / ${b}`;
+}
+
+function syncSliderAndCount(){
+  const idx = nearestIndexFromX(currentX);
+  slideCount.textContent = formatCount(idx, panels.length);
+  navSlider.max = String(panels.length - 1);
+  if(!isUserSliding){
+    navSlider.value = String(idx);
+  }
+}
 
 function raf(){
   currentX += (targetX - currentX) * 0.08;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
+  syncSliderAndCount();
   requestAnimationFrame(raf);
 }
 raf();
@@ -561,9 +611,24 @@ window.addEventListener("touchstart", (e)=>pointerDown(e.touches[0].clientX), {p
 window.addEventListener("touchmove", (e)=>pointerMove(e.touches[0].clientX), {passive:true});
 window.addEventListener("touchend", pointerUp);
 
+// Slider control (click + drag)
+navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
+navSlider.addEventListener("pointerup", ()=>{
+  isUserSliding = false;
+  const idx = Number(navSlider.value);
+  targetX = clamp(idx * window.innerWidth, 0, maxScroll());
+});
+navSlider.addEventListener("input", ()=>{
+  // while dragging, update target immediately
+  const idx = Number(navSlider.value);
+  targetX = clamp(idx * window.innerWidth, 0, maxScroll());
+});
+
 window.addEventListener("resize", ()=>{
   targetX = clamp(targetX, 0, maxScroll());
   currentX = clamp(currentX, 0, maxScroll());
+  navSlider.max = String(panels.length - 1);
+  syncSliderAndCount();
 });
 
 // Make only the "Home" link (data-goto) slide; other links behave normally
