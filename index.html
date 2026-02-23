@@ -81,23 +81,22 @@ body{
 }
 .panel{
   height:100vh;
-  width:100vw;
-  flex:0 0 100vw;
+  flex:0 0 auto;   /* IMPORTANT */
+  width:auto;      /* panel width depends on image */
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:0;
   position:relative;
-  background:transparent; /* allow bg video + logo to show in empty space */
+  background:transparent;
+  padding:0;
 }
 
 /* ================= IMAGE SLIDES (NO CROP, NO STRETCH) ================= */
 .panel-img{
-  max-width:100%;
-  max-height:100%;
-  width:auto;
-  height:auto;
-  object-fit:contain;       /* show full image */
+  height:100vh;         /* always full height */
+  width:auto;           /* auto width (no crop) */
+  max-width:none;
+  object-fit:contain;
   object-position:center;
   display:block;
 }
