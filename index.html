@@ -13,18 +13,12 @@ html,body{height:100%}
 body{
   font-family: Arial, sans-serif;
   background:#000;
-  overflow:hidden; /* we control scroll */
+  overflow:hidden;
 }
 
 /* ================= BACKGROUND VIDEO ================= */
 .bg{ position:fixed; inset:0; z-index:0; overflow:hidden; background:#000; }
 .bg video{ width:100%; height:100%; object-fit:cover; object-position:center; }
-.bg::after{
-  content:""; position:absolute; inset:0;
-  background: radial-gradient(900px 520px at 25% 35%, rgba(0,0,0,0.06), rgba(0,0,0,0.55)),
-              linear-gradient(to bottom, rgba(0,0,0,0.10), rgba(0,0,0,0.40));
-  pointer-events:none;
-}
 
 /* ================= INTRO LOGO ================= */
 .intro{
@@ -46,7 +40,6 @@ body{
   position:fixed; top:0; left:0;
   width:80px; height:100vh;
   background:rgba(255,255,255,0.92);
-  backdrop-filter:blur(8px);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -71,7 +64,7 @@ body{
 .burger-lines i::before{ top:-8px; }
 .burger-lines i::after{ top:8px; }
 
-/* ================= HORIZONTAL SCROLL AREA ================= */
+/* ================= HORIZONTAL SCROLL ================= */
 .hwrap{
   position:relative;
   z-index:30;
@@ -83,7 +76,6 @@ body{
   height:100%;
   display:flex;
   will-change:transform;
-  transform:translate3d(0,0,0);
 }
 .panel{
   height:100vh;
@@ -92,141 +84,82 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:0;
 }
 
-/* Full image slides */
+/* Image slides */
 .panel-img{
   width:100%;
   height:100%;
   object-fit:cover;
-  display:block;
 }
 
-/* ================= AUBERRY STYLE TEXT + IMAGE SPLIT SLIDE ================= */
-.panel--split{
-  background:#f4f4f2;
-}
+/* ================= SPLIT SLIDE ================= */
+.panel--split{ background:#f4f4f2; }
 .split{
   width:100%;
   height:100%;
   display:grid;
   grid-template-columns: 36% 64%;
 }
-
 .split-left{
-  padding: clamp(64px, 7vw, 92px) clamp(44px, 5vw, 70px) clamp(70px, 6vw, 90px) clamp(120px, 10vw, 150px);
-  color:#1a1a1a;
+  padding:90px 70px 90px 140px;
   display:flex;
   flex-direction:column;
   justify-content:center;
+  color:#1a1a1a;
 }
-
 .aub-heading{
   font-family:'Cormorant Garamond', serif;
-  font-weight:400;
-  line-height:1.02;
-  letter-spacing:0.2px;
-  margin-bottom: clamp(18px, 2.3vw, 30px);
+  line-height:1.05;
+  margin-bottom:28px;
 }
-
 .aub-heading .small{
   font-style:italic;
-  font-size: clamp(30px, 3.2vw, 44px);
-  display:block;
+  font-size:38px;
 }
-
 .aub-heading .big{
-  font-style:normal;
-  font-size: clamp(44px, 4.2vw, 62px);
-  text-transform:uppercase;
   display:block;
-  letter-spacing:0.6px;
+  font-size:58px;
+  text-transform:uppercase;
 }
-
 .aub-line{
   width:52px;
   height:1px;
   background:#c6b67a;
-  margin: 0 0 clamp(24px, 3vw, 44px) 0;
+  margin:0 0 40px 0;
 }
-
 .aub-text{
   font-family:'Cormorant Garamond', serif;
-  font-weight:300;
-  font-size: clamp(16px, 1.25vw, 18px);
-  line-height: 1.85;
-  max-width: 460px;
-  color:#1f1f1f;
+  font-size:18px;
+  line-height:1.85;
+  max-width:460px;
 }
-.aub-text p{ margin-bottom: clamp(18px, 2vw, 28px); }
+.aub-text p{ margin-bottom:26px; }
 
-.split-right{
-  position:relative;
-  overflow:hidden;
-}
 .split-right img{
   width:100%;
   height:100%;
   object-fit:cover;
-  display:block;
 }
 
-/* Optional vertical side label */
-.side-label{
-  position:absolute;
-  left:24px;
-  bottom:32px;
-  transform:rotate(-90deg);
-  transform-origin:left bottom;
-  font-family:'Montserrat', sans-serif;
-  font-size:11px;
-  letter-spacing:3px;
-  text-transform:uppercase;
-  color:rgba(198,182,122,0.95);
-}
+/* ================= END WHITE SLIDE ================= */
+.panel--end{ background:#f4f4f2; }
 
-/* ================= END SLIDE (AUBERRY STYLE: IMAGE LEFT + WHITE PANEL RIGHT) ================= */
-.panel--end{
-  background:#f4f4f2;
-}
-
-/* end layout: left image strip + right content */
-.end-split{
+.end-wrap{
   width:100%;
   height:100%;
-  display:grid;
-  grid-template-columns: 30% 70%;
-}
-
-.end-left{
-  position:relative;
-  overflow:hidden;
-}
-.end-left img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-.end-right{
-  background:#f4f4f2;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:80px 40px;
+  padding:80px 40px 80px 120px;
   text-align:center;
-  color:#222;
 }
-
 .end-inner{ width:min(520px, 92vw); }
 
 .end-logo img{
   width:170px;
   margin-bottom:44px;
 }
-
 .end-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
@@ -234,28 +167,19 @@ body{
   margin:18px 0;
   text-decoration:none;
   color:#222;
-  transition:opacity .25s ease;
 }
-.end-links a:hover{ opacity:.6; }
-
 .end-divider{
   width:200px;
   height:1px;
   background:#c6b67a;
   margin:50px auto 30px auto;
 }
-
 .end-footer{
   font-family:'Cormorant Garamond', serif;
   font-size:22px;
   line-height:1.6;
 }
-
-.end-footer .contact{
-  margin-top:14px;
-  font-size:20px;
-}
-
+.end-footer .contact{ margin-top:14px; font-size:20px; }
 .end-privacy{
   margin-top:22px;
   display:inline-block;
@@ -267,198 +191,66 @@ body{
   text-decoration:none;
 }
 
-/* ================= SLIDING MENU PANEL ================= */
-.menu{
-  position:fixed; top:0; left:0;
-  height:100vh; width:420px;
-  background:#f4f4f2;
-  z-index:95;
-  transform:translateX(-100%);
-  transition:transform 0.9s cubic-bezier(.77,0,.18,1);
-}
-.menu.open{ transform:translateX(0); }
-
-.menu-panel{
-  height:100%;
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center;
-  padding:60px 30px;
-  position:relative;
-}
-
-.back-arrow{
-  position:absolute;
-  left:40px;
-  top:50%;
-  transform:translateY(-50%);
-  font-size:28px;
-  cursor:pointer;
-  color:#222;
-}
-
-.menu-logo img{
-  width:180px;
-  margin-bottom:50px;
-}
-
-.menu-links a{
-  display:block;
-  font-family:'Cormorant Garamond', serif;
-  font-size:30px;
-  margin:18px 0;
-  text-decoration:none;
-  color:#222;
-  transition:opacity 0.3s ease;
-}
-.menu-links a:hover{ opacity:0.6; }
-
-.divider{
-  width:200px;
-  height:1px;
-  background:#c6b67a;
-  margin:50px auto 30px auto;
-}
-
-.menu-footer{
-  font-family:'Cormorant Garamond', serif;
-  font-size:22px;
-  line-height:1.6;
-  color:#222;
-}
-.menu-footer .contact{
-  margin-top:15px;
-  font-size:20px;
-}
-
-.privacy{
-  margin-top:20px;
-  display:inline-block;
-  font-family:'Montserrat', sans-serif;
-  font-size:12px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  color:#c6b67a;
-  text-decoration:none;
-}
-
-/* When menu open, prevent interactions behind it */
-body.menu-open .hwrap{ pointer-events:none; }
-
-/* ================= BOTTOM SCROLLBAR-STYLE SLIDER (LIKE YOUR 3RD IMAGE) ================= */
+/* ================= BOTTOM SCROLLBAR ================= */
 .nav-slider{
   position:fixed;
-  left:96px;             /* leave space for burger bar */
+  left:96px;
   right:28px;
   bottom:14px;
   z-index:92;
-  height:16px;
-  display:flex;
-  align-items:center;
-  pointer-events:auto;
 }
-
-.nav-slider input[type="range"]{
+.nav-slider input{
   width:100%;
   -webkit-appearance:none;
   appearance:none;
   height:6px;
-  background:rgba(255,255,255,0.55);
+  background:rgba(255,255,255,0.6);
   border-radius:999px;
-  outline:none;
-  backdrop-filter: blur(6px);
 }
-
-/* thumb like a small “handle” */
-.nav-slider input[type="range"]::-webkit-slider-thumb{
+.nav-slider input::-webkit-slider-thumb{
   -webkit-appearance:none;
-  appearance:none;
   width:80px;
   height:6px;
   border-radius:999px;
-  background:rgba(0,0,0,0.55);
+  background:rgba(0,0,0,0.6);
   cursor:pointer;
-}
-.nav-slider input[type="range"]::-moz-range-thumb{
-  width:80px;
-  height:6px;
-  border-radius:999px;
-  background:rgba(0,0,0,0.55);
-  cursor:pointer;
-  border:none;
-}
-
-body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
-
-/* Mobile tweaks */
-@media (max-width: 900px){
-  .split{
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 55vh;
-  }
-  .split-left{ padding:80px 24px 40px 24px; }
-  .side-label{ display:none; }
-
-  .end-split{
-    grid-template-columns: 1fr;
-    grid-template-rows: 38vh auto;
-  }
-  .end-right{ padding:60px 24px; }
-
-  .nav-slider{
-    left:24px;
-    right:24px;
-    bottom:12px;
-  }
-  .nav-slider input[type="range"]::-webkit-slider-thumb{ width:62px; }
-  .nav-slider input[type="range"]::-moz-range-thumb{ width:62px; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- Background video -->
 <div class="bg">
   <video autoplay muted loop playsinline>
     <source src="./Bg.mp4" type="video/mp4">
   </video>
 </div>
 
-<!-- Intro logo -->
 <div class="intro">
-  <img src="./logo.png" alt="RR Asset Management Logo">
+  <img src="./logo.png" alt="RR Logo">
 </div>
 
-<!-- Burger -->
 <div class="side-bar" id="burger">
   <div class="burger-lines"><i></i></div>
 </div>
 
-<!-- Bottom scrollbar-style slider -->
-<div class="nav-slider" aria-label="Slide navigation">
-  <input id="navSlider" type="range" min="0" max="10" step="1" value="0" />
+<div class="nav-slider">
+  <input id="navSlider" type="range" min="0" max="10" step="1" value="0">
 </div>
 
-<!-- Horizontal panels -->
 <div class="hwrap">
   <div class="htrack" id="track">
 
-    <!-- Panel 0: HOME (empty - shows only background video + logo) -->
     <section class="panel"></section>
 
-    <!-- Panel 1: Auberry style text + first image -->
     <section class="panel panel--split">
       <div class="split">
-
         <div class="split-left">
           <div class="aub-heading">
             <span class="small">A Distinguished</span>
             <span class="big">INTERIORS<br>AGENCY</span>
           </div>
-
           <div class="aub-line"></div>
-
           <div class="aub-text">
             <p>
               R&amp;R Mayfair is a premier real estate advisory specialising in luxury and ultra-prime properties in Dubai’s most prestigious and sought-after locations.
@@ -468,202 +260,75 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
             </p>
           </div>
         </div>
-
         <div class="split-right">
-          <img class="panel-img" src="firstpagefirstpic.png" alt="Slide 1">
-          <div class="side-label">SUPER-PRIME RESIDENTIAL</div>
+          <img src="firstpagefirstpic.png" alt="">
         </div>
-
       </div>
     </section>
 
-    <!-- image slides -->
-    <section class="panel"><img class="panel-img" src="./image2.jpg" alt="Slide 2"></section>
-    <section class="panel"><img class="panel-img" src="./image3.jpg" alt="Slide 3"></section>
-    <section class="panel"><img class="panel-img" src="./image4.jpg" alt="Slide 4"></section>
-    <section class="panel"><img class="panel-img" src="./image5.jpg" alt="Slide 5"></section>
-    <section class="panel"><img class="panel-img" src="./image6.jpg" alt="Slide 6"></section>
-    <section class="panel"><img class="panel-img" src="./image7.jpg" alt="Slide 7"></section>
-    <section class="panel"><img class="panel-img" src="./image8.jpg" alt="Slide 8"></section>
-    <section class="panel"><img class="panel-img" src="./image9.jpg" alt="Slide 9"></section>
+    <section class="panel"><img class="panel-img" src="./image2.jpg"></section>
+    <section class="panel"><img class="panel-img" src="./image3.jpg"></section>
+    <section class="panel"><img class="panel-img" src="./image4.jpg"></section>
+    <section class="panel"><img class="panel-img" src="./image5.jpg"></section>
+    <section class="panel"><img class="panel-img" src="./image6.jpg"></section>
+    <section class="panel"><img class="panel-img" src="./image7.jpg"></section>
+    <section class="panel"><img class="panel-img" src="./image8.jpg"></section>
+    <section class="panel"><img class="panel-img" src="./image9.jpg"></section>
 
-    <!-- END PANEL: image strip left + logo/links right (like your 2nd image) -->
     <section class="panel panel--end">
-      <div class="end-split">
-
-        <!-- LEFT STRIP IMAGE:
-             If you want a DIFFERENT image here, replace ./image9.jpg with ./end.jpg -->
-        <div class="end-left">
-          <img src="./image9.jpg" alt="End image">
-        </div>
-
-        <div class="end-right">
-          <div class="end-inner">
-
-            <div class="end-logo">
-              <img src="./logo.png" alt="RR Logo">
-            </div>
-
-            <nav class="end-links">
-              <a href="#" data-goto="0">Home</a>
-              <a href="expertise.html">Expertise</a>
-              <a href="interior-projects.html">Interior Projects</a>
-              <a href="press.html">Press</a>
-            </nav>
-
-            <div class="end-divider"></div>
-
-            <div class="end-footer">
-              SUN HOUSE, 428 LONG DRIVE,<br>
-              GREENFORD, UB6 8UH
-
-              <div class="contact">+44 (0) 20 8575 3700</div>
-
-              <a class="end-privacy" href="#">Privacy Policy</a>
-            </div>
-
+      <div class="end-wrap">
+        <div class="end-inner">
+          <div class="end-logo">
+            <img src="./logo.png" alt="">
+          </div>
+          <nav class="end-links">
+            <a href="#" data-goto="0">Home</a>
+            <a href="expertise.html">Expertise</a>
+            <a href="interior-projects.html">Interior Projects</a>
+            <a href="press.html">Press</a>
+          </nav>
+          <div class="end-divider"></div>
+          <div class="end-footer">
+            SUN HOUSE, 428 LONG DRIVE,<br>
+            GREENFORD, UB6 8UH
+            <div class="contact">+44 (0) 20 8575 3700</div>
+            <a class="end-privacy" href="#">Privacy Policy</a>
           </div>
         </div>
-
       </div>
     </section>
 
-  </div>
-</div>
-
-<!-- Sliding menu -->
-<div class="menu" id="menu">
-  <div class="menu-panel">
-    <div class="back-arrow" id="closeMenu">←</div>
-
-    <div class="menu-logo">
-      <img src="./logo.png" alt="RR Asset Management Logo">
-    </div>
-
-    <nav class="menu-links">
-      <a href="#" data-goto="0">Home</a>
-      <a href="expertise.html">Expertise</a>
-      <a href="interior-projects.html">Interior Projects</a>
-      <a href="press.html">Press</a>
-    </nav>
-
-    <div class="divider"></div>
-
-    <div class="menu-footer">
-      SUN HOUSE, 428 LONG DRIVE,<br>
-      GREENFORD, UB6 8UH
-
-      <div class="contact">+44 (0) 20 8575 3700</div>
-      <a href="#" class="privacy">Privacy Policy</a>
-    </div>
   </div>
 </div>
 
 <script>
-/* ===== MENU ===== */
-const menu = document.getElementById("menu");
-const burger = document.getElementById("burger");
-const closeMenu = document.getElementById("closeMenu");
-
-function openMenu(){
-  menu.classList.add("open");
-  document.body.classList.add("menu-open");
-}
-function closeMenuFn(){
-  menu.classList.remove("open");
-  document.body.classList.remove("menu-open");
-}
-burger.addEventListener("click", openMenu);
-closeMenu.addEventListener("click", closeMenuFn);
-document.addEventListener("keydown", e => { if(e.key === "Escape") closeMenuFn(); });
-
-/* ===== HORIZONTAL SCROLL (wheel + touch + drag + slider) ===== */
 const track = document.getElementById("track");
 const panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
 
 let currentX = 0;
 let targetX = 0;
-let isUserSliding = false;
 
 function maxScroll(){
   return (panels.length - 1) * window.innerWidth;
 }
-function clamp(v, min, max){
-  return Math.max(min, Math.min(max, v));
-}
-function nearestIndexFromX(x){
-  return clamp(Math.round(x / window.innerWidth), 0, panels.length - 1);
-}
-function syncSlider(){
-  navSlider.max = String(panels.length - 1);
-  if(!isUserSliding){
-    navSlider.value = String(nearestIndexFromX(currentX));
-  }
-}
+function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
 
-function raf(){
+function animate(){
   currentX += (targetX - currentX) * 0.08;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
-  syncSlider();
-  requestAnimationFrame(raf);
+  navSlider.max = panels.length - 1;
+  navSlider.value = Math.round(currentX / window.innerWidth);
+  requestAnimationFrame(animate);
 }
-raf();
+animate();
 
-window.addEventListener("wheel", (e) => {
-  if(document.body.classList.contains("menu-open")) return;
-  targetX = clamp(targetX + e.deltaY * 1.0, 0, maxScroll());
-}, { passive:true });
-
-// Drag / touch
-let isDown=false, startX=0, startTarget=0;
-
-function pointerDown(x){
-  if(document.body.classList.contains("menu-open")) return;
-  isDown=true; startX=x; startTarget=targetX;
-}
-function pointerMove(x){
-  if(!isDown) return;
-  const dx = x - startX;
-  targetX = clamp(startTarget - dx, 0, maxScroll());
-}
-function pointerUp(){ isDown=false; }
-
-window.addEventListener("mousedown", (e)=>pointerDown(e.clientX));
-window.addEventListener("mousemove", (e)=>pointerMove(e.clientX));
-window.addEventListener("mouseup", pointerUp);
-
-window.addEventListener("touchstart", (e)=>pointerDown(e.touches[0].clientX), {passive:true});
-window.addEventListener("touchmove", (e)=>pointerMove(e.touches[0].clientX), {passive:true});
-window.addEventListener("touchend", pointerUp);
-
-// Slider control
-navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
-navSlider.addEventListener("pointerup", ()=>{
-  isUserSliding = false;
-  const idx = Number(navSlider.value);
-  targetX = clamp(idx * window.innerWidth, 0, maxScroll());
+window.addEventListener("wheel", e=>{
+  targetX = clamp(targetX + e.deltaY, 0, maxScroll());
 });
+
 navSlider.addEventListener("input", ()=>{
-  const idx = Number(navSlider.value);
-  targetX = clamp(idx * window.innerWidth, 0, maxScroll());
-});
-
-window.addEventListener("resize", ()=>{
-  targetX = clamp(targetX, 0, maxScroll());
-  currentX = clamp(currentX, 0, maxScroll());
-  navSlider.max = String(panels.length - 1);
-  syncSlider();
-});
-
-// data-goto slide links
-document.querySelectorAll('[data-goto]').forEach(a=>{
-  a.addEventListener('click', (e)=>{
-    e.preventDefault();
-    const idx = Number(a.dataset.goto);
-    targetX = clamp(idx * window.innerWidth, 0, maxScroll());
-    closeMenuFn();
-  });
+  targetX = clamp(navSlider.value * window.innerWidth, 0, maxScroll());
 });
 </script>
 
