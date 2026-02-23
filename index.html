@@ -80,7 +80,7 @@ body{
   transform:translate3d(0,0,0);
 }
 
-/* Variable-width panels (no “inside-slide gaps”) */
+/* Variable-width panels (NO forced 100vw, so no fake “gaps”) */
 .panel{
   height:100vh;
   flex:0 0 auto;
@@ -182,33 +182,45 @@ body{
   display:block;
 }
 
-/* ================= END SLIDE (IMAGE BACK + RIGHT WHITE PANEL) ================= */
+/* ================= QUOTE TEXT SLIDE (Auberry-style) ================= */
+.panel--quote{
+  flex:0 0 100vw;
+  width:100vw;
+  background:#f4f4f2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.quote-wrap{
+  width:min(760px, 86vw);
+  padding-left:80px; /* keeps it away from burger visually */
+}
+.quote-mark{
+  font-family:'Cormorant Garamond', serif;
+  font-size:90px;
+  line-height:1;
+  color:#c6b67a;
+  margin-bottom:16px;
+}
+.quote-text{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:300;
+  font-style:italic;
+  font-size:30px;
+  line-height:1.6;
+  color:#1f1f1f;
+  letter-spacing:0.2px;
+}
+
+/* ================= END SLIDE (RIGHT WHITE PANEL ONLY — VIDEO BEHIND) ================= */
 .panel--end{
   flex:0 0 100vw;
   width:100vw;
   position:relative;
   overflow:hidden;
+  background:transparent; /* IMPORTANT: show bg video behind */
 }
-
-.end-bg{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  z-index:0;
-}
-
-.panel--end::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(to right, rgba(0,0,0,0.22), rgba(0,0,0,0.08), rgba(0,0,0,0.22));
-  z-index:1;
-  pointer-events:none;
-}
-
-/* fixed right panel like luxury menu */
+/* removed end-bg & overlay to avoid “End background” problem */
 .end-card{
   position:absolute;
   top:0;
@@ -228,7 +240,6 @@ body{
 }
 
 .end-inner{ width:100%; max-width:520px; }
-
 .end-logo img{ width:170px; margin-bottom:44px; }
 
 .end-links a{
@@ -384,6 +395,8 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
   }
   .split-left{ padding:80px 24px 40px 24px; }
 
+  .quote-wrap{ padding-left:24px; }
+
   .end-card{
     width:100%;
     right:0;
@@ -455,7 +468,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
     <section class="panel"><img class="panel-img" src="./firstpagesecondpic.png" alt="Slide 2"></section>
     <section class="panel"><img class="panel-img" src="./firstpagethirdpic.png" alt="Slide 3"></section>
 
-    <!-- NEW TEXT SECTION (after the third picture you uploaded) -->
+    <!-- TEXT SECTION (after third picture) -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -463,9 +476,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
             <span class="small">A Global Standard</span>
             <span class="big">REPUTATION</span>
           </div>
-
           <div class="aub-line"></div>
-
           <div class="aub-text">
             <p>
               Our multi-disciplinary team has earned a distinguished reputation for advising on exclusive private acquisitions and high-value luxury real estate across Dubai’s most prestigious addresses.
@@ -485,16 +496,24 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.35; }
     <!-- Continue images -->
     <section class="panel"><img class="panel-img" src="./firstpagefifthpic.png" alt="Slide 4"></section>
     <section class="panel"><img class="panel-img" src="./firstpagesixthpic.png" alt="Slide 5"></section>
-    <section class="panel"><img class="panel-img" src="./firstpageseventhpic.png" alt="Slide 6"></section>
 
-    <!-- ✅ ADDED: 8th and 9th images -->
+    <!-- QUOTE TEXT (after the sixth image) -->
+    <section class="panel panel--quote">
+      <div class="quote-wrap">
+        <div class="quote-mark">“</div>
+        <div class="quote-text">
+          R&amp;R Mayfair is a trusted advisory with a depth of experience across Dubai’s ultra-prime real estate — delivering discreet, strategic guidance and exceptional outcomes for our clients.
+        </div>
+      </div>
+    </section>
+
+    <!-- 7th, 8th, 9th images -->
+    <section class="panel"><img class="panel-img" src="./firstpageseventhpic.png" alt="Slide 6"></section>
     <section class="panel"><img class="panel-img" src="./firstpageeighthpic.png" alt="Slide 7"></section>
     <section class="panel"><img class="panel-img" src="./firstpageninethpic.png" alt="Slide 8"></section>
 
-    <!-- END SLIDE -->
+    <!-- END SLIDE (logo card only on right; video stays behind) -->
     <section class="panel panel--end">
-      <img class="end-bg" src="./image9.jpg" alt="End background">
-
       <div class="end-card">
         <div class="end-inner">
 
