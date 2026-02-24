@@ -13,7 +13,7 @@ html,body{height:100%}
 body{
   font-family: Arial, sans-serif;
   background:#000;
-  overflow:hidden; /* we control scroll */
+  overflow:hidden;
 }
 
 /* ================= BACKGROUND VIDEO ================= */
@@ -39,15 +39,11 @@ body{
 /* ================= LEFT BURGER ================= */
 .side-bar{
   position:fixed; top:0; left:0;
-  width:64px;
-  height:100vh;
+  width:64px; height:100vh;
   background:rgba(255,255,255,0.88);
   backdrop-filter: blur(10px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:90;
-  cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  z-index:90; cursor:pointer;
   transition:background .6s ease;
 }
 .side-bar:hover{ background:rgba(255,255,255,0.94); }
@@ -69,10 +65,8 @@ body{
 .burger-lines i::before,
 .burger-lines i::after{
   content:"";
-  position:absolute;
-  left:0;
-  width:22px;
-  height:1.6px;
+  position:absolute; left:0;
+  width:22px; height:1.6px;
   background:#111;
 }
 .burger-lines i::before{ top:-7px; }
@@ -82,8 +76,7 @@ body{
 .hwrap{
   position:relative;
   z-index:30;
-  height:100vh;
-  width:100vw;
+  height:100vh; width:100vw;
   overflow:hidden;
 }
 .htrack{
@@ -93,57 +86,51 @@ body{
   transform:translate3d(0,0,0);
 }
 
-/* ================= PANELS ================= */
-.panel{
-  flex:0 0 auto;
-  height:100vh;
-}
+/* ================= PANELS BASE ================= */
+.panel{ flex:0 0 auto; height:100vh; }
 
-/* IMAGE-ONLY PANELS MUST SHRINK TO IMAGE WIDTH (NO WHITE GAP) */
+/* ================= IMAGE-ONLY PANELS (HUG IMAGE) ================= */
 .panel--img{
   display:flex;
   align-items:stretch;
   justify-content:flex-start;
-  flex:0 0 auto;
-  width:auto;
-  background:#000; /* hides any micro-gaps */
+  background:#000;
 }
 .panel--img img{
-  margin:0;
   height:100vh;
   width:auto;
   object-fit:contain;
   display:block;
 }
 
-/* Home slide must always be full screen so you see video + logo first */
+/* Home slide (video only) */
 .panel--home{
   flex:0 0 100vw;
   width:100vw;
   background:transparent;
 }
 
-/* ================= LUXURY SPLIT (TEXT LEFT, IMAGE RIGHT) ================= */
+/* ================= SPLIT PANELS (TEXT + IMAGE) ================= */
 .panel--split{
-  flex:0 0 100vw;
-  width:100vw;
+  flex:0 0 auto;   /* IMPORTANT: not 100vw */
+  width:auto;
   background:#f4f4f2;
 }
 
 .split{
-  width:100%;
   height:100%;
-  display:grid;
-  grid-template-columns: 42% 58%;
+  display:flex;    /* IMPORTANT: no grid */
+  width:auto;
 }
 
-/* Text column */
 .split-copy{
   background:#f4f4f2;
+  flex:0 0 var(--copyW, 520px);
+  width:var(--copyW, 520px);
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
-  padding:190px 120px 90px 150px; /* was 150px -> now 190px */
+  padding:190px 120px 90px 150px;
   color:#1a1a1a;
 }
 .copy-inner{ max-width:480px; }
@@ -162,8 +149,7 @@ body{
 }
 .aub-heading .big{
   display:block;
-  font-style:normal;
-  font-size:60px; /* reduced */
+  font-size:60px;
   text-transform:uppercase;
   letter-spacing:.6px;
 }
@@ -172,7 +158,7 @@ body{
   width:56px;
   height:1px;
   background:#c6b67a;
-  margin:0 0 140px 0; /* pushes paragraph down more */
+  margin:0 0 140px 0;
 }
 
 .aub-text{
@@ -182,14 +168,15 @@ body{
   line-height:2.05;
   max-width:340px;
   color:#1f1f1f;
+  letter-spacing:0.2px;
 }
 .aub-text p{ margin:0; }
 
-/* Image column */
 .split-media{
+  flex:0 0 auto;
   display:flex;
   align-items:stretch;
-  justify-content:center;
+  justify-content:flex-start;
   overflow:hidden;
   background:#f4f4f2;
 }
@@ -197,14 +184,13 @@ body{
   height:100%;
   width:auto;
   object-fit:contain;
-  object-position:center;
   display:block;
 }
 
-/* ================= END SLIDE (IMAGE ATTACHED TO CARD — NO GAP) ================= */
+/* ================= END SLIDE (IMAGE + CARD) ================= */
 .panel--end{
-  flex:0 0 auto;     /* was 100vw */
-  width:auto;        /* was 100vw */
+  flex:0 0 auto; /* IMPORTANT: hug content */
+  width:auto;
   height:100vh;
   display:flex;
   align-items:stretch;
@@ -214,22 +200,19 @@ body{
 }
 
 .end-left{
-  flex:1;
+  flex:0 0 auto;
   display:flex;
-  justify-content:flex-end;
-  align-items:center;
-  overflow:hidden;
-  background:transparent;
+  align-items:stretch;
+  justify-content:flex-start;
 }
 .end-img{
-  height:100%;
+  height:100vh;
   width:auto;
   object-fit:contain;
-  object-position:right center;
   display:block;
 }
 
-/* Right panel (logo card) */
+/* Card width stays EXACTLY the same */
 .end-card{
   flex:0 0 min(520px, 42vw);
   height:100%;
@@ -241,7 +224,6 @@ body{
   padding:110px 60px;
   border-left:1px solid rgba(0,0,0,0.08);
 }
-
 .end-inner{ width:100%; max-width:520px; }
 .end-logo img{ width:170px; margin-bottom:44px; }
 
@@ -282,11 +264,10 @@ body{
   text-decoration:none;
 }
 
-/* ================= BOTTOM THIN SLIDER ================= */
+/* ================= BOTTOM SLIDER ================= */
 .nav-slider{
   position:fixed;
-  left:84px;
-  right:28px;
+  left:84px; right:28px;
   bottom:14px;
   z-index:92;
   transition:opacity .35s ease;
@@ -310,15 +291,12 @@ body{
   cursor:pointer;
 }
 .nav-slider input[type="range"]::-moz-range-thumb{
-  width:80px;
-  height:6px;
-  border-radius:999px;
+  width:80px;height:6px;border-radius:999px;
   background:rgba(0,0,0,0.60);
-  cursor:pointer;
-  border:none;
+  cursor:pointer;border:none;
 }
 
-/* ================= SLIDING MENU PANEL ================= */
+/* ================= MENU ================= */
 .menu{
   position:fixed; top:0; left:0;
   height:100vh; width:380px;
@@ -343,10 +321,7 @@ body{
   transition:opacity .9s ease, transform .9s ease;
   transition-delay:.2s;
 }
-.menu.open .menu-panel{
-  opacity:1;
-  transform:translateY(0);
-}
+.menu.open .menu-panel{ opacity:1; transform:translateY(0); }
 
 .back-arrow{
   position:absolute;
@@ -358,11 +333,7 @@ body{
   color:#222;
   opacity:.9;
 }
-
-.menu-logo img{
-  width:170px;
-  margin-bottom:46px;
-}
+.menu-logo img{ width:170px; margin-bottom:46px; }
 
 .menu-links a{
   display:block;
@@ -375,9 +346,7 @@ body{
 .menu-links a:hover{ opacity:0.6; }
 
 .divider{
-  width:200px;
-  height:1px;
-  background:#c6b67a;
+  width:200px;height:1px;background:#c6b67a;
   margin:50px auto 30px auto;
 }
 
@@ -400,23 +369,20 @@ body{
   text-decoration:none;
 }
 
-/* When menu open, prevent interactions behind it */
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
-/* Mobile tweaks */
+/* MOBILE */
 @media (max-width: 900px){
-  .split{
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 55vh;
+  .split{ flex-direction:column; }
+  .split-copy{
+    width:100% !important;
+    flex:0 0 auto !important;
+    padding:70px 24px 40px 24px;
   }
-  .split-copy{ padding:70px 24px 60px 24px; }
-  .aub-heading .big{ font-size:54px; }
-  .aub-text{ max-width:520px; }
-
+  .split-media img{ height:55vh; }
   .end-left{ display:none; }
   .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
-
   .nav-slider{ left:24px; right:24px; bottom:12px; }
   .menu{ width:min(380px, 92vw); }
 }
@@ -425,33 +391,27 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
 <body>
 
-<!-- Background video -->
 <div class="bg">
   <video autoplay muted loop playsinline>
     <source src="./Bg.mp4" type="video/mp4">
   </video>
 </div>
 
-<!-- Intro logo -->
 <div class="intro">
   <img src="./logo.png" alt="RR Logo">
 </div>
 
-<!-- Burger -->
 <div class="side-bar" id="burger" aria-label="Open menu">
   <div class="burger-lines"><i></i></div>
 </div>
 
-<!-- Bottom slider -->
 <div class="nav-slider" aria-label="Slide navigation">
   <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
 </div>
 
-<!-- Horizontal panels -->
 <div class="hwrap">
   <div class="htrack" id="track">
 
-    <!-- Panel 0: video only -->
     <section class="panel panel--home"></section>
 
     <!-- TEXT 1 BEFORE expertiseone -->
@@ -518,14 +478,13 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
           </div>
         </div>
         <div class="split-media">
-          <img src="./seven.png" alt="Expertise 7">
+          <img src="./expertiseseven.png" alt="Expertise 7">
         </div>
       </div>
     </section>
 
-    <section class="panel panel--img"><img src="./expertiseseven.png" alt="Expertise 8"></section>
-    <section class="panel panel--img"><img src="./expertiseeight.png" alt="Expertise 9"></section>
-    <section class="panel panel--img"><img src="./expertisenine.png" alt="Expertise 10"></section>
+    <section class="panel panel--img"><img src="./expertiseeight.png" alt="Expertise 8"></section>
+    <section class="panel panel--img"><img src="./expertisenine.png" alt="Expertise 9"></section>
 
     <!-- TEXT 4 BEFORE expertiseten -->
     <section class="panel panel--split">
@@ -543,12 +502,12 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
           </div>
         </div>
         <div class="split-media">
-          <img src="./expertiseten.png" alt="Expertise 11">
+          <img src="./expertiseten.png" alt="Expertise 10">
         </div>
       </div>
     </section>
 
-    <section class="panel panel--img"><img src="./expertiseeleven.png" alt="Expertise 12"></section>
+    <section class="panel panel--img"><img src="./expertiseeleven.png" alt="Expertise 11"></section>
 
     <!-- END SLIDE -->
     <section class="panel panel--end">
@@ -584,7 +543,6 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   </div>
 </div>
 
-<!-- Sliding menu -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
     <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
@@ -629,16 +587,16 @@ burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
 document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
 
-/* ===== AUTO-SIZE IMAGE PANELS (NO GAPS, NO CROP) ===== */
+/* ===== SIZING: image panels + split panels + end panel ===== */
 const track = document.getElementById("track");
 let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
 const intro = document.querySelector(".intro");
 
-function setImagePanelWidths(){
+function setPanelWidths(){
   const vh = window.innerHeight;
 
-  // IMAGE-ONLY PANELS
+  // image-only panels
   const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
   imgPanels.forEach(p=>{
     const img = p.querySelector("img");
@@ -654,7 +612,32 @@ function setImagePanelWidths(){
     else img.addEventListener("load", apply, { once:true });
   });
 
-  // END PANEL (image width + card width)
+  // split panels: (text width) + (image width)
+  const splitPanels = Array.from(track.querySelectorAll(".panel--split"));
+  splitPanels.forEach(p=>{
+    const img  = p.querySelector(".split-media img");
+    const copy = p.querySelector(".split-copy");
+    const media = p.querySelector(".split-media");
+    if(!img || !copy || !media) return;
+
+    const apply = () => {
+      const copyW = Math.round(window.innerWidth * 0.42);
+      const imgW  = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 2;
+
+      p.style.setProperty("--copyW", copyW + "px");
+      media.style.flex = `0 0 ${imgW}px`;
+      media.style.width = `${imgW}px`;
+
+      const total = copyW + imgW;
+      p.style.flex = `0 0 ${total}px`;
+      p.style.width = `${total}px`;
+    };
+
+    if(img.complete && img.naturalWidth) apply();
+    else img.addEventListener("load", apply, { once:true });
+  });
+
+  // end panel: (end image width) + (card width)
   const endPanel = track.querySelector(".panel--end");
   if(endPanel){
     const endImg  = endPanel.querySelector(".end-img");
@@ -663,10 +646,10 @@ function setImagePanelWidths(){
     const applyEnd = () => {
       const imgW = Math.ceil((endImg.naturalWidth / endImg.naturalHeight) * vh) + 2;
       const cardW = Math.ceil(endCard.getBoundingClientRect().width);
-      const totalW = imgW + cardW;
+      const total = imgW + cardW;
 
-      endPanel.style.flex = `0 0 ${totalW}px`;
-      endPanel.style.width = `${totalW}px`;
+      endPanel.style.flex = `0 0 ${total}px`;
+      endPanel.style.width = `${total}px`;
     };
 
     if(endImg && endImg.complete && endImg.naturalWidth) applyEnd();
@@ -675,37 +658,27 @@ function setImagePanelWidths(){
 
   panels = Array.from(track.querySelectorAll(".panel"));
 }
-window.addEventListener("load", setImagePanelWidths);
-window.addEventListener("resize", ()=>{ setImagePanelWidths(); });
 
-/* ===== HORIZONTAL SCROLL (VARIABLE WIDTH PANELS) ===== */
+window.addEventListener("load", setPanelWidths);
+window.addEventListener("resize", setPanelWidths);
+
+/* ===== HORIZONTAL SCROLL ===== */
 let currentX = 0;
 let targetX = 0;
 let isUserSliding = false;
 
 function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-
-function totalWidth(){
-  return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0);
-}
-function maxScroll(){
-  return Math.max(0, totalWidth() - window.innerWidth);
-}
-function xForIndex(idx){
-  return panels.slice(0, idx).reduce((sum, p) => sum + p.getBoundingClientRect().width, 0);
-}
+function totalWidth(){ return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0); }
+function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
 
 function raf(){
   currentX += (targetX - currentX) * 0.075;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
 
-  /* Fade logo out after scroll begins */
   if (intro) {
-    const fadeStart = 55;
-    const fadeEnd   = 320;
+    const fadeStart = 55, fadeEnd = 320;
     const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
-    const opacity = 1 - Math.max(0, Math.min(1, t));
-    intro.style.opacity = String(opacity);
+    intro.style.opacity = String(1 - Math.max(0, Math.min(1, t)));
   }
 
   const maxS = maxScroll();
@@ -720,24 +693,20 @@ function raf(){
 }
 raf();
 
-/* Wheel */
 window.addEventListener("wheel", (e)=>{
   if(document.body.classList.contains("menu-open")) return;
-  const speed = 0.9;
-  targetX = clamp(targetX + e.deltaY * speed, 0, maxScroll());
+  targetX = clamp(targetX + e.deltaY * 0.9, 0, maxScroll());
 },{passive:true});
 
-/* Drag / touch */
+/* drag / touch */
 let isDown=false, startX=0, startTarget=0;
-
 function pointerDown(x){
   if(document.body.classList.contains("menu-open")) return;
   isDown=true; startX=x; startTarget=targetX;
 }
 function pointerMove(x){
   if(!isDown) return;
-  const dx = x - startX;
-  targetX = clamp(startTarget - dx, 0, maxScroll());
+  targetX = clamp(startTarget - (x - startX), 0, maxScroll());
 }
 function pointerUp(){ isDown=false; }
 
@@ -749,33 +718,18 @@ window.addEventListener("touchstart",(e)=>pointerDown(e.touches[0].clientX),{pas
 window.addEventListener("touchmove",(e)=>pointerMove(e.touches[0].clientX),{passive:true});
 window.addEventListener("touchend",pointerUp);
 
-/* Slider */
+/* slider */
 function sliderToTarget(){
   const maxS = maxScroll();
   const denom = (panels.length - 1) || 1;
-  const ratio = Number(navSlider.value) / denom;
-  targetX = clamp(ratio * maxS, 0, maxS);
+  targetX = clamp((Number(navSlider.value) / denom) * maxS, 0, maxS);
 }
 navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
-navSlider.addEventListener("pointerup", ()=>{
-  isUserSliding = false;
-  sliderToTarget();
-});
+navSlider.addEventListener("pointerup", ()=>{ isUserSliding = false; sliderToTarget(); });
 navSlider.addEventListener("input", sliderToTarget);
 
-/* data-goto support (if you add later) */
-document.querySelectorAll('[data-goto]').forEach(a=>{
-  a.addEventListener('click', (e)=>{
-    e.preventDefault();
-    const idx = Number(a.dataset.goto);
-    targetX = clamp(xForIndex(idx), 0, maxScroll());
-    closeMenuFn();
-  });
-});
-
-/* Ensure correct bounds after resizing */
+/* keep bounds */
 window.addEventListener("resize", ()=>{
-  panels = Array.from(track.querySelectorAll(".panel"));
   targetX = clamp(targetX, 0, maxScroll());
   currentX = clamp(currentX, 0, maxScroll());
 });
