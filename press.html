@@ -10,304 +10,467 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
-body{font-family:Arial,sans-serif;background:#000;overflow:hidden}
+body{
+  font-family: Arial, sans-serif;
+  background:#000;
+  overflow:hidden; /* we control scroll */
+}
 
 /* ================= BACKGROUND VIDEO ================= */
-.bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:#000}
-.bg video{width:100%;height:100%;object-fit:cover;object-position:center}
+.bg{ position:fixed; inset:0; z-index:0; overflow:hidden; background:#000; }
+.bg video{ width:100%; height:100%; object-fit:cover; object-position:center; }
 
 /* ================= INTRO LOGO (FADE OUT ON SCROLL) ================= */
 .intro{
-  position:fixed;inset:0;z-index:40;
-  display:flex;align-items:center;justify-content:center;
-  pointer-events:none;transition:opacity .75s ease
+  position:fixed; inset:0; z-index:40;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+  transition:opacity .75s ease;
 }
 .intro img{
   width:min(240px,55vw);
-  opacity:0;transform:translateY(12px);
+  opacity:0;
+  transform:translateY(12px);
   animation:logoIn 2.2s cubic-bezier(.22,1,.36,1) forwards;
-  animation-delay:.55s
+  animation-delay:0.55s;
 }
-@keyframes logoIn{to{opacity:1;transform:translateY(0)}}
+@keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
 
 /* ================= LEFT BURGER ================= */
 .side-bar{
-  position:fixed;top:0;left:0;width:64px;height:100vh;
-  background:rgba(255,255,255,.88);backdrop-filter:blur(10px);
-  display:flex;align-items:center;justify-content:center;
-  z-index:90;cursor:pointer;transition:background .6s ease
+  position:fixed; top:0; left:0;
+  width:64px;
+  height:100vh;
+  background:rgba(255,255,255,0.88);
+  backdrop-filter: blur(10px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:90;
+  cursor:pointer;
+  transition:background .6s ease;
 }
-.side-bar:hover{background:rgba(255,255,255,.94)}
+.side-bar:hover{ background:rgba(255,255,255,0.94); }
+
 .burger-lines{
-  opacity:0;transform:translateY(8px);
+  opacity:0;
+  transform:translateY(8px);
   animation:burgerIn 1.8s cubic-bezier(.22,1,.36,1) forwards;
-  animation-delay:.85s
+  animation-delay:0.85s;
 }
-@keyframes burgerIn{to{opacity:1;transform:translateY(0)}}
-.burger-lines i{width:22px;height:1.6px;background:#111;position:relative;display:block}
-.burger-lines i::before,.burger-lines i::after{
-  content:"";position:absolute;left:0;width:22px;height:1.6px;background:#111
+@keyframes burgerIn{ to{opacity:1; transform:translateY(0);} }
+
+.burger-lines i{
+  width:22px; height:1.6px;
+  background:#111;
+  position:relative;
+  display:block;
 }
-.burger-lines i::before{top:-7px}
-.burger-lines i::after{top:7px}
+.burger-lines i::before,
+.burger-lines i::after{
+  content:"";
+  position:absolute;
+  left:0;
+  width:22px;
+  height:1.6px;
+  background:#111;
+}
+.burger-lines i::before{ top:-7px; }
+.burger-lines i::after{ top:7px; }
 
 /* ================= HORIZONTAL SCROLL AREA ================= */
-.hwrap{position:relative;z-index:30;height:100vh;width:100vw;overflow:hidden}
-.htrack{height:100%;display:flex;will-change:transform;transform:translate3d(0,0,0)}
-.panel{flex:0 0 auto;height:100vh}
+.hwrap{
+  position:relative;
+  z-index:30;
+  height:100vh;
+  width:100vw;
+  overflow:hidden;
+}
+.htrack{
+  height:100%;
+  display:flex;
+  will-change:transform;
+  transform:translate3d(0,0,0);
+}
+
+/* ================= PANELS ================= */
+.panel{ flex:0 0 auto; height:100vh; }
 
 /* Home slide (video only) */
-.panel--home{flex:0 0 100vw;width:100vw;background:transparent}
+.panel--home{ flex:0 0 100vw; width:100vw; background:transparent; }
 
-/* ================= PRESS SLIDE (BIG IMAGE + INFO CARD) ================= */
-.panel--press{
-  flex:0 0 auto;width:auto;height:100vh;
-  display:flex;align-items:stretch;justify-content:flex-start;
-  background:transparent;overflow:hidden
+/* ================= IMAGE PANELS (AUTO WIDTH — NO GAPS) ================= */
+.panel--img{
+  display:flex;
+  align-items:stretch;
+  justify-content:flex-start;
+  width:fit-content;        /* key */
+  flex:0 0 auto;
+  background:transparent;
 }
-.press-left{flex:0 0 auto;display:flex;align-items:stretch}
-.press-left img{
-  height:100vh;width:auto;object-fit:contain;display:block
+.panel--img img{
+  height:100vh;
+  width:auto;
+  object-fit:contain;        /* no crop */
+  object-position:center;
+  display:block;
+  margin:0;                  /* IMPORTANT: prevents extra blank space */
 }
-.press-right{
-  flex:0 0 min(520px,42vw);
-  height:100%;
+
+/* ================= PRESS INFO COLUMN (AUBERRY STYLE) ================= */
+.panel--info{
+  flex:0 0 420px;            /* consistent classic column width */
+  width:420px;
   background:#f4f4f2;
-  display:flex;align-items:flex-start;justify-content:center;
-  padding:90px 70px;
-  border-left:1px solid rgba(0,0,0,.08)
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:110px 60px 70px 60px;
 }
-.press-inner{width:100%;max-width:420px}
-.press-thumb{
-  width:150px;height:190px;margin:0 auto 46px auto;
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;background:transparent
-}
-.press-thumb img{width:100%;height:100%;object-fit:contain;display:block}
+.press-card{ width:100%; }
 
-.press-meta{margin-top:10px}
-.meta-row{margin:18px 0}
-.meta-label{
-  font-family:'Montserrat',sans-serif;
-  font-size:11px;letter-spacing:2px;
-  text-transform:uppercase;color:rgba(0,0,0,.35);
-  margin-bottom:6px
+.press-topimg{
+  width:140px;
+  height:auto;
+  display:block;
+  margin:0 0 36px 0;
 }
-.meta-value{
-  font-family:'Cormorant Garamond',serif;
-  font-size:14px;letter-spacing:1.2px;
-  text-transform:uppercase;color:#1a1a1a
+
+.press-meta{
+  font-family:'Cormorant Garamond', serif;
+  color:#1f1f1f;
+  font-weight:300;
+  font-size:16px;
+  line-height:1.9;
 }
-.press-more{
-  margin-top:78px;
-  font-family:'Montserrat',sans-serif;
-  font-size:11px;letter-spacing:2.4px;
+
+.press-meta .label{
+  font-family:'Montserrat', sans-serif;
+  font-size:10.5px;
+  letter-spacing:1.6px;
   text-transform:uppercase;
+  color:#8a8a8a;
+  margin:0 0 6px 0;
 }
-.press-more a{color:rgba(0,0,0,.45);text-decoration:none}
-.press-more a:hover{opacity:.7}
+.press-meta .value{
+  margin:0 0 20px 0;
+}
+
+.press-link{
+  display:inline-block;
+  margin-top:26px;
+  font-family:'Montserrat', sans-serif;
+  font-size:11px;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+  color:#c6b67a;
+  text-decoration:none;
+}
+.press-link:hover{ opacity:.7; }
 
 /* ================= END SLIDE (IMAGE + LOGO CARD) ================= */
 .panel--end{
-  flex:0 0 auto;width:auto;height:100vh;
-  display:flex;align-items:stretch;justify-content:flex-end;
-  background:transparent;overflow:hidden
+  flex:0 0 100vw;
+  width:100vw;
+  height:100vh;
+  display:flex;
+  align-items:stretch;
+  justify-content:flex-end;
+  background:transparent;
+  overflow:hidden;
 }
-.end-left{flex:0 0 auto;display:flex;align-items:stretch}
-.end-img{height:100vh;width:auto;object-fit:contain;display:block}
+.end-left{
+  flex:1;
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  overflow:hidden;
+}
+.end-img{
+  height:100%;
+  width:auto;
+  object-fit:contain;
+  object-position:right center;
+  display:block;
+}
 .end-card{
-  flex:0 0 min(520px,42vw);
+  flex:0 0 min(520px, 42vw);
   height:100%;
   background:#f4f4f2;
-  display:flex;align-items:center;justify-content:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   text-align:center;
   padding:110px 60px;
-  border-left:1px solid rgba(0,0,0,0.08)
+  border-left:1px solid rgba(0,0,0,0.08);
 }
-.end-inner{width:100%;max-width:520px}
-.end-logo img{width:170px;margin-bottom:44px}
+.end-inner{ width:100%; max-width:520px; }
+.end-logo img{ width:170px; margin-bottom:44px; }
 .end-links a{
-  display:block;font-family:'Cormorant Garamond',serif;
-  font-size:28px;margin:14px 0;
-  text-decoration:none;color:#1a1a1a;transition:opacity .25s ease
+  display:block;
+  font-family:'Cormorant Garamond', serif;
+  font-size:28px;
+  margin:14px 0;
+  text-decoration:none;
+  color:#1a1a1a;
+  transition:opacity .25s ease;
 }
-.end-links a:hover{opacity:.6}
-.end-divider{width:200px;height:1px;background:#c6b67a;margin:50px auto 30px}
-.end-footer{font-family:'Cormorant Garamond',serif;font-size:20px;line-height:1.7;color:#1a1a1a}
-.end-footer .contact{margin-top:12px;font-size:18px}
+.end-links a:hover{ opacity:.6; }
+.end-divider{
+  width:200px;
+  height:1px;
+  background:#c6b67a;
+  margin:50px auto 30px auto;
+}
+.end-footer{
+  font-family:'Cormorant Garamond', serif;
+  font-size:20px;
+  line-height:1.7;
+  color:#1a1a1a;
+}
+.end-footer .contact{ margin-top:12px; font-size:18px; }
 .end-privacy{
-  margin-top:22px;display:inline-block;
-  font-family:'Montserrat',sans-serif;font-size:12px;
-  letter-spacing:1.5px;text-transform:uppercase;
-  color:#c6b67a;text-decoration:none
+  margin-top:22px;
+  display:inline-block;
+  font-family:'Montserrat', sans-serif;
+  font-size:12px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:#c6b67a;
+  text-decoration:none;
 }
 
-/* ================= SLIDER ================= */
-.nav-slider{position:fixed;left:84px;right:28px;bottom:14px;z-index:92;transition:opacity .35s ease}
+/* ================= BOTTOM THIN SLIDER ================= */
+.nav-slider{
+  position:fixed;
+  left:84px;
+  right:28px;
+  bottom:14px;
+  z-index:92;
+}
 .nav-slider input[type="range"]{
-  width:100%;appearance:none;-webkit-appearance:none;
-  height:6px;background:rgba(255,255,255,.60);
-  border-radius:999px;outline:none
+  width:100%;
+  -webkit-appearance:none;
+  appearance:none;
+  height:6px;
+  background:rgba(255,255,255,0.60);
+  border-radius:999px;
+  outline:none;
 }
 .nav-slider input[type="range"]::-webkit-slider-thumb{
-  -webkit-appearance:none;appearance:none;
-  width:80px;height:6px;border-radius:999px;
-  background:rgba(0,0,0,.60);cursor:pointer
+  -webkit-appearance:none;
+  appearance:none;
+  width:80px;
+  height:6px;
+  border-radius:999px;
+  background:rgba(0,0,0,0.60);
+  cursor:pointer;
 }
 .nav-slider input[type="range"]::-moz-range-thumb{
-  width:80px;height:6px;border-radius:999px;
-  background:rgba(0,0,0,.60);cursor:pointer;border:none
+  width:80px;
+  height:6px;
+  border-radius:999px;
+  background:rgba(0,0,0,0.60);
+  cursor:pointer;
+  border:none;
 }
 
-/* ================= MENU ================= */
+/* ================= SLIDING MENU PANEL ================= */
 .menu{
-  position:fixed;top:0;left:0;height:100vh;width:380px;
-  background:#f4f4f2;z-index:95;
+  position:fixed; top:0; left:0;
+  height:100vh; width:380px;
+  background:#f4f4f2;
+  z-index:95;
   transform:translateX(-100%);
-  transition:transform 1.05s cubic-bezier(.77,0,.18,1)
+  transition:transform 1.05s cubic-bezier(.77,0,.18,1);
+  will-change:transform;
 }
-.menu.open{transform:translateX(0)}
-.menu-panel{
-  height:100%;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;text-align:center;
-  padding:60px 30px;position:relative;
-  opacity:0;transform:translateY(10px);
-  transition:opacity .9s ease, transform .9s ease;transition-delay:.2s
-}
-.menu.open .menu-panel{opacity:1;transform:translateY(0)}
-.back-arrow{
-  position:absolute;left:34px;top:50%;
-  transform:translateY(-50%);
-  font-size:28px;cursor:pointer;color:#222;opacity:.9
-}
-.menu-logo img{width:170px;margin-bottom:46px}
-.menu-links a{
-  display:block;font-family:'Cormorant Garamond',serif;
-  font-size:30px;margin:18px 0;text-decoration:none;color:#222
-}
-.menu-links a:hover{opacity:.6}
-.divider{width:200px;height:1px;background:#c6b67a;margin:50px auto 30px}
-.menu-footer{font-family:'Cormorant Garamond',serif;font-size:22px;line-height:1.6;color:#222}
-.menu-footer .contact{margin-top:15px;font-size:20px}
-.privacy{
-  margin-top:20px;display:inline-block;
-  font-family:'Montserrat',sans-serif;font-size:12px;
-  letter-spacing:1.5px;text-transform:uppercase;
-  color:#c6b67a;text-decoration:none
-}
-body.menu-open .hwrap{pointer-events:none}
-body.menu-open .nav-slider{pointer-events:none;opacity:.25}
+.menu.open{ transform:translateX(0); }
 
-/* MOBILE */
-@media(max-width:900px){
-  .press-right{flex:0 0 100%;padding:70px 24px}
-  .press-left{display:none}
-  .end-left{display:none}
-  .end-card{flex:0 0 100%;width:100%;padding:70px 24px}
-  .nav-slider{left:24px;right:24px;bottom:12px}
-  .menu{width:min(380px,92vw)}
+.menu-panel{
+  height:100%;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center;
+  padding:60px 30px;
+  position:relative;
+}
+.back-arrow{
+  position:absolute;
+  left:34px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:28px;
+  cursor:pointer;
+  color:#222;
+  opacity:.9;
+}
+.menu-logo img{ width:170px; margin-bottom:46px; }
+.menu-links a{
+  display:block;
+  font-family:'Cormorant Garamond', serif;
+  font-size:30px;
+  margin:18px 0;
+  text-decoration:none;
+  color:#222;
+}
+.menu-links a:hover{ opacity:0.6; }
+.divider{
+  width:200px;
+  height:1px;
+  background:#c6b67a;
+  margin:50px auto 30px auto;
+}
+.menu-footer{
+  font-family:'Cormorant Garamond', serif;
+  font-size:22px;
+  line-height:1.6;
+  color:#222;
+}
+.menu-footer .contact{ margin-top:15px; font-size:20px; }
+.privacy{
+  margin-top:20px;
+  display:inline-block;
+  font-family:'Montserrat', sans-serif;
+  font-size:12px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:#c6b67a;
+  text-decoration:none;
+}
+
+/* When menu open, prevent interactions behind it */
+body.menu-open .hwrap{ pointer-events:none; }
+body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
+
+/* MOBILE tweaks */
+@media (max-width: 900px){
+  .panel--info{ flex:0 0 78vw; width:78vw; padding:70px 24px; }
+  .press-topimg{ width:120px; }
+  .end-left{ display:none; }
+  .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
+  .nav-slider{ left:24px; right:24px; bottom:12px; }
+  .menu{ width:min(380px, 92vw); }
 }
 </style>
 </head>
 
 <body>
 
+<!-- Background video -->
 <div class="bg">
   <video autoplay muted loop playsinline>
     <source src="./Bg.mp4" type="video/mp4">
   </video>
 </div>
 
+<!-- Intro logo -->
 <div class="intro">
   <img src="./logo.png" alt="RR Logo">
 </div>
 
+<!-- Burger -->
 <div class="side-bar" id="burger" aria-label="Open menu">
   <div class="burger-lines"><i></i></div>
 </div>
 
+<!-- Bottom slider -->
 <div class="nav-slider" aria-label="Slide navigation">
-  <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
+  <input id="navSlider" type="range" min="0" max="10" step="1" value="0">
 </div>
 
+<!-- Horizontal panels -->
 <div class="hwrap">
   <div class="htrack" id="track">
 
     <!-- Panel 0: video only -->
     <section class="panel panel--home"></section>
 
-    <!-- PRESS SLIDE 1 -->
-    <section class="panel panel--press">
-      <div class="press-left">
-        <img src="./pressone.png" alt="Press 1 big image">
-      </div>
-      <div class="press-right">
-        <div class="press-inner">
-          <div class="press-thumb">
-            <img src="./presspica.png" alt="Press 1 small image">
-          </div>
+    <!-- ===== PRESS 1 ===== -->
+    <section class="panel panel--img"><img src="./pressone.png" alt="Press 1"></section>
+    <section class="panel panel--info">
+      <div class="press-card">
+        <img class="press-topimg" src="./presspica.png" alt="Press 1 small">
+        <div class="press-meta">
+          <div class="label">Publication</div>
+          <div class="value">PrimeResi</div>
 
-          <div class="press-meta">
-            <div class="meta-row">
-              <div class="meta-label">Publication</div>
-              <div class="meta-value">Harriman House</div>
-            </div>
-            <div class="meta-row">
-              <div class="meta-label">Date</div>
-              <div class="meta-value">2021</div>
-            </div>
-            <div class="meta-row">
-              <div class="meta-label">Project</div>
-              <div class="meta-value">From Nothing To Everything</div>
-            </div>
+          <div class="label">Date</div>
+          <div class="value">16 October 2018</div>
 
-            <div class="press-more">
-              <a href="#">Read More</a>
-            </div>
-          </div>
+          <div class="label">Project</div>
+          <div class="value">Carlos Place</div>
 
+          <a class="press-link" href="#" target="_blank" rel="noopener">Read More</a>
         </div>
       </div>
     </section>
 
-    <!-- PRESS SLIDE 2 -->
-    <section class="panel panel--press">
-      <div class="press-left">
-        <img src="./presstwo.png" alt="Press 2 big image">
-      </div>
-      <div class="press-right">
-        <div class="press-inner">
-          <div class="press-thumb">
-            <img src="./presspicb.png" alt="Press 2 small image">
-          </div>
+    <!-- ===== PRESS 2 ===== -->
+    <section class="panel panel--img"><img src="./presstwo.png" alt="Press 2"></section>
+    <section class="panel panel--info">
+      <div class="press-card">
+        <img class="press-topimg" src="./presspicb.png" alt="Press 2 small">
+        <div class="press-meta">
+          <div class="label">Publication</div>
+          <div class="value">Elite Living</div>
 
-          <div class="press-meta">
-            <div class="meta-row">
-              <div class="meta-label">Publication</div>
-              <div class="meta-value">The Enterprise World</div>
-            </div>
-            <div class="meta-row">
-              <div class="meta-label">Date</div>
-              <div class="meta-value">09.2021</div>
-            </div>
-            <div class="meta-row">
-              <div class="meta-label">Project</div>
-              <div class="meta-value">???</div>
-            </div>
+          <div class="label">Date</div>
+          <div class="value">03 October 2018</div>
 
-            <div class="press-more">
-              <a href="#">Read More</a>
-            </div>
-          </div>
+          <div class="label">Project</div>
+          <div class="value">Carlos Place</div>
 
+          <a class="press-link" href="#" target="_blank" rel="noopener">Read More</a>
         </div>
       </div>
     </section>
 
-    <!-- END SLIDE (image + logo card) -->
+    <!-- ===== PRESS 3 ===== -->
+    <section class="panel panel--img"><img src="./pressthree.png" alt="Press 3"></section>
+    <section class="panel panel--info">
+      <div class="press-card">
+        <img class="press-topimg" src="./presspicc.png" alt="Press 3 small">
+        <div class="press-meta">
+          <div class="label">Publication</div>
+          <div class="value">The Enterprise World</div>
+
+          <div class="label">Date</div>
+          <div class="value">09.2021</div>
+
+          <div class="label">Project</div>
+          <div class="value">—</div>
+
+          <a class="press-link" href="#" target="_blank" rel="noopener">Read More</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRESS 4 ===== -->
+    <section class="panel panel--img"><img src="./pressfour.png" alt="Press 4"></section>
+    <section class="panel panel--info">
+      <div class="press-card">
+        <img class="press-topimg" src="./presspicd.png" alt="Press 4 small">
+        <div class="press-meta">
+          <div class="label">Publication</div>
+          <div class="value">—</div>
+
+          <div class="label">Date</div>
+          <div class="value">—</div>
+
+          <div class="label">Project</div>
+          <div class="value">—</div>
+
+          <a class="press-link" href="#" target="_blank" rel="noopener">Read More</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== END SLIDE (logo card) ===== -->
     <section class="panel panel--end">
       <div class="end-left">
-        <img class="end-img" src="./pressthree.png" alt="Last slide image">
+        <!-- Optional: show last press image touching the card -->
+        <img class="end-img" src="./pressfour.png" alt="Last Press Image">
       </div>
 
       <div class="end-card">
@@ -320,7 +483,7 @@ body.menu-open .nav-slider{pointer-events:none;opacity:.25}
             <a href="index.html">Home</a>
             <a href="expertise.html">Expertise</a>
             <a href="interior-projects.html">Interior Projects</a>
-            <a href="press.html" aria-current="page">Press</a>
+            <a href="press.html">Press</a>
           </nav>
 
           <div class="end-divider"></div>
@@ -371,96 +534,86 @@ const menu = document.getElementById("menu");
 const burger = document.getElementById("burger");
 const closeMenu = document.getElementById("closeMenu");
 
-function openMenu(){ menu.classList.add("open"); document.body.classList.add("menu-open"); }
-function closeMenuFn(){ menu.classList.remove("open"); document.body.classList.remove("menu-open"); }
+function openMenu(){
+  menu.classList.add("open");
+  document.body.classList.add("menu-open");
+}
+function closeMenuFn(){
+  menu.classList.remove("open");
+  document.body.classList.remove("menu-open");
+}
 burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
 document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
 
-/* ===== AUTO WIDTH: press panels hug big image + fixed card ===== */
+/* ===== AUTO-SIZE IMAGE PANELS (NO GAPS) ===== */
 const track = document.getElementById("track");
 let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
 const intro = document.querySelector(".intro");
 
-function setPressWidths(){
-  const vh = window.innerHeight;
-
-  const pressPanels = Array.from(track.querySelectorAll(".panel--press"));
-  pressPanels.forEach(p=>{
-    const img = p.querySelector(".press-left img");
-    const card = p.querySelector(".press-right");
-    if(!img || !card) return;
+function setImagePanelWidths(){
+  const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
+  imgPanels.forEach(p=>{
+    const img = p.querySelector("img");
+    if(!img) return;
 
     const apply = () => {
-      const imgW = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 2;
-      const cardW = Math.ceil(card.getBoundingClientRect().width);
-      const total = imgW + cardW;
-      p.style.flex = `0 0 ${total}px`;
-      p.style.width = `${total}px`;
+      // use natural image aspect ratio + viewport height -> compute exact width
+      const h = window.innerHeight;
+      const nw = img.naturalWidth || 1;
+      const nh = img.naturalHeight || 1;
+      const w = Math.max(1, Math.round((nw/nh) * h));
+      p.style.flex = `0 0 ${w}px`;
+      p.style.width = `${w}px`;
     };
 
-    if(img.complete && img.naturalWidth) apply();
+    if(img.complete) apply();
     else img.addEventListener("load", apply, { once:true });
   });
 
-  const endPanel = track.querySelector(".panel--end");
-  if(endPanel){
-    const endImg = endPanel.querySelector(".end-img");
-    const endCard = endPanel.querySelector(".end-card");
-
-    const applyEnd = () => {
-      const imgW = Math.ceil((endImg.naturalWidth / endImg.naturalHeight) * vh) + 2;
-      const cardW = Math.ceil(endCard.getBoundingClientRect().width);
-      const total = imgW + cardW;
-      endPanel.style.flex = `0 0 ${total}px`;
-      endPanel.style.width = `${total}px`;
-    };
-
-    if(endImg && endImg.complete && endImg.naturalWidth) applyEnd();
-    else if(endImg) endImg.addEventListener("load", applyEnd, { once:true });
-  }
-
   panels = Array.from(track.querySelectorAll(".panel"));
 }
-window.addEventListener("load", setPressWidths);
-window.addEventListener("resize", setPressWidths);
+window.addEventListener("load", setImagePanelWidths);
+window.addEventListener("resize", ()=>{ setImagePanelWidths(); });
 
 /* ===== HORIZONTAL SCROLL ===== */
-let currentX=0, targetX=0, isUserSliding=false;
+let currentX = 0;
+let targetX = 0;
+let isUserSliding = false;
 
-function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
-function totalWidth(){ return panels.reduce((s,p)=>s+p.getBoundingClientRect().width,0); }
-function maxScroll(){ return Math.max(0,totalWidth()-window.innerWidth); }
+function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+function totalWidth(){ return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0); }
+function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
 
 function raf(){
   currentX += (targetX - currentX) * 0.075;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
 
-  if(intro){
-    const fadeStart=55, fadeEnd=320;
-    const t=(currentX-fadeStart)/(fadeEnd-fadeStart);
-    intro.style.opacity = String(1 - Math.max(0,Math.min(1,t)));
+  if (intro) {
+    const fadeStart = 55, fadeEnd = 320;
+    const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
+    intro.style.opacity = String(1 - Math.max(0, Math.min(1, t)));
   }
 
-  const maxS=maxScroll();
-  navSlider.max = String(Math.max(0, panels.length-1));
+  const maxS = maxScroll();
+  navSlider.max = String(Math.max(0, panels.length - 1));
 
   if(!isUserSliding){
-    const ratio = maxS===0 ? 0 : (currentX/maxS);
-    navSlider.value = String(Math.round(ratio*(panels.length-1)));
+    const ratio = maxS === 0 ? 0 : (currentX / maxS);
+    navSlider.value = String(Math.round(ratio * (panels.length - 1)));
   }
 
   requestAnimationFrame(raf);
 }
 raf();
 
-window.addEventListener("wheel",(e)=>{
+window.addEventListener("wheel", (e)=>{
   if(document.body.classList.contains("menu-open")) return;
-  targetX = clamp(targetX + e.deltaY*0.9, 0, maxScroll());
+  targetX = clamp(targetX + e.deltaY * 0.9, 0, maxScroll());
 },{passive:true});
 
-/* Drag/touch */
+/* Drag / touch */
 let isDown=false, startX=0, startTarget=0;
 function pointerDown(x){
   if(document.body.classList.contains("menu-open")) return;
@@ -468,7 +621,8 @@ function pointerDown(x){
 }
 function pointerMove(x){
   if(!isDown) return;
-  targetX = clamp(startTarget - (x - startX), 0, maxScroll());
+  const dx = x - startX;
+  targetX = clamp(startTarget - dx, 0, maxScroll());
 }
 function pointerUp(){ isDown=false; }
 
@@ -482,18 +636,19 @@ window.addEventListener("touchend",pointerUp);
 
 /* Slider */
 function sliderToTarget(){
-  const maxS=maxScroll();
-  const denom=(panels.length-1)||1;
-  targetX = clamp((Number(navSlider.value)/denom)*maxS, 0, maxS);
+  const maxS = maxScroll();
+  const denom = (panels.length - 1) || 1;
+  const ratio = Number(navSlider.value) / denom;
+  targetX = clamp(ratio * maxS, 0, maxS);
 }
-navSlider.addEventListener("pointerdown",()=>{isUserSliding=true;});
-navSlider.addEventListener("pointerup",()=>{isUserSliding=false;sliderToTarget();});
+navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
+navSlider.addEventListener("pointerup", ()=>{ isUserSliding = false; sliderToTarget(); });
 navSlider.addEventListener("input", sliderToTarget);
 
-/* Keep bounds */
-window.addEventListener("resize",()=>{
-  targetX = clamp(targetX,0,maxScroll());
-  currentX = clamp(currentX,0,maxScroll());
+window.addEventListener("resize", ()=>{
+  panels = Array.from(track.querySelectorAll(".panel"));
+  targetX = clamp(targetX, 0, maxScroll());
+  currentX = clamp(currentX, 0, maxScroll());
 });
 </script>
 
