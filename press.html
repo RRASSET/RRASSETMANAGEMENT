@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>RR Asset Management — Press</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:Arial,sans-serif;background:#000;overflow:hidden}
+
+/* ================= BACKGROUND VIDEO ================= */
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:#000}
+.bg video{width:100%;height:100%;object-fit:cover;object-position:center}
+
+/* ================= INTRO LOGO (FADE OUT ON SCROLL) ================= */
+.intro{
+  position:fixed;inset:0;z-index:40;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;transition:opacity .75s ease
+}
+.intro img{
+  width:min(240px,55vw);
+  opacity:0;transform:translateY(12px);
+  animation:logoIn 2.2s cubic-bezier(.22,1,.36,1) forwards;
+  animation-delay:.55s
+}
+@keyframes logoIn{to{opacity:1;transform:translateY(0)}}
+
+/* ================= LEFT BURGER ================= */
+.side-bar{
+  position:fixed;top:0;left:0;width:64px;height:100vh;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;
+  z-index:90;cursor:pointer;transition:background .6s ease
+}
+.side-bar:hover{background:rgba(255,255,255,.94)}
+.burger-lines{
+  opacity:0;transform:translateY(8px);
+  animation:burgerIn 1.8s cubic-bezier(.22,1,.36,1) forwards;
+  animation-delay:.85s
+}
+@keyframes burgerIn{to{opacity:1;transform:translateY(0)}}
+.burger-lines i{width:22px;height:1.6px;background:#111;position:relative;display:block}
+.burger-lines i::before,.burger-lines i::after{
+  content:"";position:absolute;left:0;width:22px;height:1.6px;background:#111
+}
+.burger-lines i::before{top:-7px}
+.burger-lines i::after{top:7px}
+
+/* ================= HORIZONTAL SCROLL AREA ================= */
+.hwrap{position:relative;z-index:30;height:100vh;width:100vw;overflow:hidden}
+.htrack{height:100%;display:flex;will-change:transform;transform:translate3d(0,0,0)}
+.panel{flex:0 0 auto;height:100vh}
+
+/* Home slide (video only) */
+.panel--home{flex:0 0 100vw;width:100vw;background:transparent}
+
+/* ================= PRESS SLIDE (BIG IMAGE + INFO CARD) ================= */
+.panel--press{
+  flex:0 0 auto;width:auto;height:100vh;
+  display:flex;align-items:stretch;justify-content:flex-start;
+  background:transparent;overflow:hidden
+}
+.press-left{flex:0 0 auto;display:flex;align-items:stretch}
+.press-left img{
+  height:100vh;width:auto;object-fit:contain;display:block
+}
+.press-right{
+  flex:0 0 min(520px,42vw);
+  height:100%;
+  background:#f4f4f2;
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:90px 70px;
+  border-left:1px solid rgba(0,0,0,.08)
+}
+.press-inner{width:100%;max-width:420px}
+.press-thumb{
+  width:150px;height:190px;margin:0 auto 46px auto;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;background:transparent
+}
+.press-thumb img{width:100%;height:100%;object-fit:contain;display:block}
+
+.press-meta{margin-top:10px}
+.meta-row{margin:18px 0}
+.meta-label{
+  font-family:'Montserrat',sans-serif;
+  font-size:11px;letter-spacing:2px;
+  text-transform:uppercase;color:rgba(0,0,0,.35);
+  margin-bottom:6px
+}
+.meta-value{
+  font-family:'Cormorant Garamond',serif;
+  font-size:14px;letter-spacing:1.2px;
+  text-transform:uppercase;color:#1a1a1a
+}
+.press-more{
+  margin-top:78px;
+  font-family:'Montserrat',sans-serif;
+  font-size:11px;letter-spacing:2.4px;
+  text-transform:uppercase;
+}
+.press-more a{color:rgba(0,0,0,.45);text-decoration:none}
+.press-more a:hover{opacity:.7}
+
+/* ================= END SLIDE (IMAGE + LOGO CARD) ================= */
+.panel--end{
+  flex:0 0 auto;width:auto;height:100vh;
+  display:flex;align-items:stretch;justify-content:flex-end;
+  background:transparent;overflow:hidden
+}
+.end-left{flex:0 0 auto;display:flex;align-items:stretch}
+.end-img{height:100vh;width:auto;object-fit:contain;display:block}
+.end-card{
+  flex:0 0 min(520px,42vw);
+  height:100%;
+  background:#f4f4f2;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+  padding:110px 60px;
+  border-left:1px solid rgba(0,0,0,0.08)
+}
+.end-inner{width:100%;max-width:520px}
+.end-logo img{width:170px;margin-bottom:44px}
+.end-links a{
+  display:block;font-family:'Cormorant Garamond',serif;
+  font-size:28px;margin:14px 0;
+  text-decoration:none;color:#1a1a1a;transition:opacity .25s ease
+}
+.end-links a:hover{opacity:.6}
+.end-divider{width:200px;height:1px;background:#c6b67a;margin:50px auto 30px}
+.end-footer{font-family:'Cormorant Garamond',serif;font-size:20px;line-height:1.7;color:#1a1a1a}
+.end-footer .contact{margin-top:12px;font-size:18px}
+.end-privacy{
+  margin-top:22px;display:inline-block;
+  font-family:'Montserrat',sans-serif;font-size:12px;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:#c6b67a;text-decoration:none
+}
+
+/* ================= SLIDER ================= */
+.nav-slider{position:fixed;left:84px;right:28px;bottom:14px;z-index:92;transition:opacity .35s ease}
+.nav-slider input[type="range"]{
+  width:100%;appearance:none;-webkit-appearance:none;
+  height:6px;background:rgba(255,255,255,.60);
+  border-radius:999px;outline:none
+}
+.nav-slider input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:80px;height:6px;border-radius:999px;
+  background:rgba(0,0,0,.60);cursor:pointer
+}
+.nav-slider input[type="range"]::-moz-range-thumb{
+  width:80px;height:6px;border-radius:999px;
+  background:rgba(0,0,0,.60);cursor:pointer;border:none
+}
+
+/* ================= MENU ================= */
+.menu{
+  position:fixed;top:0;left:0;height:100vh;width:380px;
+  background:#f4f4f2;z-index:95;
+  transform:translateX(-100%);
+  transition:transform 1.05s cubic-bezier(.77,0,.18,1)
+}
+.menu.open{transform:translateX(0)}
+.menu-panel{
+  height:100%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;
+  padding:60px 30px;position:relative;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .9s ease, transform .9s ease;transition-delay:.2s
+}
+.menu.open .menu-panel{opacity:1;transform:translateY(0)}
+.back-arrow{
+  position:absolute;left:34px;top:50%;
+  transform:translateY(-50%);
+  font-size:28px;cursor:pointer;color:#222;opacity:.9
+}
+.menu-logo img{width:170px;margin-bottom:46px}
+.menu-links a{
+  display:block;font-family:'Cormorant Garamond',serif;
+  font-size:30px;margin:18px 0;text-decoration:none;color:#222
+}
+.menu-links a:hover{opacity:.6}
+.divider{width:200px;height:1px;background:#c6b67a;margin:50px auto 30px}
+.menu-footer{font-family:'Cormorant Garamond',serif;font-size:22px;line-height:1.6;color:#222}
+.menu-footer .contact{margin-top:15px;font-size:20px}
+.privacy{
+  margin-top:20px;display:inline-block;
+  font-family:'Montserrat',sans-serif;font-size:12px;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:#c6b67a;text-decoration:none
+}
+body.menu-open .hwrap{pointer-events:none}
+body.menu-open .nav-slider{pointer-events:none;opacity:.25}
+
+/* MOBILE */
+@media(max-width:900px){
+  .press-right{flex:0 0 100%;padding:70px 24px}
+  .press-left{display:none}
+  .end-left{display:none}
+  .end-card{flex:0 0 100%;width:100%;padding:70px 24px}
+  .nav-slider{left:24px;right:24px;bottom:12px}
+  .menu{width:min(380px,92vw)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg">
+  <video autoplay muted loop playsinline>
+    <source src="./Bg.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div class="intro">
+  <img src="./logo.png" alt="RR Logo">
+</div>
+
+<div class="side-bar" id="burger" aria-label="Open menu">
+  <div class="burger-lines"><i></i></div>
+</div>
+
+<div class="nav-slider" aria-label="Slide navigation">
+  <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
+</div>
+
+<div class="hwrap">
+  <div class="htrack" id="track">
+
+    <!-- Panel 0: video only -->
+    <section class="panel panel--home"></section>
+
+    <!-- PRESS SLIDE 1 -->
+    <section class="panel panel--press">
+      <div class="press-left">
+        <img src="./pressone.png" alt="Press 1 big image">
+      </div>
+      <div class="press-right">
+        <div class="press-inner">
+          <div class="press-thumb">
+            <img src="./pressone-thumb.png" alt="Press 1 small image">
+          </div>
+
+          <div class="press-meta">
+            <div class="meta-row">
+              <div class="meta-label">Publication</div>
+              <div class="meta-value">Harriman House</div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-label">Date</div>
+              <div class="meta-value">2021</div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-label">Project</div>
+              <div class="meta-value">From Nothing To Everything</div>
+            </div>
+
+            <div class="press-more">
+              <a href="#">Read More</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- PRESS SLIDE 2 -->
+    <section class="panel panel--press">
+      <div class="press-left">
+        <img src="./presstwo.png" alt="Press 2 big image">
+      </div>
+      <div class="press-right">
+        <div class="press-inner">
+          <div class="press-thumb">
+            <img src="./presstwo-thumb.png" alt="Press 2 small image">
+          </div>
+
+          <div class="press-meta">
+            <div class="meta-row">
+              <div class="meta-label">Publication</div>
+              <div class="meta-value">The Enterprise World</div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-label">Date</div>
+              <div class="meta-value">09.2021</div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-label">Project</div>
+              <div class="meta-value">???</div>
+            </div>
+
+            <div class="press-more">
+              <a href="#">Read More</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- END SLIDE (image + logo card) -->
+    <section class="panel panel--end">
+      <div class="end-left">
+        <img class="end-img" src="./pressthree.png" alt="Last slide image">
+      </div>
+
+      <div class="end-card">
+        <div class="end-inner">
+          <div class="end-logo">
+            <img src="./logo.png" alt="RR Logo">
+          </div>
+
+          <nav class="end-links">
+            <a href="index.html">Home</a>
+            <a href="expertise.html">Expertise</a>
+            <a href="interior-projects.html">Interior Projects</a>
+            <a href="press.html" aria-current="page">Press</a>
+          </nav>
+
+          <div class="end-divider"></div>
+
+          <div class="end-footer">
+            SUN HOUSE, 428 LONG DRIVE,<br>
+            GREENFORD, UB6 8UH
+            <div class="contact">+44 (0) 20 8575 3700</div>
+            <a class="end-privacy" href="#">Privacy Policy</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- Sliding menu -->
+<div class="menu" id="menu" aria-label="Menu">
+  <div class="menu-panel">
+    <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
+
+    <div class="menu-logo">
+      <img src="./logo.png" alt="RR Asset Management Logo">
+    </div>
+
+    <nav class="menu-links">
+      <a href="index.html">Home</a>
+      <a href="expertise.html">Expertise</a>
+      <a href="interior-projects.html">Interior Projects</a>
+      <a href="press.html" aria-current="page">Press</a>
+    </nav>
+
+    <div class="divider"></div>
+
+    <div class="menu-footer">
+      SUN HOUSE, 428 LONG DRIVE,<br>
+      GREENFORD, UB6 8UH
+      <div class="contact">+44 (0) 20 8575 3700</div>
+      <a href="#" class="privacy">Privacy Policy</a>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== MENU ===== */
+const menu = document.getElementById("menu");
+const burger = document.getElementById("burger");
+const closeMenu = document.getElementById("closeMenu");
+
+function openMenu(){ menu.classList.add("open"); document.body.classList.add("menu-open"); }
+function closeMenuFn(){ menu.classList.remove("open"); document.body.classList.remove("menu-open"); }
+burger.addEventListener("click", openMenu);
+closeMenu.addEventListener("click", closeMenuFn);
+document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
+
+/* ===== AUTO WIDTH: press panels hug big image + fixed card ===== */
+const track = document.getElementById("track");
+let panels = Array.from(track.querySelectorAll(".panel"));
+const navSlider = document.getElementById("navSlider");
+const intro = document.querySelector(".intro");
+
+function setPressWidths(){
+  const vh = window.innerHeight;
+
+  const pressPanels = Array.from(track.querySelectorAll(".panel--press"));
+  pressPanels.forEach(p=>{
+    const img = p.querySelector(".press-left img");
+    const card = p.querySelector(".press-right");
+    if(!img || !card) return;
+
+    const apply = () => {
+      const imgW = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 2;
+      const cardW = Math.ceil(card.getBoundingClientRect().width);
+      const total = imgW + cardW;
+      p.style.flex = `0 0 ${total}px`;
+      p.style.width = `${total}px`;
+    };
+
+    if(img.complete && img.naturalWidth) apply();
+    else img.addEventListener("load", apply, { once:true });
+  });
+
+  const endPanel = track.querySelector(".panel--end");
+  if(endPanel){
+    const endImg = endPanel.querySelector(".end-img");
+    const endCard = endPanel.querySelector(".end-card");
+
+    const applyEnd = () => {
+      const imgW = Math.ceil((endImg.naturalWidth / endImg.naturalHeight) * vh) + 2;
+      const cardW = Math.ceil(endCard.getBoundingClientRect().width);
+      const total = imgW + cardW;
+      endPanel.style.flex = `0 0 ${total}px`;
+      endPanel.style.width = `${total}px`;
+    };
+
+    if(endImg && endImg.complete && endImg.naturalWidth) applyEnd();
+    else if(endImg) endImg.addEventListener("load", applyEnd, { once:true });
+  }
+
+  panels = Array.from(track.querySelectorAll(".panel"));
+}
+window.addEventListener("load", setPressWidths);
+window.addEventListener("resize", setPressWidths);
+
+/* ===== HORIZONTAL SCROLL ===== */
+let currentX=0, targetX=0, isUserSliding=false;
+
+function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
+function totalWidth(){ return panels.reduce((s,p)=>s+p.getBoundingClientRect().width,0); }
+function maxScroll(){ return Math.max(0,totalWidth()-window.innerWidth); }
+
+function raf(){
+  currentX += (targetX - currentX) * 0.075;
+  track.style.transform = `translate3d(${-currentX}px,0,0)`;
+
+  if(intro){
+    const fadeStart=55, fadeEnd=320;
+    const t=(currentX-fadeStart)/(fadeEnd-fadeStart);
+    intro.style.opacity = String(1 - Math.max(0,Math.min(1,t)));
+  }
+
+  const maxS=maxScroll();
+  navSlider.max = String(Math.max(0, panels.length-1));
+
+  if(!isUserSliding){
+    const ratio = maxS===0 ? 0 : (currentX/maxS);
+    navSlider.value = String(Math.round(ratio*(panels.length-1)));
+  }
+
+  requestAnimationFrame(raf);
+}
+raf();
+
+window.addEventListener("wheel",(e)=>{
+  if(document.body.classList.contains("menu-open")) return;
+  targetX = clamp(targetX + e.deltaY*0.9, 0, maxScroll());
+},{passive:true});
+
+/* Drag/touch */
+let isDown=false, startX=0, startTarget=0;
+function pointerDown(x){
+  if(document.body.classList.contains("menu-open")) return;
+  isDown=true; startX=x; startTarget=targetX;
+}
+function pointerMove(x){
+  if(!isDown) return;
+  targetX = clamp(startTarget - (x - startX), 0, maxScroll());
+}
+function pointerUp(){ isDown=false; }
+
+window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
+window.addEventListener("mousemove",(e)=>pointerMove(e.clientX));
+window.addEventListener("mouseup",pointerUp);
+
+window.addEventListener("touchstart",(e)=>pointerDown(e.touches[0].clientX),{passive:true});
+window.addEventListener("touchmove",(e)=>pointerMove(e.touches[0].clientX),{passive:true});
+window.addEventListener("touchend",pointerUp);
+
+/* Slider */
+function sliderToTarget(){
+  const maxS=maxScroll();
+  const denom=(panels.length-1)||1;
+  targetX = clamp((Number(navSlider.value)/denom)*maxS, 0, maxS);
+}
+navSlider.addEventListener("pointerdown",()=>{isUserSliding=true;});
+navSlider.addEventListener("pointerup",()=>{isUserSliding=false;sliderToTarget();});
+navSlider.addEventListener("input", sliderToTarget);
+
+/* Keep bounds */
+window.addEventListener("resize",()=>{
+  targetX = clamp(targetX,0,maxScroll());
+  currentX = clamp(currentX,0,maxScroll());
+});
+</script>
+
+</body>
+</html>
