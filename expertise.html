@@ -104,11 +104,12 @@ body{
   display:flex;
   align-items:stretch;
   justify-content:flex-start;
-  width:fit-content;     /* key */
   flex:0 0 auto;
+  width:auto;
+  background:#000; /* hides any micro-gaps */
 }
-.panel--img .panel-img{
-  margin:0;              /* remove auto-centering that causes blank space */
+.panel--img img{
+  margin:0;
   height:100vh;
   width:auto;
   object-fit:contain;
@@ -142,7 +143,7 @@ body{
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
-  padding:150px 120px 90px 150px;
+  padding:150px 120px 90px 150px; /* moved down */
   color:#1a1a1a;
 }
 .copy-inner{ max-width:480px; }
@@ -162,7 +163,7 @@ body{
 .aub-heading .big{
   display:block;
   font-style:normal;
-  font-size:60px;                /* balanced like reference */
+  font-size:60px; /* reduced */
   text-transform:uppercase;
   letter-spacing:.6px;
 }
@@ -171,15 +172,15 @@ body{
   width:56px;
   height:1px;
   background:#c6b67a;
-  margin:0 0 95px 0;
+  margin:0 0 110px 0; /* pushes paragraph down more */
 }
 
 .aub-text{
   font-family:'Cormorant Garamond', serif;
   font-weight:300;
-  font-size:16.5px;              /* luxury size */
+  font-size:16.5px;
   line-height:2.05;
-  max-width:340px;               /* consistent classic width */
+  max-width:340px;
   color:#1f1f1f;
 }
 .aub-text p{ margin:0; }
@@ -195,7 +196,7 @@ body{
 .split-media img{
   height:100%;
   width:auto;
-  object-fit:contain;            /* NO crop */
+  object-fit:contain;
   object-position:center;
   display:block;
 }
@@ -517,12 +518,11 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
           </div>
         </div>
         <div class="split-media">
-          <img src="./seven.png" alt="Expertise 7">
+          <img src="./expertiseseven.png" alt="Expertise 7">
         </div>
       </div>
     </section>
 
-    <section class="panel panel--img"><img src="./expertiseseven.png" alt="Expertise 8"></section>
     <section class="panel panel--img"><img src="./expertiseeight.png" alt="Expertise 8"></section>
     <section class="panel panel--img"><img src="./expertisenine.png" alt="Expertise 9"></section>
 
@@ -563,7 +563,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
           <nav class="end-links">
             <a href="index.html">Home</a>
-            <a href="expertise.html">Expertise</a>
+            <a href="expertise.html" aria-current="page">Expertise</a>
             <a href="interior-projects.html">Interior Projects</a>
             <a href="press.html">Press</a>
           </nav>
@@ -640,19 +640,18 @@ function setImagePanelWidths(){
     const img = p.querySelector("img");
     if(!img) return;
 
-    // If not loaded yet, try again when loaded
     const apply = () => {
-      const rect = img.getBoundingClientRect();
-      const w = Math.max(1, Math.ceil(rect.width));
+      // natural ratio-based width (more reliable than getBoundingClientRect in some cases)
+      const vh = window.innerHeight;
+      const w = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 2; // +2 safety
       p.style.flex = `0 0 ${w}px`;
       p.style.width = `${w}px`;
     };
 
-    if(img.complete) apply();
+    if(img.complete && img.naturalWidth) apply();
     else img.addEventListener("load", apply, { once:true });
   });
 
-  // refresh panels list (in case)
   panels = Array.from(track.querySelectorAll(".panel"));
 }
 window.addEventListener("load", setImagePanelWidths);
@@ -742,6 +741,16 @@ navSlider.addEventListener("pointerup", ()=>{
   sliderToTarget();
 });
 navSlider.addEventListener("input", sliderToTarget);
+
+/* data-goto support (if you add later) */
+document.querySelectorAll('[data-goto]').forEach(a=>{
+  a.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const idx = Number(a.dataset.goto);
+    targetX = clamp(xForIndex(idx), 0, maxScroll());
+    closeMenuFn();
+  });
+});
 
 /* Ensure correct bounds after resizing */
 window.addEventListener("resize", ()=>{
