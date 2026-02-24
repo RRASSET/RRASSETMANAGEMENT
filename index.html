@@ -95,12 +95,12 @@ body{
 
 /* ================= PANELS (VARIABLE WIDTH, NO CROP) ================= */
 .panel-img{
-  height:100%;                  /* IMPORTANT: full panel height */
-  width:auto;                   /* keep aspect ratio */
+  height:100%;
+  width:auto;
   display:block;
-  object-fit:contain;           /* no crop */
+  object-fit:contain;
   object-position:center;
-  margin:0 auto;                /* centered horizontally */
+  margin:0 auto;
 }
 
 /* Image slides: NO CROP, NO STRETCH */
@@ -182,49 +182,19 @@ body{
 
 /* Split slide image: NO CROP */
 .split-right{
-  display:flex;                 /* IMPORTANT */
-  align-items:stretch;          /* IMPORTANT */
+  display:flex;
+  align-items:stretch;
   justify-content:center;
   overflow:hidden;
   background:#f4f4f2;
 }
 
 .panel--split .panel-img{
-  height:100%;                  /* full height */
-  width:auto;                   /* no crop */
+  height:100%;
+  width:auto;
   margin:0 auto;
   object-fit:contain;
   object-position:center;
-}
-
-/* ================= QUOTE TEXT SLIDE (Auberry-style) ================= */
-.panel--quote{
-  flex:0 0 100vw;
-  width:auto;
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;   /* align left like split */
-  background:#f4f4f2;
-}
-.quote-wrap{
-  width:38%;                 /* SAME as split-left column */
-  padding-left:160px;        /* SAME as split-left */
-}
-.quote-mark{
-  font-family:'Cormorant Garamond', serif;
-  font-size:80px;
-  line-height:1;
-  color:#c6b67a;
-  margin-bottom:10px;
-}
-.quote-text{
-  font-family:'Cormorant Garamond', serif;
-  font-weight:300;
-  font-style:italic;
-  font-size:28px;
-  line-height:1.7;
-  color:#1f1f1f;
-  letter-spacing:0.2px;
 }
 
 /* ================= END SLIDE (IMAGE ATTACHED TO CARD — NO GAP) ================= */
@@ -253,7 +223,7 @@ body{
   height:100%;
   width:auto;
   object-fit:contain;
-  object-position:right center; /* hug the card edge */
+  object-position:right center;
   display:block;
 }
 
@@ -314,7 +284,7 @@ body{
 /* ================= BOTTOM THIN SLIDER ================= */
 .nav-slider{
   position:fixed;
-  left:84px;          /* matches 64px burger + spacing */
+  left:84px;
   right:28px;
   bottom:14px;
   z-index:92;
@@ -476,7 +446,6 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     grid-template-rows: auto 55vh;
   }
   .split-left{ padding:80px 24px 40px 24px; }
-  .quote-wrap{ padding:0 24px; }
 
   .end-left{ display:none; }
   .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
@@ -575,22 +544,36 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     <section class="panel"><img class="panel-img" src="./firstpagefifthpic.png" alt="Slide 4"></section>
     <section class="panel"><img class="panel-img" src="./firstpagesixthpic.png" alt="Slide 5"></section>
 
-    <!-- QUOTE TEXT (after the sixth image) -->
-    <section class="panel panel--quote">
-      <div class="quote-wrap">
-        <div class="quote-mark">“</div>
-        <div class="quote-text">
-          R&amp;R Mayfair is a trusted advisory with a depth of experience across Dubai’s ultra-prime real estate — delivering discreet, strategic guidance and exceptional outcomes for our clients.
+    <!-- REPLACED "QUOTE" WITH AUBERRY STYLE TEXT + IMAGE (after the sixth image) -->
+    <section class="panel panel--split">
+      <div class="split">
+        <div class="split-left">
+          <div class="aub-heading">
+            <span class="small">A Trusted</span>
+            <span class="big">ADVISORY</span>
+          </div>
+          <div class="aub-line"></div>
+          <div class="aub-text">
+            <p>
+              R&amp;R Mayfair is a trusted advisory with a depth of experience across Dubai’s ultra-prime real estate — delivering discreet, strategic guidance and exceptional outcomes for our clients.
+            </p>
+            <p>
+              We work closely with investors and families to identify rare opportunities, negotiate with confidence, and ensure every acquisition is handled with precision, confidentiality, and long-term vision.
+            </p>
+          </div>
+        </div>
+
+        <div class="split-right">
+          <!-- You can change this image if you want -->
+          <img class="panel-img" src="./firstpageseventhpic.png" alt="Trusted Advisory">
         </div>
       </div>
     </section>
 
-    <!-- 7th, 8th, 9th images -->
-    <section class="panel"><img class="panel-img" src="./firstpageseventhpic.png" alt="Slide 6"></section>
+    <!-- Next images (shifted down by one because the split slide uses the 7th image) -->
     <section class="panel"><img class="panel-img" src="./firstpageeighthpic.png" alt="Slide 7"></section>
- 
 
-    <!-- END SLIDE (LAST IMAGE ATTACHED TO LOGO CARD — NO GAP) -->
+    <!-- END SLIDE -->
     <section class="panel panel--end">
       <div class="end-left">
         <img class="end-img" src="./firstpageninethpic.png" alt="Last Slide Image">
