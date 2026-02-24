@@ -99,20 +99,20 @@ body{
   height:100vh;
 }
 
-/* Image-only panels auto-size to image width via JS (NO GAPS) */
+/* IMAGE-ONLY PANELS MUST SHRINK TO IMAGE WIDTH (NO WHITE GAP) */
 .panel--img{
   display:flex;
   align-items:stretch;
-  justify-content:center;
-  background:transparent;
+  justify-content:flex-start;
+  width:fit-content;     /* key */
+  flex:0 0 auto;
 }
-.panel--img img{
-  height:100%;
+.panel--img .panel-img{
+  margin:0;              /* remove auto-centering that causes blank space */
+  height:100vh;
   width:auto;
-  object-fit:contain;     /* NO crop */
-  object-position:center;
+  object-fit:contain;
   display:block;
-  margin:0;
 }
 
 /* Home slide must always be full screen so you see video + logo first */
@@ -171,7 +171,7 @@ body{
   width:56px;
   height:1px;
   background:#c6b67a;
-  margin:0 0 55px 0;
+  margin:0 0 95px 0;
 }
 
 .aub-text{
