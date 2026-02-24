@@ -203,8 +203,8 @@ body{
 
 /* ================= END SLIDE (IMAGE ATTACHED TO CARD — NO GAP) ================= */
 .panel--end{
-  flex:0 0 100vw;
-  width:100vw;
+  flex:0 0 auto;     /* was 100vw */
+  width:auto;        /* was 100vw */
   height:100vh;
   display:flex;
   align-items:stretch;
@@ -635,15 +635,16 @@ const navSlider = document.getElementById("navSlider");
 const intro = document.querySelector(".intro");
 
 function setImagePanelWidths(){
+  const vh = window.innerHeight;
+
+  // IMAGE-ONLY PANELS
   const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
   imgPanels.forEach(p=>{
     const img = p.querySelector("img");
     if(!img) return;
 
     const apply = () => {
-      // natural ratio-based width (more reliable than getBoundingClientRect in some cases)
-      const vh = window.innerHeight;
-      const w = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 2; // +2 safety
+      const w = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 2;
       p.style.flex = `0 0 ${w}px`;
       p.style.width = `${w}px`;
     };
@@ -651,6 +652,25 @@ function setImagePanelWidths(){
     if(img.complete && img.naturalWidth) apply();
     else img.addEventListener("load", apply, { once:true });
   });
+
+  // END PANEL (image width + card width)
+  const endPanel = track.querySelector(".panel--end");
+  if(endPanel){
+    const endImg  = endPanel.querySelector(".end-img");
+    const endCard = endPanel.querySelector(".end-card");
+
+    const applyEnd = () => {
+      const imgW = Math.ceil((endImg.naturalWidth / endImg.naturalHeight) * vh) + 2;
+      const cardW = Math.ceil(endCard.getBoundingClientRect().width);
+      const totalW = imgW + cardW;
+
+      endPanel.style.flex = `0 0 ${totalW}px`;
+      endPanel.style.width = `${totalW}px`;
+    };
+
+    if(endImg && endImg.complete && endImg.naturalWidth) applyEnd();
+    else if(endImg) endImg.addEventListener("load", applyEnd, { once:true });
+  }
 
   panels = Array.from(track.querySelectorAll(".panel"));
 }
