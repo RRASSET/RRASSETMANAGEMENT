@@ -179,6 +179,90 @@ body{
   object-position:center;
 }
 
+/* ================= END SLIDE (IMAGE ATTACHED TO CARD — NO GAP) ================= */
+.panel--end{
+  flex:0 0 100vw;
+  width:100vw;
+  height:100vh;
+  display:flex;
+  align-items:stretch;
+  justify-content:flex-end;
+  background:transparent;
+  overflow:hidden;
+}
+
+/* Left side shows the LAST IMAGE and pushes it to touch the card */
+.end-left{
+  flex:1;
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  overflow:hidden;
+  background:transparent;
+}
+
+.end-img{
+  height:100%;
+  width:auto;
+  object-fit:contain;
+  object-position:right center; /* hug the card edge */
+  display:block;
+}
+
+/* Right panel (logo card) */
+.end-card{
+  flex:0 0 min(520px, 42vw);
+  height:100%;
+  background:#f4f4f2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:110px 60px;
+  border-left:1px solid rgba(0,0,0,0.08);
+  box-shadow:none;
+}
+
+.end-inner{ width:100%; max-width:520px; }
+.end-logo img{ width:170px; margin-bottom:44px; }
+
+.end-links a{
+  display:block;
+  font-family:'Cormorant Garamond', serif;
+  font-size:28px;
+  margin:14px 0;
+  text-decoration:none;
+  color:#1a1a1a;
+  transition:opacity .25s ease;
+}
+.end-links a:hover{ opacity:.6; }
+
+.end-divider{
+  width:200px;
+  height:1px;
+  background:#c6b67a;
+  margin:50px auto 30px auto;
+}
+
+.end-footer{
+  font-family:'Cormorant Garamond', serif;
+  font-size:20px;
+  line-height:1.7;
+  color:#1a1a1a;
+}
+.end-footer .contact{ margin-top:12px; font-size:18px; }
+
+.end-privacy{
+  margin-top:22px;
+  display:inline-block;
+  font-family:'Montserrat', sans-serif;
+  font-size:12px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:#c6b67a;
+  text-decoration:none;
+}
+
 /* ================= BOTTOM THIN SLIDER ================= */
 .nav-slider{
   position:fixed;
@@ -344,6 +428,10 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     grid-template-rows: auto 55vh;
   }
   .split-left{ padding:80px 24px 40px 24px; }
+
+  .end-left{ display:none; }
+  .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
+
   .nav-slider{ left:24px; right:24px; bottom:12px; }
   .menu{ width:min(380px, 92vw); }
 }
@@ -381,7 +469,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     <!-- Panel 0: video only -->
     <section class="panel panel--home"></section>
 
-    <!-- Slide 1: TEXT + expertiseone.png -->
+    <!-- 1: TEXT + expertiseone.png -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -402,13 +490,13 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       </div>
     </section>
 
-    <!-- Slide 2: expertisetwo.png -->
+    <!-- 2 -->
     <section class="panel"><img class="panel-img" src="./expertisetwo.png" alt="Expertise 2"></section>
 
-    <!-- Slide 3: expertisethree.png -->
+    <!-- 3 -->
     <section class="panel"><img class="panel-img" src="./expertisethree.png" alt="Expertise 3"></section>
 
-    <!-- Slide 4: TEXT + expertisefour.png -->
+    <!-- 4: TEXT + expertisefour.png -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -429,13 +517,13 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       </div>
     </section>
 
-    <!-- Slide 5 -->
+    <!-- 5 -->
     <section class="panel"><img class="panel-img" src="./expertisefive.png" alt="Expertise 5"></section>
 
-    <!-- Slide 6 -->
+    <!-- 6 -->
     <section class="panel"><img class="panel-img" src="./expertisesix.png" alt="Expertise 6"></section>
 
-    <!-- Slide 7: TEXT + expertiseseven.png -->
+    <!-- 7: TEXT + expertiseseven.png -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -456,13 +544,13 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       </div>
     </section>
 
-    <!-- Slide 8 -->
+    <!-- 8 -->
     <section class="panel"><img class="panel-img" src="./expertiseeight.png" alt="Expertise 8"></section>
 
-    <!-- Slide 9 -->
+    <!-- 9 -->
     <section class="panel"><img class="panel-img" src="./expertisenine.png" alt="Expertise 9"></section>
 
-    <!-- Slide 10: TEXT + expertiseten.png -->
+    <!-- 10: TEXT + expertiseten.png -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -483,14 +571,47 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       </div>
     </section>
 
-    <!-- Slide 11 -->
+    <!-- 11 -->
     <section class="panel"><img class="panel-img" src="./expertiseeleven.png" alt="Expertise 11"></section>
 
-    <!-- Slide 12 -->
+    <!-- 12 -->
     <section class="panel"><img class="panel-img" src="./expertisetwelve.png" alt="Expertise 12"></section>
 
-    <!-- Slide 13 -->
+    <!-- 13 -->
     <section class="panel"><img class="panel-img" src="./expertisethirteen.png" alt="Expertise 13"></section>
+
+    <!-- END SLIDE: LAST IMAGE ATTACHED TO LOGO CARD -->
+    <section class="panel panel--end">
+      <div class="end-left">
+        <img class="end-img" src="./expertisethirteen.png" alt="Expertise Last Image">
+      </div>
+
+      <div class="end-card">
+        <div class="end-inner">
+
+          <div class="end-logo">
+            <img src="./logo.png" alt="RR Logo">
+          </div>
+
+          <nav class="end-links">
+            <a href="index.html">Home</a>
+            <a href="expertise.html">Expertise</a>
+            <a href="interior-projects.html">Interior Projects</a>
+            <a href="press.html">Press</a>
+          </nav>
+
+          <div class="end-divider"></div>
+
+          <div class="end-footer">
+            SUN HOUSE, 428 LONG DRIVE,<br>
+            GREENFORD, UB6 8UH
+            <div class="contact">+44 (0) 20 8575 3700</div>
+            <a class="end-privacy" href="#">Privacy Policy</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
 
   </div>
 </div>
@@ -505,7 +626,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     </div>
 
     <nav class="menu-links">
-      <a href="index.html" aria-label="Home">Home</a>
+      <a href="index.html">Home</a>
       <a href="expertise.html" aria-current="page">Expertise</a>
       <a href="interior-projects.html">Interior Projects</a>
       <a href="press.html">Press</a>
@@ -628,6 +749,16 @@ navSlider.addEventListener("pointerup", ()=>{
   sliderToTarget();
 });
 navSlider.addEventListener("input", sliderToTarget);
+
+/* data-goto links (only used if you add data-goto later) */
+document.querySelectorAll('[data-goto]').forEach(a=>{
+  a.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const idx = Number(a.dataset.goto);
+    targetX = clamp(xForIndex(idx), 0, maxScroll());
+    closeMenuFn();
+  });
+});
 
 window.addEventListener("resize", ()=>{
   panels = Array.from(track.querySelectorAll(".panel"));
