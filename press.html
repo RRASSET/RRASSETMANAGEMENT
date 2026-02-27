@@ -549,30 +549,31 @@ let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
 const intro = document.querySelector(".intro");
 
+<script>
 function setImagePanelWidths(){
-  const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
-  imgPanels.forEach(p=>{
-    const img = p.querySelector("img");
+  const imgPanels = Array.from(document.querySelectorAll(".panel--img"));
+
+  imgPanels.forEach(panel => {
+    const img = panel.querySelector("img");
     if(!img) return;
 
     const apply = () => {
-      // use natural image aspect ratio + viewport height -> compute exact width
-      const h = window.innerHeight;
-      const nw = img.naturalWidth || 1;
-      const nh = img.naturalHeight || 1;
-      const w = Math.max(1, Math.round((nw/nh) * h));
-      p.style.flex = `0 0 ${w}px`;
-      p.style.width = `${w}px`;
+      // wait for layout so the browser has calculated the final rendered size
+      requestAnimationFrame(() => {
+        const w = Math.ceil(img.getBoundingClientRect().width); // use real rendered width
+        panel.style.flex = `0 0 ${w}px`;
+        panel.style.width = `${w}px`;
+      });
     };
 
-    if(img.complete) apply();
+    if (img.complete) apply();
     else img.addEventListener("load", apply, { once:true });
   });
-
-  panels = Array.from(track.querySelectorAll(".panel"));
 }
+
 window.addEventListener("load", setImagePanelWidths);
-window.addEventListener("resize", ()=>{ setImagePanelWidths(); });
+window.addEventListener("resize", setImagePanelWidths);
+</script>;
 
 /* ===== HORIZONTAL SCROLL ===== */
 let currentX = 0;
