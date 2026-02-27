@@ -180,29 +180,16 @@ body{
   text-indent:-9999px;
 }
 
-/* ================= END SLIDE (IMAGE + LOGO CARD) ================= */
-.panel--end{
+/* ================= END SLIDE (MENU CARD ONLY) ================= */
+.panel--end-only{
   flex:0 0 auto;
   width:auto;
   height:100vh;
   display:flex;
   align-items:stretch;
-  justify-content:flex-end;
+  justify-content:flex-start; /* IMPORTANT: no center gap */
   background:transparent;
   overflow:hidden;
-}
-
-.end-left{
-  flex:0 0 auto;
-  display:flex;
-  align-items:stretch;
-  justify-content:flex-start;
-}
-.end-img{
-  height:100vh;
-  width:auto;
-  object-fit:contain;
-  display:block;
 }
 
 /* Card width stays same */
@@ -294,7 +281,7 @@ body{
   border:none;
 }
 
-/* ================= MENU ================= */
+/* ================= MENU (BURGER OVERLAY) ================= */
 .menu{
   position:fixed; top:0; left:0;
   height:100vh; width:380px;
@@ -377,7 +364,6 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 @media (max-width: 900px){
   .nav-slider{ left:24px; right:24px; bottom:12px; }
   .menu{ width:min(380px, 92vw); }
-  .end-left{ display:none; }
   .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
 }
 </style>
@@ -414,7 +400,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     <!-- Panel 0: video only -->
     <section class="panel panel--home"></section>
 
-    <!-- SLIDES 1–11 (Hover tiles) -->
+    <!-- SLIDES -->
     <section class="panel panel--tile">
       <a class="tile-link" href="https://rrasset.github.io/RRASSETMANAGEMENT/il-primo.html" aria-label="View project 1">View project</a>
       <img src="./interiorprojectone.png" alt="Interior Project 1">
@@ -465,41 +451,39 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       </div></div>
     </section>
 
-    <!-- SLIDE 12: END SLIDE -->
-    <section class="panel panel--end">
+    <!-- END SLIDE: MENU CARD ONLY (TOUCHES LAST IMAGE) -->
+    <section class="panel panel--end-only">
+      <div class="end-card">
+        <div class="end-inner">
 
-   
-   <!-- SLIDE 12: END SLIDE (MENU CARD ONLY) -->
-<section class="panel panel--end panel--end-only">
-  <div class="end-card end-card-only">
-    <div class="end-inner">
-      <div class="end-logo">
-        <img src="./logo.png" alt="RR Logo">
+          <div class="end-logo">
+            <img src="./logo.png" alt="RR Logo">
+          </div>
+
+          <nav class="end-links">
+            <a href="index.html">Home</a>
+            <a href="expertise.html">Expertise</a>
+            <a href="interior-projects.html" aria-current="page">Interior Projects</a>
+            <a href="press.html">Press</a>
+          </nav>
+
+          <div class="end-divider"></div>
+
+          <div class="end-footer">
+            SUN HOUSE, 428 LONG DRIVE,<br>
+            GREENFORD, UB6 8UH
+            <div class="contact">+44 (0) 20 8575 3700</div>
+            <a href="#" class="end-privacy">Privacy Policy</a>
+          </div>
+
+        </div>
       </div>
-
-      <nav class="end-links">
-        <a href="index.html">Home</a>
-        <a href="expertise.html">Expertise</a>
-        <a href="interior-projects.html" aria-current="page">Interior Projects</a>
-        <a href="press.html">Press</a>
-      </nav>
-
-      <div class="end-divider"></div>
-
-      <div class="end-footer">
-        SUN HOUSE, 428 LONG DRIVE,<br>
-        GREENFORD, UB6 8UH
-        <div class="contact">+44 (0) 20 8575 3700</div>
-        <a href="#" class="end-privacy">Privacy Policy</a>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
   </div>
 </div>
 
-<!-- Sliding menu (MOVED OUTSIDE THE HTRACK/HWRAP so it doesn't become a slide) -->
+<!-- Sliding menu (BURGER OVERLAY) -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
     <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
@@ -544,7 +528,7 @@ burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
 document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
 
-/* ===== AUTO SIZE: tile panels hug their image + end panel hugs image + card ===== */
+/* ===== AUTO SIZE: tile panels hug their image + end-only hugs its card ===== */
 const track = document.getElementById("track");
 let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
@@ -569,23 +553,18 @@ function setPanelWidths(){
     else img.addEventListener("load", apply, { once:true });
   });
 
-  // end panel = image width + card width
-  const endPanel = track.querySelector(".panel--end");
-  if(endPanel){
-    const endImg  = endPanel.querySelector(".end-img");
-    const endCard = endPanel.querySelector(".end-card");
-
-    const applyEnd = () => {
-      const imgW  = Math.ceil((endImg.naturalWidth / endImg.naturalHeight) * vh) + 2;
-      const cardW = Math.ceil(endCard.getBoundingClientRect().width);
-      const total = imgW + cardW;
-
-      endPanel.style.flex = `0 0 ${total}px`;
-      endPanel.style.width = `${total}px`;
+  // end-only panel = card width only (NO GAP)
+  const endOnly = track.querySelector(".panel--end-only");
+  if(endOnly){
+    const card = endOnly.querySelector(".end-card");
+    const applyEndOnly = () => {
+      const cardW = Math.ceil(card.getBoundingClientRect().width) + 2;
+      endOnly.style.flex = `0 0 ${cardW}px`;
+      endOnly.style.width = `${cardW}px`;
     };
 
-    if(endImg && endImg.complete && endImg.naturalWidth) applyEnd();
-    else if(endImg) endImg.addEventListener("load", applyEnd, { once:true });
+    applyEndOnly();
+    requestAnimationFrame(applyEndOnly);
   }
 
   panels = Array.from(track.querySelectorAll(".panel"));
