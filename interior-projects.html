@@ -69,12 +69,7 @@ body{
   width:100vw;
   overflow:hidden;
 }
-.htrack{
-  height:100%;
-  display:flex;
-  will-change:transform;
-  transform:translate3d(0,0,0);
-}
+
 
 /* ================= PANELS BASE ================= */
 .panel{ flex:0 0 auto; height:100vh; }
@@ -503,7 +498,7 @@ document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn()
 const track = document.getElementById("track");
 let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
-const intro = document.querySelector(".intro");
+
 
 function setPanelWidths(){
   const vh = window.innerHeight;
@@ -556,11 +551,7 @@ function raf(){
   currentX += (targetX - currentX) * 0.075;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
 
-  if (intro) {
-    const fadeStart = 55, fadeEnd = 320;
-    const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
-    intro.style.opacity = String(1 - Math.max(0, Math.min(1, t)));
-  }
+ 
 
   const maxS = maxScroll();
   navSlider.max = String(Math.max(0, panels.length - 1));
