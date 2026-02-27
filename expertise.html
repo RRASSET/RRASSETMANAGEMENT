@@ -619,25 +619,22 @@ function setPanelWidths(){
     else img.addEventListener("load", apply, { once:true });
   });
 
-  // end panel: (end image width) + (card width)
-  const endPanel = track.querySelector(".panel--end");
-  if(endPanel){
-    const endImg  = endPanel.querySelector(".end-img");
-    const endCard = endPanel.querySelector(".end-card");
 
-    const applyEnd = () => {
-      /* CHANGED: +6 for extra buffer to prevent seams */
-      const imgW = Math.ceil((endImg.naturalWidth / endImg.naturalHeight) * vh) + 6;
-      const cardW = Math.ceil(endCard.getBoundingClientRect().width);
-      const total = imgW + cardW;
+ // end panel: card only (NO end image)
+const endPanel = track.querySelector(".panel--end");
+if (endPanel) {
+  const endCard = endPanel.querySelector(".end-card");
 
-      endPanel.style.flex = `0 0 ${total}px`;
-      endPanel.style.width = `${total}px`;
-    };
+  const applyEnd = () => {
+    if (!endCard) return;
+    const cardW = Math.ceil(endCard.getBoundingClientRect().width);
 
-    if(endImg && endImg.complete && endImg.naturalWidth) applyEnd();
-    else if(endImg) endImg.addEventListener("load", applyEnd, { once:true });
-  }
+    endPanel.style.flex = `0 0 ${cardW}px`;
+    endPanel.style.width = `${cardW}px`;
+  };
+
+  requestAnimationFrame(applyEnd);
+}
 
   panels = Array.from(track.querySelectorAll(".panel"));
 }
