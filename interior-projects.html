@@ -414,9 +414,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     <!-- Panel 0: video only -->
     <section class="panel panel--home"></section>
 
-    <!-- SLIDES 1–11 (Hover tiles)
-         IMPORTANT: rename filenames here to match your real files.
-         You said: interiorprojectone, interiorproject2, interiorproject3... -->
+    <!-- SLIDES 1–11 (Hover tiles) -->
     <section class="panel panel--tile">
       <a class="tile-link" href="https://rrasset.github.io/RRASSETMANAGEMENT/il-primo.html" aria-label="View project 1">View project</a>
       <img src="./interiorprojectone.png" alt="Interior Project 1">
@@ -467,14 +465,18 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       </div></div>
     </section>
 
-    <!-- SLIDE 12: END SLIDE (image + logo card) -->
+    <!-- SLIDE 12: END SLIDE -->
     <section class="panel panel--end">
+
+      <!-- LEFT IMAGE (ONLY THIS IMAGE) -->
       <div class="end-left">
-        <img class="end-img" src="./interiorproject12.png" alt="Interior Project 12">
+        <img src="./interiorproject12.png" alt="Interior Project 12" class="end-img">
       </div>
 
+      <!-- RIGHT MENU CARD -->
       <div class="end-card">
         <div class="end-inner">
+
           <div class="end-logo">
             <img src="./logo.png" alt="RR Logo">
           </div>
@@ -492,16 +494,18 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
             SUN HOUSE, 428 LONG DRIVE,<br>
             GREENFORD, UB6 8UH
             <div class="contact">+44 (0) 20 8575 3700</div>
-            <a class="end-privacy" href="#">Privacy Policy</a>
+            <a href="#" class="end-privacy">Privacy Policy</a>
           </div>
+
         </div>
       </div>
+
     </section>
 
   </div>
 </div>
 
-<!-- Sliding menu -->
+<!-- Sliding menu (MOVED OUTSIDE THE HTRACK/HWRAP so it doesn't become a slide) -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
     <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
