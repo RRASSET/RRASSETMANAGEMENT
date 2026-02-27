@@ -196,15 +196,17 @@ body{
 }
 
 /* ================= END SLIDE (IMAGE + CARD) ================= */
-.panel--end{
-  flex:0 0 auto; /* IMPORTANT: hug content */
-  width:auto;
-  height:100vh;
+.end-card{
+  flex:0 0 min(520px, 42vw);      /* SAME width as before */
+  width:min(520px, 42vw);
+  height:100%;
+  background:#f4f4f2;
   display:flex;
-  align-items:stretch;
-  justify-content:flex-end;
-  background:transparent;
-  overflow:hidden;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:110px 60px;
+  border-left:0;
 }
 
 .end-left{
