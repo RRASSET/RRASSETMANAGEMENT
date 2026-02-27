@@ -526,7 +526,8 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   </div>
 </div>
 
-<script>
+
+  <script>
 /* ===== MENU ===== */
 const menu = document.getElementById("menu");
 const burger = document.getElementById("burger");
@@ -550,20 +551,21 @@ let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
 const intro = document.querySelector(".intro");
 
-  
 function setImagePanelWidths(){
-  const imgPanels = Array.from(document.querySelectorAll(".panel--img"));
+  const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
 
   imgPanels.forEach(panel => {
     const img = panel.querySelector("img");
     if(!img) return;
 
     const apply = () => {
-      // wait for layout so the browser has calculated the final rendered size
       requestAnimationFrame(() => {
-        const w = Math.ceil(img.getBoundingClientRect().width); // use real rendered width
+        const w = Math.ceil(img.getBoundingClientRect().width);
         panel.style.flex = `0 0 ${w}px`;
         panel.style.width = `${w}px`;
+
+        // IMPORTANT: refresh panels after widths applied
+        panels = Array.from(track.querySelectorAll(".panel"));
       });
     };
 
@@ -571,10 +573,8 @@ function setImagePanelWidths(){
     else img.addEventListener("load", apply, { once:true });
   });
 }
-
 window.addEventListener("load", setImagePanelWidths);
 window.addEventListener("resize", setImagePanelWidths);
-
 
 /* ===== HORIZONTAL SCROLL ===== */
 let currentX = 0;
