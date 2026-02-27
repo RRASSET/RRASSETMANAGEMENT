@@ -84,10 +84,18 @@ body{
   display:flex;
   will-change:transform;
   transform:translate3d(0,0,0);
+  gap:0;                 /* ADDED: ensure no flex gap */
+  align-items:stretch;   /* ADDED: stretch panels */
 }
 
 /* ================= PANELS BASE ================= */
 .panel{ flex:0 0 auto; height:100vh; }
+
+/* ADDED: seam killer (tiny overlap) */
+.panel{
+  flex-shrink:0;
+  margin-right:-2px;   /* overlap next panel slightly to eliminate hairline gaps */
+}
 
 /* ================= IMAGE-ONLY PANELS (HUG IMAGE) ================= */
 .panel--img{
@@ -471,7 +479,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
               <span class="small">Strategic</span>
               <span class="big">ADVISORY</span>
             </div>
-            <div class="aub-line"></div>
+          <div class="aub-line"></div>
             <div class="aub-text">
               <p>R&amp;R Mayfair is a premier real estate advisory specialising in luxury and ultra-prime properties in Dubai’s most prestigious and sought-after locations.</p>
             </div>
@@ -603,7 +611,8 @@ function setPanelWidths(){
     if(!img) return;
 
     const apply = () => {
-      const w = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 2;
+      /* CHANGED: +6 for extra buffer to prevent seams */
+      const w = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 6;
       p.style.flex = `0 0 ${w}px`;
       p.style.width = `${w}px`;
     };
@@ -622,7 +631,8 @@ function setPanelWidths(){
 
     const apply = () => {
       const copyW = Math.round(window.innerWidth * 0.42);
-      const imgW  = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 2;
+      /* CHANGED: +6 for extra buffer to prevent seams */
+      const imgW  = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 6;
 
       p.style.setProperty("--copyW", copyW + "px");
       media.style.flex = `0 0 ${imgW}px`;
@@ -644,7 +654,8 @@ function setPanelWidths(){
     const endCard = endPanel.querySelector(".end-card");
 
     const applyEnd = () => {
-      const imgW = Math.ceil((endImg.naturalWidth / endImg.naturalHeight) * vh) + 2;
+      /* CHANGED: +6 for extra buffer to prevent seams */
+      const imgW = Math.ceil((endImg.naturalWidth / endImg.naturalHeight) * vh) + 6;
       const cardW = Math.ceil(endCard.getBoundingClientRect().width);
       const total = imgW + cardW;
 
@@ -673,7 +684,11 @@ function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
 
 function raf(){
   currentX += (targetX - currentX) * 0.075;
-  track.style.transform = `translate3d(${-currentX}px,0,0)`;
+
+  /* ADDED: round transform to device pixels to avoid subpixel seams */
+  const dpr = window.devicePixelRatio || 1;
+  const x = Math.round(currentX * dpr) / dpr;
+  track.style.transform = `translate3d(${-x}px,0,0)`;
 
   if (intro) {
     const fadeStart = 55, fadeEnd = 320;
