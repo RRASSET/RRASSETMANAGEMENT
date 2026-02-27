@@ -371,17 +371,6 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
 <body>
 
-<!-- Background video -->
-<div class="bg">
-  <video autoplay muted loop playsinline>
-    <source src="./Bg.mp4" type="video/mp4">
-  </video>
-</div>
-
-<!-- Intro logo (optional) -->
-<div class="intro">
-  <img src="./logo.png" alt="RR Logo">
-</div>
 
 <!-- Burger -->
 <div class="side-bar" id="burger" aria-label="Open menu">
@@ -397,9 +386,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 <div class="hwrap">
   <div class="htrack" id="track">
 
-    <!-- Panel 0: video only (blank) -->
-    <section class="panel panel--home"></section>
-
+  
     <!-- Panel 1: left white text panel -->
     <section class="panel panel--copy">
       <div class="copy-wrap">
@@ -503,7 +490,6 @@ document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn()
 const track = document.getElementById("track");
 let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
-const intro = document.querySelector(".intro");
 
 function setPanelWidths(){
   const vh = window.innerHeight;
@@ -587,11 +573,7 @@ function raf(){
   const x = Math.round(currentX * dpr) / dpr;
   track.style.transform = `translate3d(${-x}px,0,0)`;
 
-  if (intro) {
-    const fadeStart = 55, fadeEnd = 320;
-    const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
-    intro.style.opacity = String(1 - Math.max(0, Math.min(1, t)));
-  }
+  
 
   const maxS = maxScroll();
   navSlider.max = String(Math.max(0, panels.length - 1));
