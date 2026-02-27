@@ -175,10 +175,9 @@ body{
   width:100vw;
   height:100vh;
   display:flex;
+  justify-content:flex-end;   /* keep card on right */
   align-items:stretch;
-  justify-content:flex-end;
-  background:transparent;
-  overflow:hidden;
+  background:#f4f4f2;         /* full grey background */
 }
 .end-left{
   flex:1;
@@ -468,33 +467,31 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     </section>
 
     <!-- ===== END SLIDE (logo card) ===== -->
-    <section class="panel panel--end">
-      <div class="end-left">
-       
-      <div class="end-card">
-        <div class="end-inner">
-          <div class="end-logo">
-            <img src="./logo.png" alt="RR Logo">
-          </div>
-
-          <nav class="end-links">
-            <a href="index.html">Home</a>
-            <a href="expertise.html">Expertise</a>
-            <a href="interior-projects.html">Interior Projects</a>
-            <a href="press.html">Press</a>
-          </nav>
-
-          <div class="end-divider"></div>
-
-          <div class="end-footer">
-            SUN HOUSE, 428 LONG DRIVE,<br>
-            GREENFORD, UB6 8UH
-            <div class="contact">+44 (0) 20 8575 3700</div>
-            <a class="end-privacy" href="#">Privacy Policy</a>
-          </div>
-        </div>
+  <section class="panel panel--end">
+  <div class="end-card">
+    <div class="end-inner">
+      <div class="end-logo">
+        <img src="./logo.png" alt="RR Logo">
       </div>
-    </section>
+
+      <nav class="end-links">
+        <a href="index.html">Home</a>
+        <a href="expertise.html">Expertise</a>
+        <a href="interior-projects.html">Interior Projects</a>
+        <a href="press.html">Press</a>
+      </nav>
+
+      <div class="end-divider"></div>
+
+      <div class="end-footer">
+        SUN HOUSE, 428 LONG DRIVE,<br>
+        GREENFORD, UB6 8UH
+        <div class="contact">+44 (0) 20 8575 3700</div>
+        <a class="end-privacy" href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</section>
 
   </div>
 </div>
