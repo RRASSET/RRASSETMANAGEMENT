@@ -378,7 +378,7 @@ body{
 
 /* Links spacing (Auberry) */
 .menu-links{
-  margin-top:-10;          /* ensures consistent spacing block */
+  margin-top:-10px;          /* ensures consistent spacing block */
 }
 
 .menu-links a{
@@ -455,25 +455,40 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 /* =========================================================
    END CARD MENU = SAME AS BURGER MENU (IDENTICAL LOOK)
    ========================================================= */
+.end-links{
+  margin-top:-10px;  /* same rhythm as menu */
+}
+
 .end-links a{
   display:block;
-  font-family:'Montserrat', sans-serif;
-  font-size:16px;
+  font-family:'Cormorant Garamond', serif;
+  font-size:22px;
   font-weight:400;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  margin:20px 0;
+  letter-spacing:0;
+  text-transform:none;
+  margin:26px 0;
   text-decoration:none;
   color:#222;
   transition:opacity .25s ease;
 }
 .end-links a:hover{ opacity:.65; }
 
-.end-divider{
-  width:220px;
-  height:1px;
-  background:rgba(198,182,122,.65);
-  margin:44px 0 26px 0;
+.end-footer{
+  font-family:'Montserrat', sans-serif;
+  font-weight:300;
+  font-size:14px;
+  line-height:1.8;
+  color:#222;
+  max-width:320px;
+  text-transform:none;
+  letter-spacing:.4px;
+  margin-top:-4px;
+  text-align:center;
+}
+.end-footer .contact{
+  margin-top:14px;
+  font-size:13px;
+  font-weight:400;
 }
 
 .end-footer{
@@ -491,7 +506,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   font-weight:400;
 }
 .end-privacy{
-  margin-top:18px;
+  margin-top:14px;
   display:inline-block;
   font-family:'Montserrat', sans-serif;
   font-size:10px;
