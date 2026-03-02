@@ -317,10 +317,14 @@ body{
   border:none;
 }
 
-/* ================= SLIDING MENU PANEL (SLOW + FADE CONTENT) ================= */
+/* =========================================================
+   AUBERRY-STYLE SLIDING MENU (EXACT ORDER + LOOK)
+   ========================================================= */
+
 .menu{
   position:fixed; top:0; left:0;
-  height:100vh; width:380px;
+  height:100vh;
+  width:420px;
   background:#f4f4f2;
   z-index:95;
   transform:translateX(-100%);
@@ -331,11 +335,12 @@ body{
 
 .menu-panel{
   height:100%;
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center;
-  padding:60px 30px;
   position:relative;
+  padding:70px 46px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
 
   opacity:0;
   transform:translateY(10px);
@@ -347,9 +352,10 @@ body{
   transform:translateY(0);
 }
 
+/* Back arrow (left middle) */
 .back-arrow{
   position:absolute;
-  left:34px;
+  left:26px;
   top:50%;
   transform:translateY(-50%);
   font-size:28px;
@@ -358,82 +364,85 @@ body{
   opacity:.9;
 }
 
-.menu-logo img{
-  width:170px;
-  margin-bottom:46px;
-  opacity:0;
-  transform:translateY(10px);
-  transition:opacity .9s ease, transform .9s ease;
-  transition-delay:.35s;
+/* Logo */
+.menu-logo{
+  margin-top:10px;
+  margin-bottom:50px;
 }
-.menu.open .menu-logo img{
-  opacity:1;
-  transform:translateY(0);
+.menu-logo img{
+  width:120px;
+  height:auto;
+  display:block;
+  margin:0 auto 10px auto;
+
+  /* makes normal logo look gold-ish if you don't have a gold PNG yet */
+  filter: brightness(0) saturate(100%) sepia(55%) saturate(350%) hue-rotate(8deg) brightness(1.05);
+}
+.menu-logo-sub{
+  font-family:'Montserrat', sans-serif;
+  font-weight:300;
+  font-size:10px;
+  letter-spacing:2.4px;
+  color:#c6b67a;
 }
 
+/* Links */
 .menu-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
-  font-size:30px;
-  margin:18px 0;
+  font-size:22px;
+  font-weight:400;
+  margin:22px 0;
   text-decoration:none;
   color:#222;
-  opacity:0;
-  transform:translateY(10px);
-  transition:opacity .75s ease, transform .75s ease;
 }
-.menu.open .menu-links a{
-  opacity:1;
-  transform:translateY(0);
-}
-.menu.open .menu-links a:nth-child(1){ transition-delay:.45s; }
-.menu.open .menu-links a:nth-child(2){ transition-delay:.55s; }
-.menu.open .menu-links a:nth-child(3){ transition-delay:.65s; }
-.menu.open .menu-links a:nth-child(4){ transition-delay:.75s; }
+.menu-links a:hover{ opacity:.65; }
 
-.menu-links a:hover{ opacity:0.6; }
-
-.divider{
-  width:200px;
+/* Gold line */
+.menu-divider{
+  width:220px;
   height:1px;
-  background:#c6b67a;
-  margin:50px auto 30px auto;
-  opacity:0;
-  transform:translateY(10px);
-  transition:opacity .8s ease, transform .8s ease;
-  transition-delay:.8s;
-}
-.menu.open .divider{
-  opacity:1;
-  transform:translateY(0);
+  background:rgba(198,182,122,.65);
+  margin:44px 0 26px 0;
 }
 
-.menu-footer{
+/* Address */
+.menu-address{
   font-family:'Cormorant Garamond', serif;
-  font-size:22px;
-  line-height:1.6;
+  font-weight:300;
+  font-size:18px;
+  line-height:1.7;
   color:#222;
-  opacity:0;
-  transform:translateY(10px);
-  transition:opacity .85s ease, transform .85s ease;
-  transition-delay:.9s;
+  max-width:320px;
 }
-.menu.open .menu-footer{
-  opacity:1;
-  transform:translateY(0);
-}
-.menu-footer .contact{ margin-top:15px; font-size:20px; }
 
-.privacy{
-  margin-top:20px;
+/* Phone | Email */
+.menu-contact{
+  margin-top:14px;
+  font-size:18px;
+}
+.menu-contact a{
+  color:#222;
+  text-decoration:none;
+}
+.menu-contact a:hover{ opacity:.65; }
+.menu-contact .dot{
+  padding:0 10px;
+  opacity:.7;
+}
+
+/* Privacy (gold, small, spaced) */
+.menu-privacy{
+  margin-top:18px;
   display:inline-block;
   font-family:'Montserrat', sans-serif;
-  font-size:12px;
-  letter-spacing:1.5px;
+  font-size:10px;
+  letter-spacing:2px;
   text-transform:uppercase;
   color:#c6b67a;
   text-decoration:none;
 }
+.menu-privacy:hover{ opacity:.7; }
 
 /* When menu open, prevent interactions behind it */
 body.menu-open .hwrap{ pointer-events:none; }
@@ -451,7 +460,8 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
 
   .nav-slider{ left:24px; right:24px; bottom:12px; }
-  .menu{ width:min(380px, 92vw); }
+  .menu{ width:min(420px, 92vw); }
+  .menu-panel{ padding:60px 28px; }
 }
 </style>
 </head>
@@ -469,7 +479,13 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 <div class="intro">
   <img src="./logo.png" alt="RR Logo">
 </div>
+  
+<!-- Scroll text (Auberry style) -->
+<div class="scroll-indicator">
+  Scroll
+</div>
 
+  
 <!-- Burger -->
 <div class="side-bar" id="burger" aria-label="Open menu">
   <div class="burger-lines"><i></i></div>
@@ -498,7 +514,6 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
           <div class="aub-text">
             <p>
               R&amp;R&R Mayfair is a private real estate investment and redevelopment firm specialising in luxury and ultra-prime assets across Dubai’s most prestigious addresses.
-
             </p>
             <p>
               Through strategic acquisition, curated renovation, and disciplined execution, we unlock hidden value and deliver exceptional residences designed for today’s sophisticated buyer and global investor.
@@ -544,7 +559,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     <section class="panel"><img class="panel-img" src="./firstpagefifthpic.png" alt="Slide 4"></section>
     <section class="panel"><img class="panel-img" src="./firstpagesixthpic.png" alt="Slide 5"></section>
 
-    <!-- REPLACED "QUOTE" WITH AUBERRY STYLE TEXT + IMAGE (after the sixth image) -->
+    <!-- AUBERRY STYLE TEXT + IMAGE -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -564,13 +579,12 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
         </div>
 
         <div class="split-right">
-          <!-- You can change this image if you want -->
           <img class="panel-img" src="./firstpageseventhpic.png" alt="Trusted Advisory">
         </div>
       </div>
     </section>
 
-    <!-- Next images (shifted down by one because the split slide uses the 7th image) -->
+    <!-- Next images -->
     <section class="panel"><img class="panel-img" src="./firstpageeighthpic.png" alt="Slide 7"></section>
 
     <!-- END SLIDE -->
@@ -588,8 +602,8 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
           <nav class="end-links">
             <a href="#" data-goto="0">Home</a>
-            <a href="https://rrasset.github.io/RRASSETMANAGEMENT/expertise.html">Expertise</a>
-            <a href="https://rrasset.github.io/RRASSETMANAGEMENT/interior-projects.html">Interior Projects</a>
+            <a href="expertise.html">Expertise</a>
+            <a href="interior-projects.html">Interior Projects</a>
             <a href="press.html">Press</a>
           </nav>
 
@@ -599,7 +613,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
             SUN HOUSE, 428 LONG DRIVE,<br>
             GREENFORD, UB6 8UH
             <div class="contact">+44 (0) 20 8575 3700</div>
-            <a class="end-privacy" href="#">Privacy Policy</a>
+            <a class="end-privacy" href="privacy.html">Privacy Policy</a>
           </div>
 
         </div>
@@ -609,13 +623,15 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   </div>
 </div>
 
-<!-- Sliding menu -->
+<!-- ================= AUBERRY-STYLE SLIDING MENU (HTML) ================= -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
+
     <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
 
     <div class="menu-logo">
       <img src="./logo.png" alt="RR Asset Management Logo">
+      <div class="menu-logo-sub">OF LONDON</div>
     </div>
 
     <nav class="menu-links">
@@ -625,14 +641,21 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       <a href="press.html">Press</a>
     </nav>
 
-    <div class="divider"></div>
+    <div class="menu-divider"></div>
 
-    <div class="menu-footer">
+    <div class="menu-address">
       SUN HOUSE, 428 LONG DRIVE,<br>
       GREENFORD, UB6 8UH
-      <div class="contact">+44 (0) 20 8575 3700</div>
-      <a href="#" class="privacy">Privacy Policy</a>
+
+      <div class="menu-contact">
+        <span>+44 (0) 20 8575 3700</span>
+        <span class="dot">|</span>
+        <a href="mailto:studio@rrmayfair.com">studio@rrmayfair.com</a>
+      </div>
+
+      <a class="menu-privacy" href="privacy.html">PRIVACY POLICY</a>
     </div>
+
   </div>
 </div>
 
