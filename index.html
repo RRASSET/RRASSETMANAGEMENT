@@ -776,17 +776,7 @@ function raf(){
     intro.style.opacity = String(opacity);
   }
 
-  /* Hide scroll text permanently once user scrolls */
-  if (scrollText) {
-    if (!scrollKilled && currentX > 10) {
-      scrollKilled = true;
-      scrollText.style.opacity = "0";
-    }
-    if (scrollKilled) {
-      scrollText.style.opacity = "0";
-      scrollText.style.pointerEvents = "none";
-    }
-  }
+
 
   const maxS = maxScroll();
   navSlider.max = String(panels.length - 1);
