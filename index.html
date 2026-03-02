@@ -119,7 +119,6 @@ body{
 }
 
 /* ================= HOME "SCROLL" — ONLY ON FIRST SLIDE + BEHIND SLIDES ================= */
-/* Put it behind slides by keeping z-index lower than slides/images */
 .panel--home .scroll-indicator{
   position:absolute;
   left:50%;
@@ -154,18 +153,17 @@ body{
   width:100%;
   height:100%;
   display:grid;
-  grid-template-columns: 40% 60%;  /* give text a bit more room */
+  grid-template-columns: 40% 60%;
 }
 
 /* ================= AUBERRY TEXT SYSTEM (FOR ALL TEXT SLIDES) ================= */
 .split-left{
-  padding:120px 70px 110px 140px; /* closer to Auberry spacing */
+  padding:120px 70px 110px 140px;
   color:#1a1a1a;
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
 
-  /* keep content inside column */
   width:100%;
   max-width:680px;
   overflow:hidden;
@@ -175,7 +173,7 @@ body{
   font-family:'Cormorant Garamond', serif;
   line-height:1.02;
   margin-bottom:0;
-  max-width:560px; /* stops giant headings overflowing */
+  max-width:560px;
 }
 
 .aub-heading .small{
@@ -185,8 +183,6 @@ body{
   font-size:clamp(32px, 2.6vw, 52px);
   margin-bottom:10px;
   color:#1a1a1a;
-
-  /* DO NOT break words */
   overflow-wrap:normal;
   word-break:normal;
 }
@@ -195,15 +191,10 @@ body{
   display:block;
   font-style:normal;
   font-weight:400;
-
-  /* responsive size that fits the column */
   font-size:clamp(38px, 3.1vw, 62px);
-
   text-transform:uppercase;
   letter-spacing:2px;
   color:#1a1a1a;
-
-  /* DO NOT break words into letters */
   white-space:normal;
   overflow-wrap:normal;
   word-break:normal;
@@ -215,20 +206,17 @@ body{
   width:64px;
   height:1px;
   background:#c6b67a;
-  margin:22px 0 70px 0; /* Auberry-like big breathing space */
+  margin:22px 0 70px 0;
 }
 
-/* Body text (Auberry-like) */
+/* Body text */
 .aub-text{
   font-family:'Cormorant Garamond', serif;
   color:#1a1a1a;
   width:100%;
   max-width:420px;
-
   font-size:clamp(18px, 1.25vw, 20px);
   line-height:1.75;
-
-  /* keep words normal */
   overflow-wrap:normal;
   word-break:normal;
   hyphens:none;
@@ -260,10 +248,10 @@ body{
   object-position:center;
 }
 
-/* ================= END SLIDE (NO GAP BEFORE IT) ================= */
+/* ================= END SLIDE (TRUE LAST SLIDE — NO GAP) ================= */
 .panel--end{
-  flex:0 0 auto;
-  width:auto;
+  flex:0 0 100vw;
+  width:100vw;
   height:100vh;
   display:flex;
   align-items:stretch;
@@ -272,9 +260,10 @@ body{
   overflow:hidden;
 }
 
-/* Left side shows the LAST IMAGE */
+/* Left side fills remaining space INSIDE 100vw */
 .end-left{
-  flex:0 0 auto;
+  flex:1 1 auto;
+  min-width:0;
   display:flex;
   align-items:stretch;
   justify-content:flex-end;
@@ -283,29 +272,35 @@ body{
 }
 .end-img{
   height:100%;
-  width:auto;
+  width:100%;
+  max-width:100%;
   object-fit:contain;
   object-position:right center;
   display:block;
 }
 
-/* Right menu card (match burger menu) */
+/* Right menu card container */
 .end-card{
   flex:0 0 420px;
   height:100%;
   background:#f4f4f2;
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
-  text-align:center;
-  padding:70px 46px;
   border-left:1px solid rgba(0,0,0,0.08);
+  padding:0; /* important: menu-panel handles padding */
 }
-.end-inner{ width:100%; max-width:320px; }
-.end-logo img{
-  width:240px;
-  height:auto;
-  margin:30px 0 50px 0;
+
+/* End card uses menu-panel, but should NOT animate like the sliding menu */
+.end-card .menu-panel{
+  opacity:1 !important;
+  transform:none !important;
+  transition:none !important;
+}
+
+/* Lift address slightly ONLY on end card */
+.end-card .menu-address{
+  margin-top:-14px; /* adjust -10 to -20 if needed */
 }
 
 /* ================= BOTTOM THIN SLIDER ================= */
@@ -465,59 +460,6 @@ body{
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
-/* =========================================================
-   END CARD MENU = IDENTICAL TO BURGER MENU
-   ========================================================= */
-.end-links{ margin-top:-10px; }
-.end-links a{
-  display:block;
-  font-family:'Cormorant Garamond', serif;
-  font-size:22px;
-  font-weight:400;
-  letter-spacing:0;
-  text-transform:none;
-  margin:26px 0;
-  text-decoration:none;
-  color:#222;
-  transition:opacity .25s ease;
-}
-.end-links a:hover{ opacity:.65; }
-
-.end-divider{
-  width:260px;
-  height:1px;
-  background:#c6b67a;
-  margin:30px auto 14px auto;  /* tighter spacing */
-}
-
-.end-footer{
-  font-family:'Montserrat', sans-serif;
-  font-weight:300;
-  font-size:14px;
-  line-height:1.8;
-  color:#222;
-  letter-spacing:.4px;
-  text-transform:none;
-  margin-top:-4px;
-}
-.end-footer .contact{
-  margin-top:14px;
-  font-size:13px;
-  font-weight:400;
-}
-
-.end-privacy{
-  margin-top:14px;
-  display:inline-block;
-  font-family:'Montserrat', sans-serif;
-  font-size:10px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  color:#c6b67a;
-  text-decoration:none;
-}
-.end-privacy:hover{ opacity:.7; }
-
 /* Mobile tweaks */
 @media (max-width: 900px){
   .split{
@@ -529,9 +471,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   .aub-text{ max-width:none; }
 
   .end-left{ display:none; }
-  .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
-  .end-inner{ max-width:320px; }
-
+  .end-card{ flex:0 0 100%; width:100%; }
   .nav-slider{ left:24px; right:24px; bottom:12px; }
   .menu{ width:min(420px, 92vw); }
   .menu-panel{ padding:60px 28px; }
@@ -662,29 +602,34 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
         <img class="end-img" src="./firstpageninethpic.png" alt="Last Slide Image">
       </div>
 
+      <!-- END CARD uses SAME markup/classes as burger menu -->
       <div class="end-card">
-        <div class="end-inner">
-
-          <div class="end-logo">
-            <img src="./logo.png" alt="RR Logo">
+        <div class="menu-panel">
+          <div class="menu-logo">
+            <img src="./logo.png" alt="RR Asset Management Logo">
           </div>
 
-          <nav class="end-links">
+          <nav class="menu-links">
             <a href="#" data-goto="0">Home</a>
             <a href="expertise.html">Expertise</a>
             <a href="interior-projects.html">Interior Projects</a>
             <a href="press.html">Press</a>
           </nav>
 
-          <div class="end-divider"></div>
+          <div class="menu-divider"></div>
 
-          <div class="end-footer">
+          <div class="menu-address">
             Sun House, 428 Long Drive,<br>
             Greenford, UB6 8UH
-            <div class="contact">+44 (0) 20 8575 3700</div>
-            <a class="end-privacy" href="privacy.html">Privacy Policy</a>
-          </div>
 
+            <div class="menu-contact">
+              <span>+44 (0) 20 8575 3700</span>
+              <span class="dot">|</span>
+              <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+            </div>
+
+            <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
+          </div>
         </div>
       </div>
     </section>
