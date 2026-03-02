@@ -1,0 +1,182 @@
+:root{
+  --aub-bg: #f4f4f2;
+  --aub-gold: #c6b67a;
+  --aub-text: #222;
+  --aub-panelW: 420px;
+}
+
+/* ================= BURGER STRIP ================= */
+.side-bar{
+  position:fixed; top:0; left:0;
+  width:64px;
+  height:100vh;
+  background:rgba(255,255,255,0.88);
+  backdrop-filter: blur(10px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:90;
+  cursor:pointer;
+  transition:background .6s ease;
+}
+.side-bar:hover{ background:rgba(255,255,255,0.94); }
+
+.burger-lines{
+  opacity:0;
+  transform:translateY(8px);
+  animation:burgerIn 1.8s cubic-bezier(.22,1,.36,1) forwards;
+  animation-delay:0.85s;
+}
+@keyframes burgerIn{ to{opacity:1; transform:translateY(0);} }
+
+.burger-lines i{
+  width:22px; height:1.6px;
+  background:#111;
+  position:relative;
+  display:block;
+}
+.burger-lines i::before,
+.burger-lines i::after{
+  content:"";
+  position:absolute;
+  left:0;
+  width:22px;
+  height:1.6px;
+  background:#111;
+}
+.burger-lines i::before{ top:-7px; }
+.burger-lines i::after{ top:7px; }
+
+/* ================= MENU PANEL (AUBERRY STYLE) ================= */
+.menu{
+  position:fixed;
+  top:0; left:0;
+  height:100vh;
+  width:var(--aub-panelW);
+  background:var(--aub-bg);
+  z-index:95;
+  transform:translateX(-100%);
+  transition:transform 1.15s cubic-bezier(.77,0,.18,1);
+  will-change:transform;
+}
+.menu.open{ transform:translateX(0); }
+
+.menu-panel{
+  height:100%;
+  width:100%;
+  position:relative;
+  padding:64px 42px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity .9s ease, transform .9s ease;
+  transition-delay:.25s;
+}
+.menu.open .menu-panel{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* Back arrow (left middle) */
+.back-arrow{
+  position:absolute;
+  left:26px;
+  top:50%;
+  transform:translateY(-50%);
+  border:0;
+  background:transparent;
+  font-size:28px;
+  line-height:1;
+  cursor:pointer;
+  color:var(--aub-text);
+  opacity:.9;
+  padding:10px;
+}
+
+/* Logo block */
+.menu-logo{
+  margin-top:18px;
+  margin-bottom:56px;
+}
+.menu-logo img{
+  width:120px;              /* Auberry-like */
+  height:auto;
+  display:block;
+  margin:0 auto 10px auto;
+}
+.menu-logo-sub{
+  font-family:'Montserrat', sans-serif;
+  font-weight:300;
+  font-size:10px;
+  letter-spacing:2.4px;
+  color:var(--aub-gold);
+}
+
+/* Links */
+.menu-links a{
+  display:block;
+  font-family:'Cormorant Garamond', serif;
+  font-weight:400;
+  font-size:22px;
+  color:var(--aub-text);
+  text-decoration:none;
+  margin:22px 0;
+}
+.menu-links a:hover{ opacity:.65; }
+
+/* Divider line */
+.menu-divider{
+  width:220px;
+  height:1px;
+  background:rgba(198,182,122,.65);
+  margin:44px 0 34px 0;
+}
+
+/* Address block */
+.menu-address{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:300;
+  font-size:18px;
+  line-height:1.7;
+  color:var(--aub-text);
+  max-width:320px;
+}
+
+.menu-contact{
+  margin-top:16px;
+  font-size:18px;
+}
+.menu-contact a{
+  color:var(--aub-text);
+  text-decoration:none;
+}
+.menu-contact a:hover{ opacity:.65; }
+.menu-contact .dot{
+  padding:0 10px;
+  opacity:.7;
+}
+
+/* Privacy link (gold, small, spaced) */
+.menu-privacy{
+  display:inline-block;
+  margin-top:18px;
+  font-family:'Montserrat', sans-serif;
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--aub-gold);
+  text-decoration:none;
+}
+.menu-privacy:hover{ opacity:.7; }
+
+body.menu-open { overflow:hidden; }
+
+/* Mobile */
+@media (max-width: 900px){
+  .menu{ width:min(var(--aub-panelW), 92vw); }
+  .menu-panel{ padding:54px 26px; }
+}
