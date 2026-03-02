@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>RR Asset Management</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -120,21 +120,12 @@ body{
 
 /* ================= PANELS (VARIABLE WIDTH, NO CROP) ================= */
 .panel-img{
-  height:100%;
-  width:auto;
-  display:block;
-  object-fit:contain;
-  object-position:center;
-  margin:0 auto;
-}
-
-/* Image slides: NO CROP, NO STRETCH */
-.panel-img{
   height:100vh;
   width:auto;
   object-fit:contain;
   object-position:center;
   display:block;
+  margin:0 auto;
 }
 
 /* Home slide must always be full screen so you see video + logo first */
@@ -144,11 +135,11 @@ body{
   background:transparent;
 }
 
-/* ================= AUBERRY STYLE TEXT + IMAGE SPLIT SLIDE ================= */
+/* ================= SPLIT SLIDE (BELLA-LIGHT TYPE) ================= */
 .panel--split{
   flex:0 0 100vw;
   width:100vw;
-  background:#f4f4f2;
+  background:#ffffff;
 }
 
 .split{
@@ -160,60 +151,67 @@ body{
 
 .split-left{
   padding:120px 80px 120px 160px;
-  color:#1a1a1a;
+  color:#111;
   display:flex;
   flex-direction:column;
   justify-content:center;
 }
 
+/* BELLA-style heading/subheading */
 .aub-heading{
   font-family:'Nunito Sans', sans-serif;
-  font-weight:700;
-  line-height:1.02;
-  letter-spacing:0.2px;
-  margin-bottom:22px;
+  line-height:1.08;
+  margin-bottom:18px;
 }
+
 .aub-heading .small{
   display:block;
   font-style:normal;
-  font-size:34px;
-  font-weight:600;
+  font-size:18px;
+  font-weight:400;          /* lighter */
+  letter-spacing:.4px;
+  color:#555;               /* softer grey */
+  margin-bottom:8px;
+  text-transform:none;
 }
+
 .aub-heading .big{
   display:block;
   font-style:normal;
-  font-size:64px;
+  font-size:clamp(28px, 3.5vw, 54px);
   text-transform:uppercase;
-  letter-spacing:1px;
-  font-weight:700;
+  letter-spacing:2px;       /* clean tracking */
+  font-weight:600;          /* less heavy */
+  color:#111;
 }
 
+/* GOLD LINE — KEPT */
 .aub-line{
   width:56px;
   height:1px;
   background:#c6b67a;
-  margin:0 0 34px 0;
+  margin:22px 0 30px 0;
 }
 
+/* Body text lighter */
 .aub-text{
   font-family:'Nunito Sans', sans-serif;
-  font-weight:400;
+  font-weight:300;
   font-size:18px;
-  line-height:1.85;
-  max-width:440px;
-  color:#1f1f1f;
+  line-height:1.9;
+  max-width:460px;
+  color:#2f2f2f;
 }
-.aub-text p{ margin-bottom:24px; }
-
-.split-right{ position:relative; overflow:hidden; background:#f4f4f2; }
+.aub-text p{ margin-bottom:22px; }
 
 /* Split slide image: NO CROP */
 .split-right{
+  position:relative;
+  overflow:hidden;
+  background:#ffffff;
   display:flex;
   align-items:stretch;
   justify-content:center;
-  overflow:hidden;
-  background:#f4f4f2;
 }
 
 .panel--split .panel-img{
@@ -258,7 +256,7 @@ body{
 .end-card{
   flex:0 0 min(520px, 42vw);
   height:100%;
-  background:#f4f4f2;
+  background:#ffffff;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -278,7 +276,7 @@ body{
   font-weight:600;
   margin:14px 0;
   text-decoration:none;
-  color:#1a1a1a;
+  color:#111;
   transition:opacity .25s ease;
 }
 .end-links a:hover{ opacity:.6; }
@@ -294,7 +292,7 @@ body{
   font-family:'Nunito Sans', sans-serif;
   font-size:16px;
   line-height:1.7;
-  color:#1a1a1a;
+  color:#111;
 }
 .end-footer .contact{ margin-top:12px; font-size:16px; font-weight:600; }
 
@@ -397,12 +395,10 @@ body{
   margin-bottom:50px;
 }
 .menu-logo img{
-  width:140px; /* menu logo size */
+  width:140px;
   height:auto;
   display:block;
   margin:0 auto 10px auto;
-
-  /* makes normal logo look gold-ish if you don't have a gold PNG yet */
   filter: brightness(0) saturate(100%) sepia(55%) saturate(350%) hue-rotate(8deg) brightness(1.05);
 }
 .menu-logo-sub{
