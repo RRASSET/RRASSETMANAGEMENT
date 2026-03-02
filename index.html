@@ -157,12 +157,16 @@ body{
 
 /* ================= AUBERRY TEXT SYSTEM (FOR ALL TEXT SLIDES) ================= */
 .split-left{
-  padding:140px 80px 120px 165px;   /* TOP / RIGHT / BOTTOM / LEFT */
+  padding:140px 80px 120px 165px;
   color:#1a1a1a;
   display:flex;
   flex-direction:column;
-  justify-content:flex-start;       /* start from top like Auberry */
+  justify-content:flex-start;
   max-width:620px;
+
+  /* NEW: keep everything safely inside the column */
+  width:100%;
+  overflow:hidden;
 }
 
 .aub-heading{
@@ -184,10 +188,18 @@ body{
   display:block;
   font-style:normal;
   font-weight:400;
-  font-size:clamp(54px, 4.2vw, 88px);
-  text-transform:uppercase;   /* Auberry style */
-  letter-spacing:2px;         /* Auberry tracking */
+
+  /* NEW: responsive size that never breaks layout */
+  font-size:clamp(40px, 3.6vw, 68px);
+
+  text-transform:uppercase;
+  letter-spacing:2px;
   color:#1a1a1a;
+
+  /* NEW: never overflow */
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:break-word;
 }
 
 /* GOLD LINE */
@@ -203,8 +215,9 @@ body{
   font-family:'Cormorant Garamond', serif;
   color:#1a1a1a;
   max-width:360px;
-  font-size:22px;
-  line-height:1.65;
+  width:100%;
+  font-size:20px;
+  line-height:1.7;
 }
 .aub-text .lead{
   font-style:italic;
