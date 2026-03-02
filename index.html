@@ -326,11 +326,12 @@ body{
 .menu-panel{
   height:100%;
   position:relative;
-  padding:70px 46px;
+  padding:90px 46px 70px;   /* pushes everything DOWN */
   display:flex;
   flex-direction:column;
   align-items:center;
   text-align:center;
+  justify-content:flex-start; /* like Auberry */
 
   opacity:0;
   transform:translateY(10px);
@@ -357,13 +358,13 @@ body{
 /* Logo */
 .menu-logo{
   margin-top:10px;
-  margin-bottom:44px;
+  margin-bottom:60px;  /* more space like Auberry */
 }
 .menu-logo img{
-  width:140px;
+  width:210px;         /* slightly bigger like Auberry */
   height:auto;
   display:block;
-  margin:0 auto 10px auto;
+  margin:0 auto 14px auto;
   filter: brightness(0) saturate(100%) sepia(55%) saturate(350%) hue-rotate(8deg) brightness(1.05);
 }
 .menu-logo-sub{
@@ -376,14 +377,18 @@ body{
 }
 
 /* Links spacing (Auberry) */
+.menu-links{
+  margin-top:0;          /* ensures consistent spacing block */
+}
+
 .menu-links a{
   display:block;
-  font-family:'Cormorant Garamond', serif;  /* Auberry look */
-  font-size:20px;
+  font-family:'Cormorant Garamond', serif;
+  font-size:22px;        /* Auberry reads slightly larger */
   font-weight:400;
-  letter-spacing:0;                         /* Auberry has no tracking here */
-  text-transform:none;                      /* Auberry is not uppercase */
-  margin:14px 0;                            /* tighter spacing like Auberry */
+  letter-spacing:0;
+  text-transform:none;
+  margin:22px 0;         /* THIS is the Auberry spacing */
   text-decoration:none;
   color:#222;
   transition:opacity .25s ease;
@@ -392,10 +397,10 @@ body{
 
 /* Divider */
 .menu-divider{
-  width:220px;
+  width:240px;                 /* Auberry looks longer */
   height:1px;
   background:rgba(198,182,122,.65);
-  margin:44px 0 26px 0;
+  margin:52px 0 34px 0;        /* more breathing space */
 }
 
 /* Address NOT all caps */
