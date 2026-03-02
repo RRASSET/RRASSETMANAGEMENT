@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>RR Asset Management</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- Auberry-like fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
 body{
-  font-family:'Nunito Sans', sans-serif;
+  font-family:'Montserrat', sans-serif;
   background:#000;
   overflow:hidden; /* we control scroll */
 }
@@ -44,10 +45,10 @@ body{
   transform:translateX(-50%);
   z-index:45;
 
-  font-family:'Nunito Sans', sans-serif;
+  font-family:'Montserrat', sans-serif;
   font-weight:400;
-  font-size:18px;
-  letter-spacing:1px;
+  font-size:16px;
+  letter-spacing:2px;
   color:#fff;
 
   opacity:0;
@@ -118,13 +119,29 @@ body{
   transform:translate3d(0,0,0);
 }
 
-/* ================= PANELS (VARIABLE WIDTH, NO CROP) ================= */
+/* ================= PANELS (NO GAPS, NO CROP) ================= */
+.panel{
+  flex:0 0 auto;
+  height:100vh;
+}
+
+/* IMPORTANT: make image panels exactly viewport width so there is NEVER a “gap” */
+.panel:not(.panel--home):not(.panel--split):not(.panel--end){
+  flex:0 0 100vw;
+  width:100vw;
+  background:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Images: contain, centered */
 .panel-img{
   height:100vh;
   width:auto;
+  display:block;
   object-fit:contain;
   object-position:center;
-  display:block;
   margin:0 auto;
 }
 
@@ -135,80 +152,77 @@ body{
   background:transparent;
 }
 
-/* ================= SPLIT SLIDE (BELLA-LIGHT TYPE) ================= */
+/* ================= AUBERRY STYLE TEXT + IMAGE SPLIT SLIDE ================= */
 .panel--split{
   flex:0 0 100vw;
   width:100vw;
-  background:#ffffff;
+  background:#f4f4f2;
 }
 
 .split{
   width:100%;
   height:100%;
   display:grid;
-  grid-template-columns: 42% 58%;
+  grid-template-columns: 36% 64%; /* narrower left column */
 }
 
+/* LEFT */
 .split-left{
-  padding:120px 80px 120px 160px;
-  color:#111;
+  padding:110px 70px 110px 140px;
+  color:#1a1a1a;
   display:flex;
   flex-direction:column;
   justify-content:center;
+  max-width:520px;
 }
 
-/* BELLA-style heading/subheading */
 .aub-heading{
-  font-family:'Nunito Sans', sans-serif;
-  line-height:1.08;
-  margin-bottom:18px;
+  font-family:'Cormorant Garamond', serif;
+  line-height:1.02;
+  margin-bottom:22px;
 }
 
 .aub-heading .small{
   display:block;
-  font-style:normal;
-  font-size:18px;
-  font-weight:400;          /* lighter */
-  letter-spacing:.4px;
-  color:#555;               /* softer grey */
-  margin-bottom:8px;
-  text-transform:none;
+  font-style:italic;
+  font-weight:300;
+  font-size:clamp(28px, 2.4vw, 44px);
+  color:#1a1a1a;
+  margin-bottom:6px;
 }
 
 .aub-heading .big{
   display:block;
   font-style:normal;
-  font-size:clamp(28px, 3.5vw, 54px);
+  font-weight:400;
+  font-size:clamp(36px, 3.2vw, 60px);
   text-transform:uppercase;
-  letter-spacing:2px;       /* clean tracking */
-  font-weight:600;          /* less heavy */
-  color:#111;
+  letter-spacing:2px;
+  color:#1a1a1a;
 }
 
-/* GOLD LINE — KEPT */
+/* GOLD LINE (KEEP) */
 .aub-line{
   width:56px;
   height:1px;
   background:#c6b67a;
-  margin:22px 0 30px 0;
+  margin:0 0 34px 0;
 }
 
-/* Body text lighter */
 .aub-text{
-  font-family:'Nunito Sans', sans-serif;
+  font-family:'Montserrat', sans-serif;
   font-weight:300;
-  font-size:18px;
-  line-height:1.9;
-  max-width:460px;
-  color:#2f2f2f;
+  font-size:15px;
+  line-height:1.95;
+  max-width:360px;
+  color:#1f1f1f;
 }
 .aub-text p{ margin-bottom:22px; }
 
-/* Split slide image: NO CROP */
 .split-right{
   position:relative;
   overflow:hidden;
-  background:#ffffff;
+  background:#f4f4f2;
   display:flex;
   align-items:stretch;
   justify-content:center;
@@ -222,7 +236,7 @@ body{
   object-position:center;
 }
 
-/* ================= END SLIDE (IMAGE ATTACHED TO CARD — NO GAP) ================= */
+/* ================= END SLIDE (NO GAP BEFORE IT) ================= */
 .panel--end{
   flex:0 0 100vw;
   width:100vw;
@@ -234,14 +248,14 @@ body{
   overflow:hidden;
 }
 
-/* Left side shows the LAST IMAGE and pushes it to touch the card */
+/* Left side shows the LAST IMAGE and touches the card */
 .end-left{
   flex:1;
   display:flex;
   justify-content:flex-end;
-  align-items:center;
+  align-items:stretch;         /* ensure full-height so no strip */
   overflow:hidden;
-  background:transparent;
+  background:#000;             /* if anything shows, it's black not “gap” */
 }
 
 .end-img{
@@ -256,7 +270,7 @@ body{
 .end-card{
   flex:0 0 min(520px, 42vw);
   height:100%;
-  background:#ffffff;
+  background:#f4f4f2;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -271,12 +285,14 @@ body{
 
 .end-links a{
   display:block;
-  font-family:'Nunito Sans', sans-serif;
-  font-size:22px;
-  font-weight:600;
-  margin:14px 0;
+  font-family:'Montserrat', sans-serif;
+  font-size:18px;
+  font-weight:400;
+  letter-spacing:2px;          /* Auberry-like spacing */
+  text-transform:uppercase;
+  margin:18px 0;               /* consistent spacing like Auberry */
   text-decoration:none;
-  color:#111;
+  color:#1a1a1a;
   transition:opacity .25s ease;
 }
 .end-links a:hover{ opacity:.6; }
@@ -289,19 +305,22 @@ body{
 }
 
 .end-footer{
-  font-family:'Nunito Sans', sans-serif;
-  font-size:16px;
-  line-height:1.7;
-  color:#111;
+  font-family:'Montserrat', sans-serif;
+  font-size:14px;
+  line-height:1.8;
+  color:#1a1a1a;
+  letter-spacing:.5px;
 }
-.end-footer .contact{ margin-top:12px; font-size:16px; font-weight:600; }
+
+/* phone */
+.end-footer .contact{ margin-top:12px; font-size:14px; font-weight:500; }
 
 .end-privacy{
   margin-top:22px;
   display:inline-block;
-  font-family:'Nunito Sans', sans-serif;
-  font-size:11px;
-  letter-spacing:1.8px;
+  font-family:'Montserrat', sans-serif;
+  font-size:10px;
+  letter-spacing:2px;
   text-transform:uppercase;
   color:#c6b67a;
   text-decoration:none;
@@ -344,7 +363,7 @@ body{
 }
 
 /* =========================================================
-   AUBERRY-STYLE SLIDING MENU (EXACT ORDER + LOOK)
+   AUBERRY-STYLE SLIDING MENU (SPACING FIXED)
    ========================================================= */
 .menu{
   position:fixed; top:0; left:0;
@@ -392,7 +411,7 @@ body{
 /* Logo */
 .menu-logo{
   margin-top:10px;
-  margin-bottom:50px;
+  margin-bottom:44px;
 }
 .menu-logo img{
   width:140px;
@@ -402,22 +421,26 @@ body{
   filter: brightness(0) saturate(100%) sepia(55%) saturate(350%) hue-rotate(8deg) brightness(1.05);
 }
 .menu-logo-sub{
-  font-family:'Nunito Sans', sans-serif;
-  font-weight:600;
+  font-family:'Montserrat', sans-serif;
+  font-weight:400;
   font-size:10px;
-  letter-spacing:2.4px;
+  letter-spacing:3px;
   color:#c6b67a;
+  text-transform:uppercase;
 }
 
-/* Links */
+/* Links (Auberry-like spacing) */
 .menu-links a{
   display:block;
-  font-family:'Nunito Sans', sans-serif;
-  font-size:20px;
-  font-weight:600;
-  margin:22px 0;
+  font-family:'Montserrat', sans-serif;
+  font-size:16px;
+  font-weight:400;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin:20px 0;              /* equal spacing */
   text-decoration:none;
   color:#222;
+  transition:opacity .25s ease;
 }
 .menu-links a:hover{ opacity:.65; }
 
@@ -429,25 +452,25 @@ body{
   margin:44px 0 26px 0;
 }
 
-/* Address */
+/* Address (NOT ALL CAPS anymore) */
 .menu-address{
-  font-family:'Nunito Sans', sans-serif;
-  font-weight:400;
-  font-size:15px;
-  line-height:1.7;
+  font-family:'Montserrat', sans-serif;
+  font-weight:300;
+  font-size:14px;
+  line-height:1.8;
   color:#222;
   max-width:320px;
-  text-transform:uppercase;
-  letter-spacing:.6px;
+  text-transform:none;        /* <-- FIX */
+  letter-spacing:.4px;
 }
 
 /* Phone | Email */
 .menu-contact{
   margin-top:14px;
-  font-size:14px;
-  font-weight:600;
+  font-size:13px;
+  font-weight:400;
   text-transform:none;
-  letter-spacing:0;
+  letter-spacing:.2px;
 }
 .menu-contact a{
   color:#222;
@@ -459,11 +482,11 @@ body{
   opacity:.7;
 }
 
-/* Privacy (gold, small, spaced) */
+/* Privacy */
 .menu-privacy{
   margin-top:18px;
   display:inline-block;
-  font-family:'Nunito Sans', sans-serif;
+  font-family:'Montserrat', sans-serif;
   font-size:10px;
   letter-spacing:2px;
   text-transform:uppercase;
@@ -482,7 +505,8 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     grid-template-columns: 1fr;
     grid-template-rows: auto 55vh;
   }
-  .split-left{ padding:80px 24px 40px 24px; }
+  .split-left{ padding:70px 24px 30px 24px; max-width:none; }
+  .aub-text{ max-width:none; }
 
   .end-left{ display:none; }
   .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
@@ -551,7 +575,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       </div>
     </section>
 
-    <!-- Image slides (NO CROP) -->
+    <!-- Image slides -->
     <section class="panel"><img class="panel-img" src="./firstpagesecondpic.png" alt="Slide 2"></section>
     <section class="panel"><img class="panel-img" src="./firstpagethirdpic.png" alt="Slide 3"></section>
 
@@ -561,7 +585,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
         <div class="split-left">
           <div class="aub-heading">
             <span class="small">A Global Standard</span>
-            <span class="big">REPUTATION</span>
+            <span class="big">Reputation</span>
           </div>
           <div class="aub-line"></div>
           <div class="aub-text">
@@ -590,7 +614,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
         <div class="split-left">
           <div class="aub-heading">
             <span class="small">A Trusted</span>
-            <span class="big">ADVISORY</span>
+            <span class="big">Advisory</span>
           </div>
           <div class="aub-line"></div>
           <div class="aub-text">
@@ -612,7 +636,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     <!-- Next images -->
     <section class="panel"><img class="panel-img" src="./firstpageeighthpic.png" alt="Slide 7"></section>
 
-    <!-- END SLIDE -->
+    <!-- END SLIDE (this is your 9th image attached — no gap now) -->
     <section class="panel panel--end">
       <div class="end-left">
         <img class="end-img" src="./firstpageninethpic.png" alt="Last Slide Image">
@@ -636,7 +660,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
           <div class="end-footer">
             Sun House, 428 Long Drive,<br>
-            Greenford, Ub6 8uh
+            Greenford, UB6 8UH
             <div class="contact">+44 (0) 20 8575 3700</div>
             <a class="end-privacy" href="privacy.html">Privacy Policy</a>
           </div>
@@ -656,7 +680,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
     <div class="menu-logo">
       <img src="./logo.png" alt="RR Asset Management Logo">
-      <div class="menu-logo-sub">OF LONDON</div>
+      <div class="menu-logo-sub">Of London</div>
     </div>
 
     <nav class="menu-links">
@@ -669,8 +693,8 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     <div class="menu-divider"></div>
 
     <div class="menu-address">
-      SUN HOUSE, 428 LONG DRIVE,<br>
-      GREENFORD, UB6 8UH
+      Sun House, 428 Long Drive,<br>
+      Greenford, UB6 8UH
 
       <div class="menu-contact">
         <span>+44 (0) 20 8575 3700</span>
@@ -678,7 +702,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
         <a href="mailto:studio@rrmayfair.com">studio@rrmayfair.com</a>
       </div>
 
-      <a class="menu-privacy" href="privacy.html">PRIVACY POLICY</a>
+      <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
     </div>
 
   </div>
@@ -702,7 +726,7 @@ burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
 document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
 
-/* ===== HORIZONTAL SCROLL (VARIABLE WIDTH PANELS) ===== */
+/* ===== HORIZONTAL SCROLL (PANELS LOCKED TO 100vw FOR IMAGES => NO GAPS) ===== */
 const track = document.getElementById("track");
 let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
@@ -738,8 +762,6 @@ function raf(){
     intro.style.opacity = String(opacity);
   }
 
-  /* IMPORTANT: do NOT touch scroll opacity until user scrolls,
-     so CSS fade-in (0 -> 1) can play smoothly */
   if (scrollText && currentX > 40) {
     const sStart = 40;
     const sEnd   = 240;
@@ -760,7 +782,7 @@ function raf(){
 }
 raf();
 
-/* Wheel: smoother */
+/* Wheel */
 window.addEventListener("wheel", (e)=>{
   if(document.body.classList.contains("menu-open")) return;
   const speed = 0.9;
