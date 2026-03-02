@@ -38,12 +38,14 @@ body{
 @keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
 
 /* ================= SCROLL FADE-IN (0 -> 1) ================= */
-.scroll-indicator{
-  position:fixed;
+.panel--home{ position:relative; }
+
+.panel--home .scroll-indicator{
+  position:absolute;
   left:50%;
   bottom:68px;
   transform:translateX(-50%);
-  z-index:45;
+  z-index:2; /* stays within first slide only */
 
   font-family:'Montserrat', sans-serif;
   font-weight:400;
@@ -541,8 +543,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   <img src="./logo.png" alt="RR Logo">
 </div>
 
-<!-- Scroll text -->
-<div class="scroll-indicator">Scroll</div>
+
 
 <!-- Burger -->
 <div class="side-bar" id="burger" aria-label="Open menu">
@@ -559,7 +560,9 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   <div class="htrack" id="track">
 
     <!-- Panel 0: video only -->
-    <section class="panel panel--home"></section>
+  <section class="panel panel--home">
+  <div class="scroll-indicator">Scroll</div>
+</section>
 
     <!-- Panel 1: split text + image -->
     <section class="panel panel--split">
