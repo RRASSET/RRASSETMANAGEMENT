@@ -118,7 +118,7 @@ body{
 
 /* ================= PANELS ================= */
 .panel{
-  flex:0 0 auto;     /* IMPORTANT: variable-width rail (Auberry style) */
+  flex:0 0 auto;     /* variable-width rail (Auberry style) */
   height:100vh;
   background:#000;
 }
@@ -150,7 +150,7 @@ body{
   width:100%;
   height:100%;
   display:grid;
-  grid-template-columns: 36% 64%; /* narrower left column like Auberry */
+  grid-template-columns: 36% 64%;
 }
 
 /* LEFT */
@@ -183,8 +183,8 @@ body{
   font-style:normal;
   font-weight:400;
   font-size:clamp(40px, 3.4vw, 64px);
-  text-transform:none;     /* remove uppercase */
-  letter-spacing:0;        /* remove tracking */
+  text-transform:none;
+  letter-spacing:0;
   color:#1a1a1a;
 }
 
@@ -225,7 +225,6 @@ body{
 }
 
 /* ================= END SLIDE (NO GAP BEFORE IT) ================= */
-/* KEY FIX: end panel is AUTO width (image width + card width), not 100vw */
 .panel--end{
   flex:0 0 auto;
   width:auto;
@@ -239,7 +238,7 @@ body{
 
 /* Left side shows the LAST IMAGE */
 .end-left{
-  flex:0 0 auto;      /* IMPORTANT: do not stretch, so no “gap” */
+  flex:0 0 auto;
   display:flex;
   align-items:stretch;
   justify-content:flex-end;
@@ -255,22 +254,29 @@ body{
   display:block;
 }
 
-/* Right menu card */
+/* Right menu card (match burger menu) */
 .end-card{
-  flex:0 0 420px;       /* same feel as menu width */
+  flex:0 0 420px;
   height:100%;
   background:#f4f4f2;
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding:110px 60px;
+  padding:70px 46px;
   border-left:1px solid rgba(0,0,0,0.08);
-  box-shadow:none;
 }
 
-.end-inner{ width:100%; max-width:520px; }
-.end-logo img{ width:140px; margin-bottom:44px; }
+.end-inner{
+  width:100%;
+  max-width:320px;
+}
+
+.end-logo img{
+  width:240px;
+  height:auto;
+  margin:30px 0 50px 0;
+}
 
 /* ================= BOTTOM THIN SLIDER ================= */
 .nav-slider{
@@ -326,12 +332,12 @@ body{
 .menu-panel{
   height:100%;
   position:relative;
-  padding:70px 46px 70px;   /* pushes everything DOWN */
+  padding:70px 46px 70px;
   display:flex;
   flex-direction:column;
   align-items:center;
   text-align:center;
-  justify-content:flex-start; /* like Auberry */
+  justify-content:flex-start;
 
   opacity:0;
   transform:translateY(10px);
@@ -358,37 +364,29 @@ body{
 /* Logo */
 .menu-logo{
   margin-top:30px;
-  margin-bottom:0px;  /* more space like Auberry */
+  margin-bottom:0px;
 }
 .menu-logo img{
   width:240px;
   height:auto;
   display:block;
   margin:0 auto 14px auto;
-  filter:none;   /* REMOVE forced recolor */
-}
-.menu-logo-sub{
-  font-family:'Montserrat', sans-serif;
-  font-weight:400;
-  font-size:10px;
-  letter-spacing:3px;
-  color:#c6b67a;
-  text-transform:uppercase;
+  filter:none;
 }
 
 /* Links spacing (Auberry) */
 .menu-links{
-  margin-top:-10px;          /* ensures consistent spacing block */
+  margin-top:-10px;
 }
 
 .menu-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
-  font-size:22px;        /* Auberry reads slightly larger */
+  font-size:22px;
   font-weight:400;
   letter-spacing:0;
   text-transform:none;
-  margin:26px 0;         /* THIS is the Auberry spacing */
+  margin:26px 0;
   text-decoration:none;
   color:#222;
   transition:opacity .25s ease;
@@ -399,9 +397,9 @@ body{
 .menu-divider{
   width:260px;
   height:1px;
-  background:#c6b67a !important; /* FORCE GOLD */
+  background:#c6b67a !important;
   opacity:1 !important;
-  margin:40px 0 22px 0;          /* pulls divider+address UP */
+  margin:40px 0 22px 0;
 }
 
 /* Address NOT all caps */
@@ -414,7 +412,7 @@ body{
   max-width:320px;
   text-transform:none;
   letter-spacing:.4px;
-  margin-top:-4px;   /* pulls address UP slightly */
+  margin-top:-4px;
 }
 
 /* Phone | Email */
@@ -453,10 +451,10 @@ body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
 /* =========================================================
-   END CARD MENU = SAME AS BURGER MENU (IDENTICAL LOOK)
+   END CARD MENU = IDENTICAL TO BURGER MENU
    ========================================================= */
 .end-links{
-  margin-top:-10px;  /* same rhythm as menu */
+  margin-top:-10px;
 }
 
 .end-links a{
@@ -473,22 +471,11 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 }
 .end-links a:hover{ opacity:.65; }
 
-.end-footer{
-  font-family:'Montserrat', sans-serif;
-  font-weight:300;
-  font-size:14px;
-  line-height:1.8;
-  color:#222;
-  max-width:320px;
-  text-transform:none;
-  letter-spacing:.4px;
-  margin-top:-4px;
-  text-align:center;
-}
-.end-footer .contact{
-  margin-top:14px;
-  font-size:13px;
-  font-weight:400;
+.end-divider{
+  width:260px;
+  height:1px;
+  background:#c6b67a;
+  margin:40px auto 22px auto;
 }
 
 .end-footer{
@@ -499,12 +486,15 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   color:#222;
   letter-spacing:.4px;
   text-transform:none;
+  margin-top:-4px;
 }
+
 .end-footer .contact{
   margin-top:14px;
   font-size:13px;
   font-weight:400;
 }
+
 .end-privacy{
   margin-top:14px;
   display:inline-block;
@@ -528,6 +518,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
   .end-left{ display:none; }
   .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
+  .end-inner{ max-width:320px; }
 
   .nav-slider{ left:24px; right:24px; bottom:12px; }
   .menu{ width:min(420px, 92vw); }
@@ -593,7 +584,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       </div>
     </section>
 
-    <!-- Image slides (variable width like Auberry) -->
+    <!-- Image slides -->
     <section class="panel"><img class="panel-img" src="./firstpagesecondpic.png" alt="Slide 2"></section>
     <section class="panel"><img class="panel-img" src="./firstpagethirdpic.png" alt="Slide 3"></section>
 
@@ -654,7 +645,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     <!-- 8th image -->
     <section class="panel"><img class="panel-img" src="./firstpageeighthpic.png" alt="Slide 7"></section>
 
-    <!-- END SLIDE (9th image attached + card, no gap) -->
+    <!-- END SLIDE -->
     <section class="panel panel--end">
       <div class="end-left">
         <img class="end-img" src="./firstpageninethpic.png" alt="Last Slide Image">
@@ -698,7 +689,6 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
     <div class="menu-logo">
       <img src="./logo.png" alt="RR Asset Management Logo">
-      
     </div>
 
     <nav class="menu-links">
@@ -744,7 +734,7 @@ burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
 document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
 
-/* ===== HORIZONTAL SCROLL (VARIABLE WIDTH PANELS) ===== */
+/* ===== HORIZONTAL SCROLL ===== */
 const track = document.getElementById("track");
 let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
@@ -754,6 +744,9 @@ const scrollText = document.querySelector(".scroll-indicator");
 let currentX = 0;
 let targetX = 0;
 let isUserSliding = false;
+
+/* Scroll text: kill permanently once user moves */
+let scrollKilled = false;
 
 function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 
@@ -780,19 +773,18 @@ function raf(){
     intro.style.opacity = String(opacity);
   }
 
-  /* Hide scroll text after movement */
-if (scrollText) {
-  const fadeStart = 55;
-  const fadeEnd   = 320;
-
-  if (currentX <= 5) {
-    // let the CSS animation fade it in naturally
-  } else {
-    const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
-    const opacity = 1 - Math.max(0, Math.min(1, t));
-    scrollText.style.opacity = String(opacity);
+  /* Hide scroll text permanently once user scrolls */
+  if (scrollText) {
+    if (!scrollKilled && currentX > 10) {
+      scrollKilled = true;
+      scrollText.style.opacity = "0";
+    }
+    if (scrollKilled) {
+      scrollText.style.opacity = "0";
+      scrollText.style.pointerEvents = "none";
+    }
   }
-}
+
   const maxS = maxScroll();
   navSlider.max = String(panels.length - 1);
 
