@@ -37,30 +37,6 @@ body{
 }
 @keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
 
-/* ================= SCROLL FADE-IN (0 -> 1) ================= */
-.panel--home{ position:relative; }
-
-.panel--home .scroll-indicator{
-  position:absolute;
-  left:50%;
-  bottom:68px;
-  transform:translateX(-50%);
-  z-index:2; /* stays within first slide only */
-
-  font-family:'Montserrat', sans-serif;
-  font-weight:400;
-  font-size:16px;
-  letter-spacing:2px;
-  color:#fff;
-
-  opacity:0;
-  pointer-events:none;
-
-  animation:scrollFadeIn 2.5s ease forwards;
-  animation-delay:1.2s;
-}
-@keyframes scrollFadeIn{ from{opacity:0;} to{opacity:1;} }
-
 /* ================= LEFT BURGER ================= */
 .side-bar{
   position:fixed; top:0; left:0;
@@ -123,6 +99,7 @@ body{
   flex:0 0 auto;     /* variable-width rail (Auberry style) */
   height:100vh;
   background:#000;
+  position:relative;
 }
 
 /* Images: never crop, never stretch */
@@ -141,6 +118,29 @@ body{
   background:transparent;
 }
 
+/* ================= HOME "SCROLL" — ONLY ON FIRST SLIDE + BEHIND SLIDES ================= */
+/* IMPORTANT: z-index is LOW so images/slides always cover it */
+.panel--home .scroll-indicator{
+  position:absolute;
+  left:50%;
+  bottom:68px;
+  transform:translateX(-50%);
+  z-index:0;                 /* behind everything */
+  font-family:'Montserrat', sans-serif;
+  font-weight:400;
+  font-size:16px;
+  letter-spacing:2px;
+  color:#fff;
+  opacity:0;
+  pointer-events:none;
+  animation:scrollFadeIn 2.5s ease forwards;
+  animation-delay:1.2s;
+}
+@keyframes scrollFadeIn{ from{opacity:0;} to{opacity:1;} }
+
+/* Make sure the track/panels always paint ABOVE the scroll text */
+.htrack, .panel, .panel-img{ position:relative; z-index:2; }
+
 /* ================= AUBERRY STYLE TEXT + IMAGE SPLIT SLIDE ================= */
 .panel--split{
   flex:0 0 100vw;
@@ -155,58 +155,65 @@ body{
   grid-template-columns: 36% 64%;
 }
 
-/* LEFT */
+/* ================= AUBERRY TEXT SYSTEM (FOR ALL TEXT SLIDES) ================= */
 .split-left{
-  padding:110px 70px 110px 140px;
+  padding:140px 80px 120px 165px;   /* TOP / RIGHT / BOTTOM / LEFT */
   color:#1a1a1a;
   display:flex;
   flex-direction:column;
-  justify-content:center;
-  max-width:520px;
+  justify-content:flex-start;       /* start from top like Auberry */
+  max-width:620px;
 }
 
 .aub-heading{
   font-family:'Cormorant Garamond', serif;
   line-height:1.02;
-  margin-bottom:22px;
+  margin-bottom:0;
 }
 
 .aub-heading .small{
   display:block;
   font-style:italic;
   font-weight:300;
-  font-size:clamp(28px, 2.4vw, 44px);
+  font-size:clamp(34px, 2.8vw, 54px);
+  margin-bottom:10px;
   color:#1a1a1a;
-  margin-bottom:6px;
 }
 
 .aub-heading .big{
   display:block;
   font-style:normal;
   font-weight:400;
-  font-size:clamp(40px, 3.4vw, 64px);
-  text-transform:none;
-  letter-spacing:0;
+  font-size:clamp(54px, 4.2vw, 88px);
+  text-transform:uppercase;   /* Auberry style */
+  letter-spacing:2px;         /* Auberry tracking */
   color:#1a1a1a;
 }
 
-/* GOLD LINE (KEEP) */
+/* GOLD LINE */
 .aub-line{
-  width:56px;
+  width:64px;
   height:1px;
   background:#c6b67a;
-  margin:0 0 34px 0;
+  margin:22px 0 90px 0;       /* BIG GAP like Auberry */
 }
 
+/* Text typography */
 .aub-text{
-  font-family:'Montserrat', sans-serif;
-  font-weight:300;
-  font-size:15px;
-  line-height:1.95;
+  font-family:'Cormorant Garamond', serif;
+  color:#1a1a1a;
   max-width:360px;
-  color:#1f1f1f;
+  font-size:22px;
+  line-height:1.65;
 }
-.aub-text p{ margin-bottom:22px; }
+.aub-text .lead{
+  font-style:italic;
+  margin-bottom:42px;
+}
+.aub-text .body{
+  font-style:normal;
+  margin-bottom:0;
+}
 
 /* RIGHT */
 .split-right{
@@ -404,7 +411,7 @@ body{
   margin:40px 0 22px 0;
 }
 
-/* Address NOT all caps */
+/* Address */
 .menu-address{
   font-family:'Montserrat', sans-serif;
   font-weight:300;
@@ -490,7 +497,6 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   text-transform:none;
   margin-top:-4px;
 }
-
 .end-footer .contact{
   margin-top:14px;
   font-size:13px;
@@ -515,7 +521,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     grid-template-columns: 1fr;
     grid-template-rows: auto 55vh;
   }
-  .split-left{ padding:70px 24px 30px 24px; max-width:none; }
+  .split-left{ padding:90px 24px 30px 24px; max-width:none; }
   .aub-text{ max-width:none; }
 
   .end-left{ display:none; }
@@ -543,8 +549,6 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   <img src="./logo.png" alt="RR Logo">
 </div>
 
-
-
 <!-- Burger -->
 <div class="side-bar" id="burger" aria-label="Open menu">
   <div class="burger-lines"><i></i></div>
@@ -560,9 +564,9 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   <div class="htrack" id="track">
 
     <!-- Panel 0: video only -->
-  <section class="panel panel--home">
-  <div class="scroll-indicator">Scroll</div>
-</section>
+    <section class="panel panel--home">
+      <div class="scroll-indicator">Scroll</div>
+    </section>
 
     <!-- Panel 1: split text + image -->
     <section class="panel panel--split">
@@ -573,10 +577,10 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
           </div>
           <div class="aub-line"></div>
           <div class="aub-text">
-            <p>
+            <p class="lead">
               R&amp;R Mayfair is an ultra-prime luxury developer and private real estate investment firm specialising in the acquisition and redevelopment of exceptional assets across Dubai’s most prestigious addresses.
             </p>
-            <p>
+            <p class="body">
               Through strategic vision and disciplined execution, we transform rare properties into refined residences designed for sophisticated buyers and global investors.
             </p>
           </div>
@@ -601,10 +605,10 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
           </div>
           <div class="aub-line"></div>
           <div class="aub-text">
-            <p>
+            <p class="lead">
               Our multi-disciplinary team has earned a distinguished reputation for advising on exclusive private acquisitions and high-value luxury real estate across Dubai’s most prestigious addresses.
             </p>
-            <p>
+            <p class="body">
               With deep market insight and refined strategic expertise in-house, we curate tailored solutions that align with each client’s vision - delivering seamless, considered, and highly personalised outcomes.
             </p>
           </div>
@@ -630,10 +634,10 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
           </div>
           <div class="aub-line"></div>
           <div class="aub-text">
-            <p>
+            <p class="lead">
               R&amp;R Mayfair is a trusted advisory with a depth of experience across Dubai’s ultra-prime real estate — delivering discreet, strategic guidance and exceptional outcomes for our clients.
             </p>
-            <p>
+            <p class="body">
               We work closely with investors and families to identify rare opportunities, negotiate with confidence, and ensure every acquisition is handled with precision, confidentiality, and long-term vision.
             </p>
           </div>
@@ -742,14 +746,10 @@ const track = document.getElementById("track");
 let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
 const intro = document.querySelector(".intro");
-const scrollText = document.querySelector(".scroll-indicator");
 
 let currentX = 0;
 let targetX = 0;
 let isUserSliding = false;
-
-/* Scroll text: kill permanently once user moves */
-let scrollKilled = false;
 
 function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 
@@ -775,8 +775,6 @@ function raf(){
     const opacity = 1 - Math.max(0, Math.min(1, t));
     intro.style.opacity = String(opacity);
   }
-
-
 
   const maxS = maxScroll();
   navSlider.max = String(panels.length - 1);
