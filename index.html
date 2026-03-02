@@ -55,14 +55,11 @@ body{
   pointer-events:none;
 
   animation:scrollFadeIn 2.5s ease forwards;
-  animation-delay:1.2s;   /* appears after logo */
+  animation-delay:1.2s;
 }
-@keyframes scrollFadeIn{
-  from{ opacity:0; }
-  to{ opacity:1; }
-}
+@keyframes scrollFadeIn{ from{opacity:0;} to{opacity:1;} }
 
-/* ================= LEFT BURGER (NARROWER + SLOWER) ================= */
+/* ================= LEFT BURGER ================= */
 .side-bar{
   position:fixed; top:0; left:0;
   width:64px;
@@ -107,7 +104,7 @@ body{
 /* ================= HORIZONTAL SCROLL AREA ================= */
 .hwrap{
   position:relative;
-  z-index:30; /* slides above logo */
+  z-index:30;
   height:100vh;
   width:100vw;
   overflow:hidden;
@@ -119,33 +116,23 @@ body{
   transform:translate3d(0,0,0);
 }
 
-/* ================= PANELS (NO GAPS, NO CROP) ================= */
+/* ================= PANELS ================= */
 .panel{
-  flex:0 0 auto;
+  flex:0 0 auto;     /* IMPORTANT: variable-width rail (Auberry style) */
   height:100vh;
-}
-
-/* IMPORTANT: make image panels exactly viewport width so there is NEVER a “gap” */
-.panel:not(.panel--home):not(.panel--split):not(.panel--end){
-  flex:0 0 100vw;
-  width:100vw;
   background:#000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
 }
 
-/* Images: contain, centered */
+/* Images: never crop, never stretch */
 .panel-img{
   height:100vh;
   width:auto;
   display:block;
   object-fit:contain;
   object-position:center;
-  margin:0 auto;
 }
 
-/* Home slide must always be full screen so you see video + logo first */
+/* Home slide always full viewport */
 .panel--home{
   flex:0 0 100vw;
   width:100vw;
@@ -163,7 +150,7 @@ body{
   width:100%;
   height:100%;
   display:grid;
-  grid-template-columns: 36% 64%; /* narrower left column */
+  grid-template-columns: 36% 64%; /* narrower left column like Auberry */
 }
 
 /* LEFT */
@@ -219,6 +206,7 @@ body{
 }
 .aub-text p{ margin-bottom:22px; }
 
+/* RIGHT */
 .split-right{
   position:relative;
   overflow:hidden;
@@ -237,25 +225,26 @@ body{
 }
 
 /* ================= END SLIDE (NO GAP BEFORE IT) ================= */
+/* KEY FIX: end panel is AUTO width (image width + card width), not 100vw */
 .panel--end{
-  flex:0 0 100vw;
-  width:100vw;
+  flex:0 0 auto;
+  width:auto;
   height:100vh;
   display:flex;
   align-items:stretch;
   justify-content:flex-end;
-  background:transparent;
+  background:#000;
   overflow:hidden;
 }
 
-/* Left side shows the LAST IMAGE and touches the card */
+/* Left side shows the LAST IMAGE */
 .end-left{
-  flex:1;
+  flex:0 0 auto;      /* IMPORTANT: do not stretch, so no “gap” */
   display:flex;
+  align-items:stretch;
   justify-content:flex-end;
-  align-items:stretch;         /* ensure full-height so no strip */
   overflow:hidden;
-  background:#000;             /* if anything shows, it's black not “gap” */
+  background:#000;
 }
 
 .end-img{
@@ -266,9 +255,9 @@ body{
   display:block;
 }
 
-/* Right panel (logo card) */
+/* Right menu card */
 .end-card{
-  flex:0 0 min(520px, 42vw);
+  flex:0 0 420px;       /* same feel as menu width */
   height:100%;
   background:#f4f4f2;
   display:flex;
@@ -281,50 +270,7 @@ body{
 }
 
 .end-inner{ width:100%; max-width:520px; }
-.end-logo img{ width:170px; margin-bottom:44px; }
-
-.end-links a{
-  display:block;
-  font-family:'Montserrat', sans-serif;
-  font-size:18px;
-  font-weight:400;
-  letter-spacing:2px;          /* Auberry-like spacing */
-  text-transform:uppercase;
-  margin:18px 0;               /* consistent spacing like Auberry */
-  text-decoration:none;
-  color:#1a1a1a;
-  transition:opacity .25s ease;
-}
-.end-links a:hover{ opacity:.6; }
-
-.end-divider{
-  width:200px;
-  height:1px;
-  background:#c6b67a;
-  margin:50px auto 30px auto;
-}
-
-.end-footer{
-  font-family:'Montserrat', sans-serif;
-  font-size:14px;
-  line-height:1.8;
-  color:#1a1a1a;
-  letter-spacing:.5px;
-}
-
-/* phone */
-.end-footer .contact{ margin-top:12px; font-size:14px; font-weight:500; }
-
-.end-privacy{
-  margin-top:22px;
-  display:inline-block;
-  font-family:'Montserrat', sans-serif;
-  font-size:10px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  color:#c6b67a;
-  text-decoration:none;
-}
+.end-logo img{ width:140px; margin-bottom:44px; }
 
 /* ================= BOTTOM THIN SLIDER ================= */
 .nav-slider{
@@ -396,7 +342,7 @@ body{
   transform:translateY(0);
 }
 
-/* Back arrow (left middle) */
+/* Back arrow */
 .back-arrow{
   position:absolute;
   left:26px;
@@ -429,7 +375,7 @@ body{
   text-transform:uppercase;
 }
 
-/* Links (Auberry-like spacing) */
+/* Links spacing (Auberry) */
 .menu-links a{
   display:block;
   font-family:'Montserrat', sans-serif;
@@ -437,14 +383,14 @@ body{
   font-weight:400;
   letter-spacing:2px;
   text-transform:uppercase;
-  margin:20px 0;              /* equal spacing */
+  margin:20px 0;
   text-decoration:none;
   color:#222;
   transition:opacity .25s ease;
 }
 .menu-links a:hover{ opacity:.65; }
 
-/* Gold line */
+/* Divider */
 .menu-divider{
   width:220px;
   height:1px;
@@ -452,7 +398,7 @@ body{
   margin:44px 0 26px 0;
 }
 
-/* Address (NOT ALL CAPS anymore) */
+/* Address NOT all caps */
 .menu-address{
   font-family:'Montserrat', sans-serif;
   font-weight:300;
@@ -460,7 +406,7 @@ body{
   line-height:1.8;
   color:#222;
   max-width:320px;
-  text-transform:none;        /* <-- FIX */
+  text-transform:none;     /* <-- fixed */
   letter-spacing:.4px;
 }
 
@@ -495,9 +441,59 @@ body{
 }
 .menu-privacy:hover{ opacity:.7; }
 
-/* When menu open, prevent interactions behind it */
+/* When menu open */
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
+
+/* =========================================================
+   END CARD MENU = SAME AS BURGER MENU (IDENTICAL LOOK)
+   ========================================================= */
+.end-links a{
+  display:block;
+  font-family:'Montserrat', sans-serif;
+  font-size:16px;
+  font-weight:400;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin:20px 0;
+  text-decoration:none;
+  color:#222;
+  transition:opacity .25s ease;
+}
+.end-links a:hover{ opacity:.65; }
+
+.end-divider{
+  width:220px;
+  height:1px;
+  background:rgba(198,182,122,.65);
+  margin:44px 0 26px 0;
+}
+
+.end-footer{
+  font-family:'Montserrat', sans-serif;
+  font-weight:300;
+  font-size:14px;
+  line-height:1.8;
+  color:#222;
+  letter-spacing:.4px;
+  text-transform:none;
+}
+.end-footer .contact{
+  margin-top:14px;
+  font-size:13px;
+  font-weight:400;
+}
+.end-privacy{
+  margin-top:18px;
+  display:inline-block;
+  font-family:'Montserrat', sans-serif;
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:#c6b67a;
+  text-decoration:none;
+}
+.end-privacy:hover{ opacity:.7; }
 
 /* Mobile tweaks */
 @media (max-width: 900px){
@@ -527,7 +523,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   </video>
 </div>
 
-<!-- Logo (between bg video and slides) -->
+<!-- Logo -->
 <div class="intro">
   <img src="./logo.png" alt="RR Logo">
 </div>
@@ -575,11 +571,11 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       </div>
     </section>
 
-    <!-- Image slides -->
+    <!-- Image slides (variable width like Auberry) -->
     <section class="panel"><img class="panel-img" src="./firstpagesecondpic.png" alt="Slide 2"></section>
     <section class="panel"><img class="panel-img" src="./firstpagethirdpic.png" alt="Slide 3"></section>
 
-    <!-- TEXT SECTION (after third picture) -->
+    <!-- TEXT SECTION -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -633,10 +629,10 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       </div>
     </section>
 
-    <!-- Next images -->
+    <!-- 8th image -->
     <section class="panel"><img class="panel-img" src="./firstpageeighthpic.png" alt="Slide 7"></section>
 
-    <!-- END SLIDE (this is your 9th image attached — no gap now) -->
+    <!-- END SLIDE (9th image attached + card, no gap) -->
     <section class="panel panel--end">
       <div class="end-left">
         <img class="end-img" src="./firstpageninethpic.png" alt="Last Slide Image">
@@ -680,7 +676,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
     <div class="menu-logo">
       <img src="./logo.png" alt="RR Asset Management Logo">
-      <div class="menu-logo-sub">Of London</div>
+      <div class="menu-logo-sub">OF LONDON</div>
     </div>
 
     <nav class="menu-links">
@@ -699,7 +695,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       <div class="menu-contact">
         <span>+44 (0) 20 8575 3700</span>
         <span class="dot">|</span>
-        <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+        <a href="mailto:studio@rrmayfair.com">studio@rrmayfair.com</a>
       </div>
 
       <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
@@ -726,7 +722,7 @@ burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
 document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
 
-/* ===== HORIZONTAL SCROLL (PANELS LOCKED TO 100vw FOR IMAGES => NO GAPS) ===== */
+/* ===== HORIZONTAL SCROLL (VARIABLE WIDTH PANELS) ===== */
 const track = document.getElementById("track");
 let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
@@ -762,6 +758,7 @@ function raf(){
     intro.style.opacity = String(opacity);
   }
 
+  /* Hide scroll text after movement */
   if (scrollText && currentX > 40) {
     const sStart = 40;
     const sEnd   = 240;
