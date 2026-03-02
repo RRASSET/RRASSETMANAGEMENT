@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>RR Asset Management</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
 body{
-  font-family: Arial, sans-serif;
+  font-family:'Nunito Sans', sans-serif;
   background:#000;
   overflow:hidden; /* we control scroll */
 }
@@ -36,8 +36,7 @@ body{
 }
 @keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
 
-/* ================= SCROLL INDICATOR (AUBERRY STYLE) ================= */
-/* ================= SCROLL FADE-IN (CLEAN) ================= */
+/* ================= SCROLL FADE-IN (0 -> 1) ================= */
 .scroll-indicator{
   position:fixed;
   left:50%;
@@ -45,8 +44,8 @@ body{
   transform:translateX(-50%);
   z-index:45;
 
-  font-family:'Cormorant Garamond', serif;
-  font-weight:300;
+  font-family:'Nunito Sans', sans-serif;
+  font-weight:400;
   font-size:18px;
   letter-spacing:1px;
   color:#fff;
@@ -57,17 +56,9 @@ body{
   animation:scrollFadeIn 2.5s ease forwards;
   animation-delay:1.2s;   /* appears after logo */
 }
-
 @keyframes scrollFadeIn{
   from{ opacity:0; }
   to{ opacity:1; }
-}
-/* Scroll fade-in animation */
-@keyframes scrollIn{
-  to{
-    opacity:0.92;
-    transform:translateX(-50%) translateY(0);
-  }
 }
 
 /* ================= LEFT BURGER (NARROWER + SLOWER) ================= */
@@ -176,16 +167,17 @@ body{
 }
 
 .aub-heading{
-  font-family:'Cormorant Garamond', serif;
-  font-weight:400;
+  font-family:'Nunito Sans', sans-serif;
+  font-weight:700;
   line-height:1.02;
   letter-spacing:0.2px;
   margin-bottom:22px;
 }
 .aub-heading .small{
   display:block;
-  font-style:italic;
+  font-style:normal;
   font-size:34px;
+  font-weight:600;
 }
 .aub-heading .big{
   display:block;
@@ -193,6 +185,7 @@ body{
   font-size:64px;
   text-transform:uppercase;
   letter-spacing:1px;
+  font-weight:700;
 }
 
 .aub-line{
@@ -203,10 +196,10 @@ body{
 }
 
 .aub-text{
-  font-family:'Cormorant Garamond', serif;
-  font-weight:300;
-  font-size:19px;
-  line-height:1.9;
+  font-family:'Nunito Sans', sans-serif;
+  font-weight:400;
+  font-size:18px;
+  line-height:1.85;
   max-width:440px;
   color:#1f1f1f;
 }
@@ -280,8 +273,9 @@ body{
 
 .end-links a{
   display:block;
-  font-family:'Cormorant Garamond', serif;
-  font-size:28px;
+  font-family:'Nunito Sans', sans-serif;
+  font-size:22px;
+  font-weight:600;
   margin:14px 0;
   text-decoration:none;
   color:#1a1a1a;
@@ -297,19 +291,19 @@ body{
 }
 
 .end-footer{
-  font-family:'Cormorant Garamond', serif;
-  font-size:20px;
+  font-family:'Nunito Sans', sans-serif;
+  font-size:16px;
   line-height:1.7;
   color:#1a1a1a;
 }
-.end-footer .contact{ margin-top:12px; font-size:18px; }
+.end-footer .contact{ margin-top:12px; font-size:16px; font-weight:600; }
 
 .end-privacy{
   margin-top:22px;
   display:inline-block;
-  font-family:'Montserrat', sans-serif;
-  font-size:12px;
-  letter-spacing:1.5px;
+  font-family:'Nunito Sans', sans-serif;
+  font-size:11px;
+  letter-spacing:1.8px;
   text-transform:uppercase;
   color:#c6b67a;
   text-decoration:none;
@@ -403,7 +397,7 @@ body{
   margin-bottom:50px;
 }
 .menu-logo img{
-  width:120px;
+  width:140px; /* menu logo size */
   height:auto;
   display:block;
   margin:0 auto 10px auto;
@@ -412,8 +406,8 @@ body{
   filter: brightness(0) saturate(100%) sepia(55%) saturate(350%) hue-rotate(8deg) brightness(1.05);
 }
 .menu-logo-sub{
-  font-family:'Montserrat', sans-serif;
-  font-weight:300;
+  font-family:'Nunito Sans', sans-serif;
+  font-weight:600;
   font-size:10px;
   letter-spacing:2.4px;
   color:#c6b67a;
@@ -422,9 +416,9 @@ body{
 /* Links */
 .menu-links a{
   display:block;
-  font-family:'Cormorant Garamond', serif;
-  font-size:22px;
-  font-weight:400;
+  font-family:'Nunito Sans', sans-serif;
+  font-size:20px;
+  font-weight:600;
   margin:22px 0;
   text-decoration:none;
   color:#222;
@@ -441,18 +435,23 @@ body{
 
 /* Address */
 .menu-address{
-  font-family:'Cormorant Garamond', serif;
-  font-weight:300;
-  font-size:18px;
+  font-family:'Nunito Sans', sans-serif;
+  font-weight:400;
+  font-size:15px;
   line-height:1.7;
   color:#222;
   max-width:320px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
 }
 
 /* Phone | Email */
 .menu-contact{
   margin-top:14px;
-  font-size:18px;
+  font-size:14px;
+  font-weight:600;
+  text-transform:none;
+  letter-spacing:0;
 }
 .menu-contact a{
   color:#222;
@@ -468,7 +467,7 @@ body{
 .menu-privacy{
   margin-top:18px;
   display:inline-block;
-  font-family:'Montserrat', sans-serif;
+  font-family:'Nunito Sans', sans-serif;
   font-size:10px;
   letter-spacing:2px;
   text-transform:uppercase;
@@ -513,7 +512,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   <img src="./logo.png" alt="RR Logo">
 </div>
 
-<!-- Scroll text (Auberry style) -->
+<!-- Scroll text -->
 <div class="scroll-indicator">Scroll</div>
 
 <!-- Burger -->
@@ -653,7 +652,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   </div>
 </div>
 
-<!-- ================= AUBERRY-STYLE SLIDING MENU (HTML) ================= -->
+<!-- ================= MENU (HTML) ================= -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
 
@@ -743,8 +742,9 @@ function raf(){
     intro.style.opacity = String(opacity);
   }
 
-  /* Fade "Scroll" out similar to Auberry */
-  if (scrollText) {
+  /* IMPORTANT: do NOT touch scroll opacity until user scrolls,
+     so CSS fade-in (0 -> 1) can play smoothly */
+  if (scrollText && currentX > 40) {
     const sStart = 40;
     const sEnd   = 240;
     const t2 = (currentX - sStart) / (sEnd - sStart);
