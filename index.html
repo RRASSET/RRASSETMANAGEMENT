@@ -37,11 +37,12 @@ body{
 @keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
 
 /* ================= SCROLL INDICATOR (AUBERRY STYLE) ================= */
+/* ================= SCROLL FADE-IN (CLEAN) ================= */
 .scroll-indicator{
   position:fixed;
   left:50%;
   bottom:68px;
-  transform:translateX(-50%) translateY(12px);
+  transform:translateX(-50%);
   z-index:45;
 
   font-family:'Cormorant Garamond', serif;
@@ -53,10 +54,14 @@ body{
   opacity:0;
   pointer-events:none;
 
-  animation:scrollIn 2.2s cubic-bezier(.22,1,.36,1) forwards;
+  animation:scrollFadeIn 2.5s ease forwards;
   animation-delay:1.2s;   /* appears after logo */
 }
 
+@keyframes scrollFadeIn{
+  from{ opacity:0; }
+  to{ opacity:1; }
+}
 /* Scroll fade-in animation */
 @keyframes scrollIn{
   to{
