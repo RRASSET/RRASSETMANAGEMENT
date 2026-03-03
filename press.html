@@ -20,7 +20,21 @@ body{
 .bg{ position:fixed; inset:0; z-index:0; overflow:hidden; background:#000; }
 .bg video{ width:100%; height:100%; object-fit:cover; object-position:center; }
 
-
+/* ================= INTRO LOGO (FADE OUT ON SCROLL) ================= */
+.intro{
+  position:fixed; inset:0; z-index:40;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+  transition:opacity .75s ease;
+}
+.intro img{
+  width:min(240px,55vw);
+  opacity:0;
+  transform:translateY(12px);
+  animation:logoIn 2.2s cubic-bezier(.22,1,.36,1) forwards;
+  animation-delay:0.55s;
+}
+@keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
 
 /* ================= LEFT BURGER ================= */
 .side-bar{
@@ -156,13 +170,13 @@ body{
 .press-link:hover{ opacity:.7; }
 
 /* ================= END SLIDE (IMAGE + LOGO CARD) ================= */
-..panel--end{
-  flex:0 0 auto;               /* NOT 100vw */
-  width:auto;                  /* shrink to content */
+.panel--end{
+  flex:0 0 100vw;
+  width:100vw;
   height:100vh;
   display:flex;
   align-items:stretch;
-  justify-content:flex-start;
+  justify-content:flex-end;
   background:transparent;
   overflow:hidden;
 }
@@ -344,6 +358,17 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
 <body>
 
+<!-- Background video -->
+<div class="bg">
+  <video autoplay muted loop playsinline>
+    <source src="./Bg.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- Intro logo -->
+<div class="intro">
+  <img src="./logo.png" alt="RR Logo">
+</div>
 
 <!-- Burger -->
 <div class="side-bar" id="burger" aria-label="Open menu">
@@ -359,7 +384,9 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 <div class="hwrap">
   <div class="htrack" id="track">
 
- 
+    <!-- Panel 0: video only -->
+    <section class="panel panel--home"></section>
+
     <!-- ===== PRESS 1 ===== -->
     <section class="panel panel--img"><img src="./presspicone.png" alt="Press 1"></section>
     <section class="panel panel--info">
@@ -441,31 +468,33 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     </section>
 
     <!-- ===== END SLIDE (logo card) ===== -->
-  <section class="panel panel--end">
-  <div class="end-card">
-    <div class="end-inner">
-      <div class="end-logo">
-        <img src="./logo.png" alt="RR Logo">
+    <section class="panel panel--end">
+      <div class="end-left">
+       
+      <div class="end-card">
+        <div class="end-inner">
+          <div class="end-logo">
+            <img src="./logo.png" alt="RR Logo">
+          </div>
+
+          <nav class="end-links">
+            <a href="index.html">Home</a>
+            <a href="expertise.html">Expertise</a>
+            <a href="interior-projects.html">Interior Projects</a>
+            <a href="press.html">Press</a>
+          </nav>
+
+          <div class="end-divider"></div>
+
+          <div class="end-footer">
+            SUN HOUSE, 428 LONG DRIVE,<br>
+            GREENFORD, UB6 8UH
+            <div class="contact">+44 (0) 20 8575 3700</div>
+            <a class="end-privacy" href="#">Privacy Policy</a>
+          </div>
+        </div>
       </div>
-
-      <nav class="end-links">
-        <a href="index.html">Home</a>
-        <a href="expertise.html">Expertise</a>
-        <a href="interior-projects.html">Interior Projects</a>
-        <a href="press.html">Press</a>
-      </nav>
-
-      <div class="end-divider"></div>
-
-      <div class="end-footer">
-        SUN HOUSE, 428 LONG DRIVE,<br>
-        GREENFORD, UB6 8UH
-        <div class="contact">+44 (0) 20 8575 3700</div>
-        <a class="end-privacy" href="#">Privacy Policy</a>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
   </div>
 </div>
@@ -520,7 +549,7 @@ document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn()
 const track = document.getElementById("track");
 let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
-
+const intro = document.querySelector(".intro");
 
 function setImagePanelWidths(){
   const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
@@ -560,7 +589,11 @@ function raf(){
   currentX += (targetX - currentX) * 0.075;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
 
- 
+  if (intro) {
+    const fadeStart = 55, fadeEnd = 320;
+    const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
+    intro.style.opacity = String(1 - Math.max(0, Math.min(1, t)));
+  }
 
   const maxS = maxScroll();
   navSlider.max = String(Math.max(0, panels.length - 1));
