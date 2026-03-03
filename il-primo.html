@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>RR Asset Management — IL PRIMO</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+<!-- Auberry-like fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
 body{
-  font-family: Arial, sans-serif;
+  font-family:'Montserrat', sans-serif;
   background:#000;
   overflow:hidden; /* horizontal scroll controlled in JS */
 }
@@ -20,7 +21,7 @@ body{
 .bg{ position:fixed; inset:0; z-index:0; overflow:hidden; background:#000; }
 .bg video{ width:100%; height:100%; object-fit:cover; object-position:center; }
 
-/* ================= INTRO LOGO (OPTIONAL FADE OUT ON SCROLL) ================= */
+/* ================= INTRO LOGO (OPTIONAL) ================= */
 .intro{
   position:fixed; inset:0; z-index:40;
   display:flex; align-items:center; justify-content:center;
@@ -69,8 +70,10 @@ body{
 .burger-lines i::before,
 .burger-lines i::after{
   content:"";
-  position:absolute; left:0;
-  width:22px; height:1.6px;
+  position:absolute;
+  left:0;
+  width:22px;
+  height:1.6px;
   background:#111;
 }
 .burger-lines i::before{ top:-7px; }
@@ -80,7 +83,8 @@ body{
 .hwrap{
   position:relative;
   z-index:30;
-  height:100vh; width:100vw;
+  height:100vh;
+  width:100vw;
   overflow:hidden;
 }
 .htrack{
@@ -92,62 +96,110 @@ body{
   align-items:stretch;
 }
 
-/* ================= PANELS BASE ================= */
-.panel{ flex:0 0 auto; height:100vh; }
-
-/* Seam killer */
+/* ================= PANELS ================= */
 .panel{
+  flex:0 0 auto;
+  height:100vh;
+  background:#000;
+  position:relative;
   flex-shrink:0;
-  margin-right:-2px;
+  margin-right:-2px; /* seam killer */
 }
 
-/* Home slide (video only) */
-.panel--home{
+/* ================= TEXT PANEL (INDEX-STYLE) ================= */
+.panel--copy{
   flex:0 0 100vw;
   width:100vw;
-  background:transparent;
-}
-
-/* ================= TEXT PANEL (LEFT WHITE CARD) ================= */
-.panel--copy{
-  flex:0 0 auto;
-  width:auto;
-  height:100vh;
   background:#f4f4f2;
-  display:flex;
-  align-items:stretch;
+}
+.split{
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-columns: 40% 60%;
 }
 
-.copy-wrap{
-  width:440px;
-  max-width:440px;
-  height:100%;
-  padding:140px 60px 80px 90px;
+.split-left{
+  padding:120px 70px 110px 140px;
+  color:#1a1a1a;
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
-  color:#1a1a1a;
+
+  width:100%;
+  max-width:680px;
+  overflow:hidden;
 }
 
-.copy-title{
+.aub-heading{
   font-family:'Cormorant Garamond', serif;
-  font-weight:400;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  font-size:26px;
-  line-height:1.25;
-  margin-bottom:70px;
+  line-height:1.02;
+  margin-bottom:0;
+  max-width:560px;
 }
-.copy-title span{ display:block; }
 
-.copy-text{
-  font-family:'Cormorant Garamond', serif;
+.aub-heading .small{
+  display:block;
+  font-style:italic;
   font-weight:300;
-  font-size:12px;
-  line-height:1.9;
-  color:#1f1f1f;
-  max-width:260px;
-  opacity:0.95;
+  font-size:clamp(26px, 2vw, 42px);
+  margin-bottom:10px;
+  color:#1a1a1a;
+  overflow-wrap:normal;
+  word-break:normal;
+}
+
+.aub-heading .big{
+  display:block;
+  font-style:normal;
+  font-weight:400;
+  font-size:clamp(30px, 2.4vw, 50px);
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:#1a1a1a;
+  white-space:normal;
+  overflow-wrap:normal;
+  word-break:normal;
+  hyphens:none;
+}
+
+/* GOLD LINE */
+.aub-line{
+  width:64px;
+  height:1px;
+  background:#c6b67a;
+  margin:22px 0 70px 0;
+}
+
+/* Body text */
+.aub-text{
+  font-family:'Cormorant Garamond', serif;
+  color:#1a1a1a;
+  width:100%;
+  max-width:420px;
+  font-size:clamp(18px, 1.25vw, 20px);
+  line-height:1.75;
+  overflow-wrap:normal;
+  word-break:normal;
+  hyphens:none;
+}
+.aub-text .lead{
+  font-style:italic;
+  margin-bottom:42px;
+}
+.aub-text .body{
+  font-style:italic;
+  margin-bottom:0;
+}
+
+/* RIGHT (image side for copy slide) */
+.split-right{
+  position:relative;
+  overflow:hidden;
+  background:#f4f4f2;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
 }
 
 /* ================= IMAGE PANELS (HUG IMAGE) ================= */
@@ -164,7 +216,7 @@ body{
   display:block;
 }
 
-/* ================= END SLIDE (IMAGE + CARD) ================= */
+/* ================= END SLIDE (IMAGE + INDEX MENU CARD) ================= */
 .panel--end{
   flex:0 0 auto;
   width:auto;
@@ -175,7 +227,6 @@ body{
   background:transparent;
   overflow:hidden;
 }
-
 .end-left{
   flex:0 0 auto;
   display:flex;
@@ -189,62 +240,30 @@ body{
   display:block;
 }
 
+/* Index-style card sizing */
 .end-card{
-  flex:0 0 min(520px, 42vw);
+  flex:0 0 420px;
   height:100%;
   background:#f4f4f2;
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
-  text-align:center;
-  padding:110px 60px;
   border-left:1px solid rgba(0,0,0,0.08);
+  padding:0;
 }
 
-.end-inner{ width:100%; max-width:520px; }
-.end-logo img{ width:170px; margin-bottom:44px; }
-
-.end-links a{
-  display:block;
-  font-family:'Cormorant Garamond', serif;
-  font-size:28px;
-  margin:14px 0;
-  text-decoration:none;
-  color:#1a1a1a;
-  transition:opacity .25s ease;
-}
-.end-links a:hover{ opacity:.6; }
-
-.end-divider{
-  width:200px;
-  height:1px;
-  background:#c6b67a;
-  margin:50px auto 30px auto;
-}
-
-.end-footer{
-  font-family:'Cormorant Garamond', serif;
-  font-size:20px;
-  line-height:1.7;
-  color:#1a1a1a;
-}
-.end-footer .contact{ margin-top:12px; font-size:18px; }
-
-.end-privacy{
-  margin-top:22px;
-  display:inline-block;
-  font-family:'Montserrat', sans-serif;
-  font-size:12px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  color:#c6b67a;
-  text-decoration:none;
+/* End card uses menu-panel, but should NOT animate like the sliding menu */
+.end-card .menu-panel{
+  opacity:1 !important;
+  transform:none !important;
+  transition:none !important;
 }
 
 /* ================= BOTTOM SLIDER ================= */
 .nav-slider{
   position:fixed;
-  left:84px; right:28px;
+  left:84px;
+  right:28px;
   bottom:14px;
   z-index:92;
   transition:opacity .35s ease;
@@ -275,7 +294,6 @@ body{
   cursor:pointer;
   border:none;
 }
-
 
 /* =========================================================
    AUBERRY-STYLE SLIDING MENU (INDEX VERSION)
@@ -398,23 +416,26 @@ body{
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
-/* MOBILE */
+/* Mobile tweaks (index-style) */
 @media (max-width: 900px){
-  .copy-wrap{
-    width:100%;
-    max-width:100%;
-    padding:110px 24px 60px 24px;
+  .split{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 55vh;
   }
+  .split-left{ padding:90px 24px 30px 24px; max-width:none; }
+  .aub-heading{ max-width:none; }
+  .aub-text{ max-width:none; }
+
+  .end-left{ display:none; }
+  .end-card{ flex:0 0 100%; width:100%; }
   .nav-slider{ left:24px; right:24px; bottom:12px; }
   .menu{ width:min(420px, 92vw); }
-  .end-left{ display:none; }
-  .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
+  .menu-panel{ padding:60px 28px; }
 }
 </style>
 </head>
 
 <body>
-
 
 <!-- Burger -->
 <div class="side-bar" id="burger" aria-label="Open menu">
@@ -430,26 +451,35 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 <div class="hwrap">
   <div class="htrack" id="track">
 
-  
-    <!-- Panel 1: left white text panel -->
+    <!-- COPY SLIDE (INDEX STYLE: text + image) -->
     <section class="panel panel--copy">
-      <div class="copy-wrap">
-        <div class="copy-title">
-          <span>IL</span>
-          <span>PRIMO</span>
+      <div class="split">
+        <div class="split-left">
+          <div class="aub-heading">
+            <span class="small">Interior Project</span>
+            <span class="big">IL PRIMO</span>
+          </div>
+          <div class="aub-line"></div>
+          <div class="aub-text">
+            <p class="lead">
+              Replace this with a short, elegant IL PRIMO description — 2 to 3 lines, like your index text style.
+            </p>
+            <p class="body">
+              Add one more italic line here to match the index rhythm and spacing.
+            </p>
+          </div>
         </div>
 
-        <div class="copy-text">
-          Replace this paragraph with your IL PRIMO project description. Keep it short like the Burj page.
+        <div class="split-right">
+          <!-- Use your first image here so this slide matches index -->
+          <img class="end-img" src="./primoone.png" alt="IL PRIMO hero">
         </div>
       </div>
     </section>
 
-    <!-- Image panels (CHANGE FILENAMES to your real ones: ilprimoone, ilprimotwo etc.) -->
-    <section class="panel panel--img"><img src="./primoone.png" alt="IL PRIMO 1"></section>
+    <!-- Remaining images -->
     <section class="panel panel--img"><img src="./primotwo.png" alt="IL PRIMO 2"></section>
     <section class="panel panel--img"><img src="./primothree.png" alt="IL PRIMO 3"></section>
-
 
     <!-- END SLIDE -->
     <section class="panel panel--end">
@@ -457,40 +487,40 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
         <img class="end-img" src="./primofour.png" alt="IL PRIMO last">
       </div>
 
+      <!-- INDEX MENU CARD -->
       <div class="end-card">
-  <div class="menu-panel">
-    <div class="menu-logo">
-      <img src="./logo.png" alt="RR Asset Management Logo">
-    </div>
+        <div class="menu-panel">
+          <div class="menu-logo">
+            <img src="./logo.png" alt="RR Asset Management Logo">
+          </div>
 
-    <nav class="menu-links">
-      <a href="index.html">Home</a>
-      <a href="expertise.html">Expertise</a>
-      <a href="interior-projects.html">Interior Projects</a>
-      <a href="press.html">Press</a>
-    </nav>
+          <nav class="menu-links">
+            <a href="index.html">Home</a>
+            <a href="expertise.html">Expertise</a>
+            <a href="interior-projects.html">Interior Projects</a>
+            <a href="press.html">Press</a>
+          </nav>
 
-    <div class="menu-divider"></div>
+          <div class="menu-divider"></div>
 
-    <div class="menu-address">
-      Sun House, 428 Long Drive,<br>
-      Greenford, UB6 8UH
+          <div class="menu-address">
+            Sun House, 428 Long Drive,<br>
+            Greenford, UB6 8UH
 
-      <div class="menu-contact">
-        <span>+44 (0) 20 8575 3700</span>
-        <span class="dot">|</span>
-        <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+            <div class="menu-contact">
+              <span>+44 (0) 20 8575 3700</span>
+              <span class="dot">|</span>
+              <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+            </div>
+
+            <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
+          </div>
+        </div>
       </div>
-
-      <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
-    </div>
-  </div>
-</div>
     </section>
 
   </div>
 </div>
-
 
 <!-- ================= MENU (HTML) ================= -->
 <div class="menu" id="menu" aria-label="Menu">
@@ -553,7 +583,7 @@ const navSlider = document.getElementById("navSlider");
 function setPanelWidths(){
   const vh = window.innerHeight;
 
-  // image panels
+  // All panels are auto except end panel + pure image panels (so rail hugs images)
   const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
   imgPanels.forEach(p=>{
     const img = p.querySelector("img");
@@ -569,15 +599,14 @@ function setPanelWidths(){
     else img.addEventListener("load", apply, { once:true });
   });
 
-  // copy panel width
+  // Copy slide is full viewport
   const copyPanel = track.querySelector(".panel--copy");
   if(copyPanel){
-    const w = Math.ceil(copyPanel.getBoundingClientRect().width);
-    copyPanel.style.flex = `0 0 ${w}px`;
-    copyPanel.style.width = `${w}px`;
+    copyPanel.style.flex = `0 0 ${window.innerWidth}px`;
+    copyPanel.style.width = `${window.innerWidth}px`;
   }
 
-  // end panel: (end image width) + (card width)
+  // End panel: (end image width) + (card width)
   const endPanel = track.querySelector(".panel--end");
   if(endPanel){
     const endImg  = endPanel.querySelector(".end-img");
@@ -632,8 +661,6 @@ function raf(){
   const x = Math.round(currentX * dpr) / dpr;
   track.style.transform = `translate3d(${-x}px,0,0)`;
 
-  
-
   const maxS = maxScroll();
   navSlider.max = String(Math.max(0, panels.length - 1));
 
@@ -651,8 +678,9 @@ window.addEventListener("wheel", (e)=>{
   targetX = clamp(targetX + e.deltaY * 0.9, 0, maxScroll());
 },{passive:true});
 
-/* drag / touch */
+/* Drag / touch */
 let isDown=false, startX=0, startTarget=0;
+
 function pointerDown(x){
   if(document.body.classList.contains("menu-open")) return;
   isDown=true; startX=x; startTarget=targetX;
@@ -671,7 +699,7 @@ window.addEventListener("touchstart",(e)=>pointerDown(e.touches[0].clientX),{pas
 window.addEventListener("touchmove",(e)=>pointerMove(e.touches[0].clientX),{passive:true});
 window.addEventListener("touchend",pointerUp);
 
-/* slider */
+/* Slider */
 function sliderToTarget(){
   const maxS = maxScroll();
   const denom = (panels.length - 1) || 1;
@@ -681,7 +709,7 @@ navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
 navSlider.addEventListener("pointerup", ()=>{ isUserSliding = false; sliderToTarget(); });
 navSlider.addEventListener("input", sliderToTarget);
 
-/* keep bounds */
+/* Keep bounds */
 window.addEventListener("resize", ()=>{
   panels = Array.from(track.querySelectorAll(".panel"));
   targetX = clamp(targetX, 0, maxScroll());
