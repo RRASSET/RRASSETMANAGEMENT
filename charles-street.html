@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>RR Asset Management — CHARLES STREET</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+<!-- Auberry-like fonts (same as index) -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
 body{
-  font-family: Arial, sans-serif;
+  font-family:'Montserrat', sans-serif;
   background:#000;
   overflow:hidden; /* horizontal scroll controlled in JS */
 }
@@ -69,8 +70,10 @@ body{
 .burger-lines i::before,
 .burger-lines i::after{
   content:"";
-  position:absolute; left:0;
-  width:22px; height:1.6px;
+  position:absolute;
+  left:0;
+  width:22px;
+  height:1.6px;
   background:#111;
 }
 .burger-lines i::before{ top:-7px; }
@@ -92,59 +95,118 @@ body{
   align-items:stretch;
 }
 
-/* ================= PANELS BASE ================= */
-.panel{ flex:0 0 auto; height:100vh; flex-shrink:0; }
-
-/* ✅ FIX: seam overlap ONLY between panels (NOT after last one) */
+/* ================= PANELS ================= */
+.panel{
+  flex:0 0 auto;
+  height:100vh;
+  background:#000;
+  position:relative;
+  flex-shrink:0;
+}
+/* seam killer WITHOUT creating a tail gap */
 .panel:not(:last-child){ margin-right:-2px; }
 
-/* Home slide (video only) */
+/* Home slide always full viewport */
 .panel--home{
   flex:0 0 100vw;
   width:100vw;
   background:transparent;
 }
 
-/* ================= TEXT PANEL (LEFT WHITE CARD) ================= */
+/* ================= COPY SLIDE (INDEX STYLE: text + image) ================= */
 .panel--copy{
-  flex:0 0 auto;
-  width:auto;
-  height:100vh;
+  flex:0 0 100vw;
+  width:100vw;
   background:#f4f4f2;
-  display:flex;
-  align-items:stretch;
+}
+.split{
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-columns: 40% 60%;
 }
 
-.copy-wrap{
-  width:440px;
-  max-width:440px;
-  height:100%;
-  padding:140px 60px 80px 90px;
+/* TEXT */
+.split-left{
+  padding:120px 70px 110px 140px;
+  color:#1a1a1a;
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
+
+  width:100%;
+  max-width:680px;
+  overflow:hidden;
+}
+
+.aub-heading{
+  font-family:'Cormorant Garamond', serif;
+  line-height:1.02;
+  margin-bottom:0;
+  max-width:560px;
+}
+
+.aub-heading .small{
+  display:block;
+  font-style:italic;
+  font-weight:300;
+  font-size:clamp(26px, 2vw, 42px);
+  margin-bottom:10px;
   color:#1a1a1a;
 }
 
-.copy-title{
-  font-family:'Cormorant Garamond', serif;
+.aub-heading .big{
+  display:block;
+  font-style:normal;
   font-weight:400;
-  letter-spacing:1px;
+  font-size:clamp(30px, 2.4vw, 50px);
   text-transform:uppercase;
-  font-size:26px;
-  line-height:1.25;
-  margin-bottom:70px;
+  letter-spacing:2px;
+  color:#1a1a1a;
 }
-.copy-title span{ display:block; }
 
-.copy-text{
+/* GOLD LINE */
+.aub-line{
+  width:64px;
+  height:1px;
+  background:#c6b67a;
+  margin:22px 0 70px 0;
+}
+
+/* Body text (all italic like index) */
+.aub-text{
   font-family:'Cormorant Garamond', serif;
-  font-weight:300;
-  font-size:12px;
-  line-height:1.9;
-  color:#1f1f1f;
-  max-width:260px;
-  opacity:0.95;
+  color:#1a1a1a;
+  width:100%;
+  max-width:420px;
+  font-size:clamp(18px, 1.25vw, 20px);
+  line-height:1.75;
+}
+.aub-text .lead{
+  font-style:italic;
+  margin-bottom:42px;
+}
+.aub-text .body{
+  font-style:italic;
+  margin-bottom:0;
+}
+
+/* RIGHT */
+.split-right{
+  position:relative;
+  overflow:hidden;
+  background:#f4f4f2;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+}
+.copy-hero{
+  height:100%;
+  width:auto;
+  margin:0 auto;
+  object-fit:contain;
+  object-position:center;
+  display:block;
 }
 
 /* ================= IMAGE PANELS (HUG IMAGE) ================= */
@@ -161,7 +223,7 @@ body{
   display:block;
 }
 
-/* ================= END SLIDE (IMAGE + CARD) ================= */
+/* ================= END SLIDE (IMAGE + INDEX MENU CARD) ================= */
 .panel--end{
   flex:0 0 auto;
   width:auto;
@@ -172,7 +234,6 @@ body{
   background:transparent;
   overflow:hidden;
 }
-
 .end-left{
   flex:0 0 auto;
   display:flex;
@@ -186,56 +247,21 @@ body{
   display:block;
 }
 
+/* Index-style card */
 .end-card{
-  flex:0 0 min(520px, 42vw);
+  flex:0 0 420px;
   height:100%;
   background:#f4f4f2;
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
-  text-align:center;
-  padding:110px 60px;
   border-left:1px solid rgba(0,0,0,0.08);
+  padding:0;
 }
-
-.end-inner{ width:100%; max-width:520px; }
-.end-logo img{ width:170px; margin-bottom:44px; }
-
-.end-links a{
-  display:block;
-  font-family:'Cormorant Garamond', serif;
-  font-size:28px;
-  margin:14px 0;
-  text-decoration:none;
-  color:#1a1a1a;
-  transition:opacity .25s ease;
-}
-.end-links a:hover{ opacity:.6; }
-
-.end-divider{
-  width:200px;
-  height:1px;
-  background:#c6b67a;
-  margin:50px auto 30px auto;
-}
-
-.end-footer{
-  font-family:'Cormorant Garamond', serif;
-  font-size:20px;
-  line-height:1.7;
-  color:#1a1a1a;
-}
-.end-footer .contact{ margin-top:12px; font-size:18px; }
-
-.end-privacy{
-  margin-top:22px;
-  display:inline-block;
-  font-family:'Montserrat', sans-serif;
-  font-size:12px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  color:#c6b67a;
-  text-decoration:none;
+.end-card .menu-panel{
+  opacity:1 !important;
+  transform:none !important;
+  transition:none !important;
 }
 
 /* ================= BOTTOM SLIDER ================= */
@@ -273,36 +299,41 @@ body{
   border:none;
 }
 
-/* ================= MENU ================= */
+/* =========================================================
+   AUBERRY-STYLE SLIDING MENU (INDEX VERSION)
+   ========================================================= */
 .menu{
   position:fixed; top:0; left:0;
-  height:100vh; width:380px;
+  height:100vh;
+  width:420px;
   background:#f4f4f2;
   z-index:95;
   transform:translateX(-100%);
-  transition:transform 1.05s cubic-bezier(.77,0,.18,1);
+  transition:transform 1.15s cubic-bezier(.77,0,.18,1);
   will-change:transform;
 }
 .menu.open{ transform:translateX(0); }
 
 .menu-panel{
   height:100%;
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center;
-  padding:60px 30px;
   position:relative;
+  padding:70px 46px 70px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  justify-content:flex-start;
 
   opacity:0;
   transform:translateY(10px);
   transition:opacity .9s ease, transform .9s ease;
-  transition-delay:.2s;
+  transition-delay:.25s;
 }
 .menu.open .menu-panel{ opacity:1; transform:translateY(0); }
 
 .back-arrow{
   position:absolute;
-  left:34px;
+  left:26px;
   top:50%;
   transform:translateY(-50%);
   font-size:28px;
@@ -310,58 +341,88 @@ body{
   color:#222;
   opacity:.9;
 }
-.menu-logo img{ width:170px; margin-bottom:46px; }
 
+.menu-logo{ margin-top:30px; margin-bottom:0px; }
+.menu-logo img{
+  width:240px;
+  height:auto;
+  display:block;
+  margin:0 auto 14px auto;
+  filter:none;
+}
+
+.menu-links{ margin-top:-10px; }
 .menu-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
-  font-size:30px;
-  margin:18px 0;
+  font-size:22px;
+  font-weight:400;
+  margin:26px 0;
   text-decoration:none;
   color:#222;
+  transition:opacity .25s ease;
 }
-.menu-links a:hover{ opacity:0.6; }
+.menu-links a:hover{ opacity:.65; }
 
-.divider{
-  width:200px;
+.menu-divider{
+  width:260px;
   height:1px;
-  background:#c6b67a;
-  margin:50px auto 30px auto;
+  background:#c6b67a !important;
+  opacity:1 !important;
+  margin:40px 0 22px 0;
 }
 
-.menu-footer{
-  font-family:'Cormorant Garamond', serif;
-  font-size:22px;
-  line-height:1.6;
+.menu-address{
+  font-family:'Montserrat', sans-serif;
+  font-weight:300;
+  font-size:14px;
+  line-height:1.8;
   color:#222;
+  max-width:320px;
+  letter-spacing:.4px;
+  margin-top:-4px;
 }
-.menu-footer .contact{ margin-top:15px; font-size:20px; }
 
-.privacy{
-  margin-top:20px;
+.menu-contact{
+  margin-top:14px;
+  font-size:13px;
+  font-weight:400;
+  letter-spacing:.2px;
+}
+.menu-contact a{ color:#222; text-decoration:none; }
+.menu-contact a:hover{ opacity:.65; }
+.menu-contact .dot{ padding:0 10px; opacity:.7; }
+
+.menu-privacy{
+  margin-top:14px;
   display:inline-block;
   font-family:'Montserrat', sans-serif;
-  font-size:12px;
-  letter-spacing:1.5px;
+  font-size:10px;
+  letter-spacing:2px;
   text-transform:uppercase;
   color:#c6b67a;
   text-decoration:none;
 }
+.menu-privacy:hover{ opacity:.7; }
 
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
-/* MOBILE */
+/* Mobile tweaks */
 @media (max-width: 900px){
-  .copy-wrap{
-    width:100%;
-    max-width:100%;
-    padding:110px 24px 60px 24px;
+  .split{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 55vh;
   }
-  .nav-slider{ left:24px; right:24px; bottom:12px; }
-  .menu{ width:min(380px, 92vw); }
+  .split-left{ padding:90px 24px 30px 24px; max-width:none; }
+  .aub-heading{ max-width:none; }
+  .aub-text{ max-width:none; }
+
   .end-left{ display:none; }
-  .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
+  .end-card{ flex:0 0 100%; width:100%; }
+  .nav-slider{ left:24px; right:24px; bottom:12px; }
+  .menu{ width:min(420px, 92vw); }
+  .menu-panel{ padding:60px 28px; }
 }
 </style>
 </head>
@@ -394,54 +455,74 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 <div class="hwrap">
   <div class="htrack" id="track">
 
-    <!-- Panel 0: video only (blank) -->
+    <!-- Panel 0: blank video-only -->
     <section class="panel panel--home"></section>
 
-    <!-- Panel 1: left text panel -->
+    <!-- COPY SLIDE (INDEX STYLE) -->
     <section class="panel panel--copy">
-      <div class="copy-wrap">
-        <div class="copy-title">
-          <span>CHARLES</span>
-          <span>STREET</span>
+      <div class="split">
+        <div class="split-left">
+          <div class="aub-heading">
+            <span class="small">Interior Project</span>
+            <span class="big">CHARLES<br>STREET</span>
+          </div>
+          <div class="aub-line"></div>
+          <div class="aub-text">
+            <p class="lead">
+              Replace this with a short Charles Street description — elegant, minimal, and italic like the index text slides.
+            </p>
+            <p class="body">
+              Add a second line here (also italic) to match the spacing and rhythm of your index layout.
+            </p>
+          </div>
         </div>
 
-        <div class="copy-text">
-          Replace this paragraph with your CHARLES STREET project description.
+        <div class="split-right">
+          <!-- hero image on the right -->
+          <img class="copy-hero" src="./charlesone.png" alt="Charles Street hero">
         </div>
       </div>
     </section>
 
-    <!-- Images (rename to your real filenames if needed) -->
-    <section class="panel panel--img"><img src="./charlesone.png" alt="Charles Street 1"></section>
+    <!-- Remaining image panels -->
     <section class="panel panel--img"><img src="./charlestwo.png" alt="Charles Street 2"></section>
     <section class="panel panel--img"><img src="./charlesthree.png" alt="Charles Street 3"></section>
     <section class="panel panel--img"><img src="./charlesfour.png" alt="Charles Street 4"></section>
-   
 
     <!-- END SLIDE -->
     <section class="panel panel--end">
-      
+      <div class="end-left">
+        <!-- Optional last image; if you don’t want it, remove end-left completely -->
+        <img class="end-img" src="./charlesfour.png" alt="Charles Street last">
+      </div>
 
+      <!-- INDEX MENU CARD -->
       <div class="end-card">
-        <div class="end-inner">
-          <div class="end-logo">
-            <img src="./logo.png" alt="RR Logo">
+        <div class="menu-panel">
+          <div class="menu-logo">
+            <img src="./logo.png" alt="RR Asset Management Logo">
           </div>
 
-          <nav class="end-links">
+          <nav class="menu-links">
             <a href="index.html">Home</a>
             <a href="expertise.html">Expertise</a>
             <a href="interior-projects.html">Interior Projects</a>
             <a href="press.html">Press</a>
           </nav>
 
-          <div class="end-divider"></div>
+          <div class="menu-divider"></div>
 
-          <div class="end-footer">
-            SUN HOUSE, 428 LONG DRIVE,<br>
-            GREENFORD, UB6 8UH
-            <div class="contact">+44 (0) 20 8575 3700</div>
-            <a class="end-privacy" href="#">Privacy Policy</a>
+          <div class="menu-address">
+            Sun House, 428 Long Drive,<br>
+            Greenford, UB6 8UH
+
+            <div class="menu-contact">
+              <span>+44 (0) 20 8575 3700</span>
+              <span class="dot">|</span>
+              <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+            </div>
+
+            <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
           </div>
         </div>
       </div>
@@ -450,9 +531,10 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   </div>
 </div>
 
-<!-- Sliding menu -->
+<!-- ================= MENU (HTML) ================= -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
+
     <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
 
     <div class="menu-logo">
@@ -466,14 +548,21 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       <a href="press.html">Press</a>
     </nav>
 
-    <div class="divider"></div>
+    <div class="menu-divider"></div>
 
-    <div class="menu-footer">
-      SUN HOUSE, 428 LONG DRIVE,<br>
-      GREENFORD, UB6 8UH
-      <div class="contact">+44 (0) 20 8575 3700</div>
-      <a href="#" class="privacy">Privacy Policy</a>
+    <div class="menu-address">
+      Sun House, 428 Long Drive,<br>
+      Greenford, UB6 8UH
+
+      <div class="menu-contact">
+        <span>+44 (0) 20 8575 3700</span>
+        <span class="dot">|</span>
+        <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+      </div>
+
+      <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
     </div>
+
   </div>
 </div>
 
@@ -504,7 +593,19 @@ const intro = document.querySelector(".intro");
 function setPanelWidths(){
   const vh = window.innerHeight;
 
-  // image panels
+  // Home + Copy are full viewport width
+  const homePanel = track.querySelector(".panel--home");
+  if(homePanel){
+    homePanel.style.flex = `0 0 ${window.innerWidth}px`;
+    homePanel.style.width = `${window.innerWidth}px`;
+  }
+  const copyPanel = track.querySelector(".panel--copy");
+  if(copyPanel){
+    copyPanel.style.flex = `0 0 ${window.innerWidth}px`;
+    copyPanel.style.width = `${window.innerWidth}px`;
+  }
+
+  // image panels hug image width
   const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
   imgPanels.forEach(p=>{
     const img = p.querySelector("img");
@@ -520,15 +621,7 @@ function setPanelWidths(){
     else img.addEventListener("load", apply, { once:true });
   });
 
-  // copy panel width
-  const copyPanel = track.querySelector(".panel--copy");
-  if(copyPanel){
-    const w = Math.ceil(copyPanel.getBoundingClientRect().width);
-    copyPanel.style.flex = `0 0 ${w}px`;
-    copyPanel.style.width = `${w}px`;
-  }
-
-  // end panel: image width + card width
+  // end panel = end image width + card width
   const endPanel = track.querySelector(".panel--end");
   if(endPanel){
     const endImg  = endPanel.querySelector(".end-img");
