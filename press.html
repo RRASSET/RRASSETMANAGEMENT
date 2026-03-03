@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>RR Asset Management — West London Business Park</title>
+<title>RR Asset Management — Press</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 
@@ -13,21 +13,17 @@ html,body{height:100%}
 body{
   font-family:'Montserrat', sans-serif;
   background:#000;
-  overflow:hidden; /* we control scroll */
+  overflow:hidden;
 }
 
 /* ================= LEFT BURGER (INDEX) ================= */
 .side-bar{
   position:fixed; top:0; left:0;
-  width:64px;
-  height:100vh;
+  width:64px; height:100vh;
   background:rgba(255,255,255,0.88);
   backdrop-filter: blur(10px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:90;
-  cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  z-index:90; cursor:pointer;
   transition:background .6s ease;
 }
 .side-bar:hover{ background:rgba(255,255,255,0.94); }
@@ -49,10 +45,8 @@ body{
 .burger-lines i::before,
 .burger-lines i::after{
   content:"";
-  position:absolute;
-  left:0;
-  width:22px;
-  height:1.6px;
+  position:absolute; left:0;
+  width:22px; height:1.6px;
   background:#111;
 }
 .burger-lines i::before{ top:-7px; }
@@ -62,8 +56,7 @@ body{
 .hwrap{
   position:relative;
   z-index:30;
-  height:100vh;
-  width:100vw;
+  height:100vh; width:100vw;
   overflow:hidden;
 }
 .htrack{
@@ -81,103 +74,112 @@ body{
   height:100vh;
   flex-shrink:0;
 }
-/* seam killer ONLY between panels */
-.panel:not(:last-child){ margin-right:-2px; }
+.panel:not(:last-child){ margin-right:-2px; } /* seam killer */
 
-/* ================= IMAGE PANELS (HUG IMAGE) ================= */
-.panel--img{
+/* ================= INTRO / TITLE PANEL ================= */
+.panel--copy{
+  background:#f4f4f2;
   display:flex;
   align-items:stretch;
-  justify-content:flex-start;
-  background:#000;
 }
-.panel--img img{
-  height:100vh;
-  width:auto;
-  object-fit:contain;
-  display:block;
-}
-
-/* ================= SPLIT PANEL (TEXT + IMAGE) ================= */
-.panel--split{
-  flex:0 0 auto;
-  width:auto;
-  background:#f4f4f2;
-}
-.split{
+.copy-wrap{
+  width:520px;
+  max-width:520px;
   height:100%;
-  display:flex;
-  width:auto;
-}
-.split-copy{
-  background:#f4f4f2;
-  flex:0 0 var(--copyW, 520px);
-  width:var(--copyW, 520px);
+  padding:170px 90px 80px 110px;
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
-  padding:190px 120px 90px 150px;
   color:#1a1a1a;
 }
-.copy-inner{ max-width:480px; }
-
-.aub-heading{
+.copy-title{
   font-family:'Cormorant Garamond', serif;
   font-weight:400;
-  line-height:1.04;
-  margin:0 0 26px 0;
-}
-.aub-heading .small{
-  display:block;
-  font-style:italic;
-  font-size:30px;
-  margin-bottom:6px;
-}
-.aub-heading .big{
-  display:block;
-  font-size:56px;
+  letter-spacing:1px;
   text-transform:uppercase;
-  letter-spacing:.6px;
+  font-size:28px;
+  line-height:1.2;
+  margin-bottom:40px;
 }
-
-.aub-line{
-  width:56px;
-  height:1px;
-  background:#c6b67a;
-  margin:0 0 140px 0;
-}
-
-.aub-text{
+.copy-text{
   font-family:'Cormorant Garamond', serif;
   font-weight:300;
-  font-size:16.5px;
-  line-height:2.05;
-  max-width:340px;
+  font-size:14px;
+  line-height:2.0;
   color:#1f1f1f;
-  letter-spacing:0.2px;
+  max-width:360px;
+  opacity:0.95;
 }
-.aub-text p{ margin:0; }
 
-.split-media{
-  flex:0 0 auto;
-  display:flex;
-  align-items:stretch;
-  justify-content:flex-start;
-  overflow:hidden;
+/* ================= PRESS CARD SLIDES ================= */
+.panel--press{
   background:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 60px;
 }
-.split-media img{
-  height:100%;
-  width:auto;
-  object-fit:contain;
-  display:block;
+.press-card{
+  width:min(760px, 86vw);
+  background:#f4f4f2;
+  border:1px solid rgba(0,0,0,0.08);
+  padding:80px 90px;
+  box-shadow:0 20px 70px rgba(0,0,0,0.25);
+}
+.press-meta{
+  font-family:'Montserrat', sans-serif;
+  font-size:12px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:#7a7a7a;
+  margin-bottom:18px;
+}
+.press-title{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:400;
+  font-size:44px;
+  line-height:1.08;
+  color:#1a1a1a;
+  margin-bottom:18px;
+}
+.press-excerpt{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:300;
+  font-size:16px;
+  line-height:2.0;
+  color:#1f1f1f;
+  max-width:560px;
+}
+.press-actions{
+  margin-top:36px;
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.press-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height:44px;
+  padding:0 18px;
+  border-radius:999px;
+  text-decoration:none;
+  font-family:'Montserrat', sans-serif;
+  font-size:12px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  border:1px solid rgba(0,0,0,0.18);
+  color:#1a1a1a;
+  transition:opacity .25s ease, transform .25s ease;
+}
+.press-btn:hover{ opacity:.75; transform:translateY(-1px); }
+.press-btn.primary{
+  border-color:#c6b67a;
+  color:#1a1a1a;
 }
 
 /* ================= END SLIDE (INDEX MENU CARD ONLY) ================= */
 .panel--end-only{
-  flex:0 0 auto;
-  width:auto;
-  height:100vh;
   display:flex;
   align-items:stretch;
   justify-content:flex-start;
@@ -194,20 +196,17 @@ body{
   border-left:1px solid rgba(0,0,0,0.08);
   padding:0;
 }
-/* end card uses menu-panel but must NOT animate */
 .end-card .menu-panel{
   opacity:1 !important;
   transform:none !important;
   transition:none !important;
 }
-/* lift address like index end card */
 .end-card .menu-address{ margin-top:-14px; }
 
-/* ================= BOTTOM THIN SLIDER ================= */
+/* ================= BOTTOM SLIDER ================= */
 .nav-slider{
   position:fixed;
-  left:84px;
-  right:28px;
+  left:84px; right:28px;
   bottom:14px;
   z-index:92;
   transition:opacity .35s ease;
@@ -231,12 +230,9 @@ body{
   cursor:pointer;
 }
 .nav-slider input[type="range"]::-moz-range-thumb{
-  width:80px;
-  height:6px;
-  border-radius:999px;
+  width:80px; height:6px; border-radius:999px;
   background:rgba(0,0,0,0.60);
-  cursor:pointer;
-  border:none;
+  cursor:pointer; border:none;
 }
 
 /* =========================================================
@@ -271,7 +267,6 @@ body{
 }
 .menu.open .menu-panel{ opacity:1; transform:translateY(0); }
 
-/* Back arrow */
 .back-arrow{
   position:absolute;
   left:26px;
@@ -283,25 +278,20 @@ body{
   opacity:.9;
 }
 
-/* Logo */
 .menu-logo{ margin-top:30px; margin-bottom:0px; }
 .menu-logo img{
   width:240px;
   height:auto;
   display:block;
   margin:0 auto 14px auto;
-  filter:none;
 }
 
-/* Links */
 .menu-links{ margin-top:-10px; }
 .menu-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
   font-size:22px;
   font-weight:400;
-  letter-spacing:0;
-  text-transform:none;
   margin:26px 0;
   text-decoration:none;
   color:#222;
@@ -309,7 +299,6 @@ body{
 }
 .menu-links a:hover{ opacity:.65; }
 
-/* Divider */
 .menu-divider{
   width:260px;
   height:1px;
@@ -318,7 +307,6 @@ body{
   margin:40px 0 22px 0;
 }
 
-/* Address */
 .menu-address{
   font-family:'Montserrat', sans-serif;
   font-weight:300;
@@ -326,24 +314,20 @@ body{
   line-height:1.8;
   color:#222;
   max-width:320px;
-  text-transform:none;
   letter-spacing:.4px;
   margin-top:-4px;
 }
 
-/* Phone | Email */
 .menu-contact{
   margin-top:14px;
   font-size:13px;
   font-weight:400;
-  text-transform:none;
   letter-spacing:.2px;
 }
 .menu-contact a{ color:#222; text-decoration:none; }
 .menu-contact a:hover{ opacity:.65; }
 .menu-contact .dot{ padding:0 10px; opacity:.7; }
 
-/* Privacy */
 .menu-privacy{
   margin-top:14px;
   display:inline-block;
@@ -361,13 +345,14 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
 /* MOBILE */
 @media (max-width: 900px){
-  .split{ flex-direction:column; }
-  .split-copy{
-    width:100% !important;
-    flex:0 0 auto !important;
-    padding:70px 24px 40px 24px;
+  .copy-wrap{
+    width:100%;
+    max-width:100%;
+    padding:110px 24px 60px 24px;
   }
-  .split-media img{ height:55vh; }
+  .panel--press{ padding:0 18px; }
+  .press-card{ padding:60px 26px; }
+  .press-title{ font-size:34px; }
   .nav-slider{ left:24px; right:24px; bottom:12px; }
   .menu{ width:min(420px, 92vw); }
   .end-card{ flex:0 0 100%; width:100%; }
@@ -391,33 +376,75 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 <div class="hwrap">
   <div class="htrack" id="track">
 
-    <!-- SPLIT: TEXT + westone -->
-    <section class="panel panel--split">
-      <div class="split">
-        <div class="split-copy">
-          <div class="copy-inner">
-            <div class="aub-heading">
-              <span class="small">Project</span>
-              <span class="big">WEST LONDON<br>BUSINESS PARK</span>
-            </div>
-            <div class="aub-line"></div>
-            <div class="aub-text">
-              <p>Replace this paragraph with your final project description (location, scope, highlights, etc.).</p>
-            </div>
-          </div>
-        </div>
-        <div class="split-media">
-          <img src="./westone.png" alt="West London Business Park — Image 1">
+    <!-- Panel 1: Press intro -->
+    <section class="panel panel--copy">
+      <div class="copy-wrap">
+        <div class="copy-title">Press</div>
+        <div class="copy-text">
+          A curated selection of features and mentions. Replace the entries with your real publications and links.
         </div>
       </div>
     </section>
 
-    <!-- Images -->
-    <section class="panel panel--img"><img src="./westtwo.png" alt="West London Business Park — Image 2"></section>
-    <section class="panel panel--img"><img src="./westthree.png" alt="West London Business Park — Image 3"></section>
-    <section class="panel panel--img"><img src="./westfour.png" alt="West London Business Park — Image 4"></section>
-    <section class="panel panel--img"><img src="./westfive.png" alt="West London Business Park — Image 5"></section>
-    <section class="panel panel--img"><img src="./westsix.png" alt="West London Business Park — Image 6"></section>
+    <!-- Press item 1 -->
+    <section class="panel panel--press">
+      <div class="press-card">
+        <div class="press-meta">Publication Name • 2026</div>
+        <div class="press-title">Headline for the press feature goes here</div>
+        <div class="press-excerpt">
+          Short 1–2 sentence excerpt summarising the article. Keep it elegant and minimal.
+        </div>
+        <div class="press-actions">
+          <a class="press-btn primary" href="#" target="_blank" rel="noopener">Read Article</a>
+          <a class="press-btn" href="#" target="_blank" rel="noopener">Download PDF</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Press item 2 -->
+    <section class="panel panel--press">
+      <div class="press-card">
+        <div class="press-meta">Publication Name • 2026</div>
+        <div class="press-title">Second press headline goes here</div>
+        <div class="press-excerpt">
+          Add a short excerpt. If you don’t have one, keep it to one line.
+        </div>
+        <div class="press-actions">
+          <a class="press-btn primary" href="#" target="_blank" rel="noopener">Read Article</a>
+          <a class="press-btn" href="#" target="_blank" rel="noopener">Download PDF</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Press item 3 -->
+    <section class="panel panel--press">
+      <div class="press-card">
+        <div class="press-meta">Publication Name • 2025</div>
+        <div class="press-title">Third press headline goes here</div>
+        <div class="press-excerpt">
+          Add a short excerpt. Elegant, refined, and minimal — like Auberry.
+        </div>
+        <div class="press-actions">
+          <a class="press-btn primary" href="#" target="_blank" rel="noopener">Read Article</a>
+          <a class="press-btn" href="#" target="_blank" rel="noopener">Download PDF</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Press item 4 -->
+    <section class="panel panel--press">
+      <div class="press-card">
+        <div class="press-meta">Publication Name • 2025</div>
+        <div class="press-title">Fourth press headline goes here</div>
+        <div class="press-excerpt">
+          Add a short excerpt. You can also remove this slide if you want fewer press items.
+        </div>
+        <div class="press-actions">
+          <a class="press-btn primary" href="#" target="_blank" rel="noopener">Read Article</a>
+          <a class="press-btn" href="#" target="_blank" rel="noopener">Download PDF</a>
+        </div>
+      </div>
+    </section>
 
     <!-- END SLIDE: INDEX MENU CARD -->
     <section class="panel panel--end-only">
@@ -455,7 +482,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   </div>
 </div>
 
-<!-- ================= MENU (HTML) ================= -->
+<!-- MENU (SLIDE OUT) -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
 
@@ -508,64 +535,33 @@ burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
 document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
 
-/* ===== SIZING: split + img + end-only ===== */
+/* ===== SIZING ===== */
 const track = document.getElementById("track");
 let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
 
 function setPanelWidths(){
-  const vh = window.innerHeight;
+  // copy panel width
+  const copyPanel = track.querySelector(".panel--copy");
+  if(copyPanel){
+    const w = Math.ceil(copyPanel.getBoundingClientRect().width);
+    copyPanel.style.flex = `0 0 ${w}px`;
+    copyPanel.style.width = `${w}px`;
+  }
 
-  // image panels
-  const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
-  imgPanels.forEach(p=>{
-    const img = p.querySelector("img");
-    if(!img) return;
-
-    const apply = () => {
-      const w = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 6; // seam buffer
-      p.style.flex = `0 0 ${w}px`;
-      p.style.width = `${w}px`;
-    };
-
-    if(img.complete && img.naturalWidth) apply();
-    else img.addEventListener("load", apply, { once:true });
+  // press panels width = viewport width (so each card is one screen)
+  track.querySelectorAll(".panel--press").forEach(p=>{
+    p.style.flex = `0 0 ${window.innerWidth}px`;
+    p.style.width = `${window.innerWidth}px`;
   });
 
-  // split panel width = copy + image
-  const splitPanels = Array.from(track.querySelectorAll(".panel--split"));
-  splitPanels.forEach(p=>{
-    const img  = p.querySelector(".split-media img");
-    const media = p.querySelector(".split-media");
-    if(!img || !media) return;
-
-    const apply = () => {
-      const copyW = 520; // fixed like your design
-      const imgW  = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 6;
-
-      p.style.setProperty("--copyW", copyW + "px");
-      media.style.flex = `0 0 ${imgW}px`;
-      media.style.width = `${imgW}px`;
-
-      const total = copyW + imgW;
-      p.style.flex = `0 0 ${total}px`;
-      p.style.width = `${total}px`;
-    };
-
-    if(img.complete && img.naturalWidth) apply();
-    else img.addEventListener("load", apply, { once:true });
-  });
-
-  // end-only panel = card width only
+  // end-only = card width only
   const endOnly = track.querySelector(".panel--end-only");
   if(endOnly){
     const card = endOnly.querySelector(".end-card");
-    const applyEndOnly = () => {
-      const cardW = Math.ceil(card.getBoundingClientRect().width);
-      endOnly.style.flex = `0 0 ${cardW}px`;
-      endOnly.style.width = `${cardW}px`;
-    };
-    requestAnimationFrame(applyEndOnly);
+    const cardW = Math.ceil(card.getBoundingClientRect().width);
+    endOnly.style.flex = `0 0 ${cardW}px`;
+    endOnly.style.width = `${cardW}px`;
   }
 
   panels = Array.from(track.querySelectorAll(".panel"));
