@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>RR Asset Management — Burj Khalifa</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+<!-- Auberry-like fonts (same as index) -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
 body{
-  font-family: Arial, sans-serif;
+  font-family:'Montserrat', sans-serif;
   background:#000;
   overflow:hidden; /* horizontal scroll controlled in JS */
 }
@@ -20,7 +21,7 @@ body{
 .bg{ position:fixed; inset:0; z-index:0; overflow:hidden; background:#000; }
 .bg video{ width:100%; height:100%; object-fit:cover; object-position:center; }
 
-/* ================= INTRO LOGO (OPTIONAL FADE OUT ON SCROLL) ================= */
+/* ================= INTRO LOGO (OPTIONAL) ================= */
 .intro{
   position:fixed; inset:0; z-index:40;
   display:flex; align-items:center; justify-content:center;
@@ -69,8 +70,10 @@ body{
 .burger-lines i::before,
 .burger-lines i::after{
   content:"";
-  position:absolute; left:0;
-  width:22px; height:1.6px;
+  position:absolute;
+  left:0;
+  width:22px;
+  height:1.6px;
   background:#111;
 }
 .burger-lines i::before{ top:-7px; }
@@ -80,7 +83,8 @@ body{
 .hwrap{
   position:relative;
   z-index:30;
-  height:100vh; width:100vw;
+  height:100vh;
+  width:100vw;
   overflow:hidden;
 }
 .htrack{
@@ -92,62 +96,120 @@ body{
   align-items:stretch;
 }
 
-/* ================= PANELS BASE ================= */
-.panel{ flex:0 0 auto; height:100vh; }
-
-/* Seam killer (tiny overlap to remove hairline gaps) */
+/* ================= PANELS ================= */
 .panel{
+  flex:0 0 auto;
+  height:100vh;
+  background:#000;
+  position:relative;
   flex-shrink:0;
-  margin-right:-2px;
+  margin-right:-2px; /* seam killer */
 }
 
-/* Home slide (video only) */
-.panel--home{
+/* ================= COPY SLIDE (INDEX STYLE: text + image) ================= */
+.panel--copy{
   flex:0 0 100vw;
   width:100vw;
-  background:transparent;
-}
-
-/* ================= TEXT PANEL (LEFT WHITE CARD) ================= */
-.panel--copy{
-  flex:0 0 auto;
-  width:auto;
-  height:100vh;
   background:#f4f4f2;
-  display:flex;
-  align-items:stretch;
+}
+.split{
+  width:100%;
+  height:100%;
+  display:grid;
+  grid-template-columns: 40% 60%;
 }
 
-.copy-wrap{
-  width:440px;            /* matches the style in your screenshot */
-  max-width:440px;
-  height:100%;
-  padding:140px 60px 80px 90px;
+.split-left{
+  padding:120px 70px 110px 140px;
+  color:#1a1a1a;
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
-  color:#1a1a1a;
+
+  width:100%;
+  max-width:680px;
+  overflow:hidden;
 }
 
-.copy-title{
+.aub-heading{
   font-family:'Cormorant Garamond', serif;
-  font-weight:400;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  font-size:26px;
-  line-height:1.25;
-  margin-bottom:70px;
+  line-height:1.02;
+  margin-bottom:0;
+  max-width:560px;
 }
-.copy-title span{ display:block; }
 
-.copy-text{
-  font-family:'Cormorant Garamond', serif;
+.aub-heading .small{
+  display:block;
+  font-style:italic;
   font-weight:300;
-  font-size:12px;
-  line-height:1.9;
-  color:#1f1f1f;
-  max-width:260px;
-  opacity:0.95;
+  font-size:clamp(26px, 2vw, 42px);
+  margin-bottom:10px;
+  color:#1a1a1a;
+  overflow-wrap:normal;
+  word-break:normal;
+}
+
+.aub-heading .big{
+  display:block;
+  font-style:normal;
+  font-weight:400;
+  font-size:clamp(30px, 2.4vw, 50px);
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:#1a1a1a;
+  white-space:normal;
+  overflow-wrap:normal;
+  word-break:normal;
+  hyphens:none;
+}
+
+/* GOLD LINE */
+.aub-line{
+  width:64px;
+  height:1px;
+  background:#c6b67a;
+  margin:22px 0 70px 0;
+}
+
+/* Body text */
+.aub-text{
+  font-family:'Cormorant Garamond', serif;
+  color:#1a1a1a;
+  width:100%;
+  max-width:420px;
+  font-size:clamp(18px, 1.25vw, 20px);
+  line-height:1.75;
+  overflow-wrap:normal;
+  word-break:normal;
+  hyphens:none;
+}
+.aub-text .lead{
+  font-style:italic;
+  margin-bottom:42px;
+}
+.aub-text .body{
+  font-style:italic;
+  margin-bottom:0;
+}
+
+/* RIGHT image area */
+.split-right{
+  position:relative;
+  overflow:hidden;
+  background:#f4f4f2;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+}
+
+/* hero image inside copy slide */
+.copy-hero{
+  height:100%;
+  width:auto;
+  margin:0 auto;
+  object-fit:contain;
+  object-position:center;
+  display:block;
 }
 
 /* ================= IMAGE PANELS (HUG IMAGE) ================= */
@@ -164,7 +226,7 @@ body{
   display:block;
 }
 
-/* ================= END SLIDE (IMAGE + CARD) ================= */
+/* ================= END SLIDE (IMAGE + INDEX MENU CARD) ================= */
 .panel--end{
   flex:0 0 auto;
   width:auto;
@@ -175,7 +237,6 @@ body{
   background:transparent;
   overflow:hidden;
 }
-
 .end-left{
   flex:0 0 auto;
   display:flex;
@@ -189,62 +250,30 @@ body{
   display:block;
 }
 
+/* Index-style card sizing */
 .end-card{
-  flex:0 0 min(520px, 42vw);
+  flex:0 0 420px;
   height:100%;
   background:#f4f4f2;
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
-  text-align:center;
-  padding:110px 60px;
   border-left:1px solid rgba(0,0,0,0.08);
+  padding:0;
 }
 
-.end-inner{ width:100%; max-width:520px; }
-.end-logo img{ width:170px; margin-bottom:44px; }
-
-.end-links a{
-  display:block;
-  font-family:'Cormorant Garamond', serif;
-  font-size:28px;
-  margin:14px 0;
-  text-decoration:none;
-  color:#1a1a1a;
-  transition:opacity .25s ease;
-}
-.end-links a:hover{ opacity:.6; }
-
-.end-divider{
-  width:200px;
-  height:1px;
-  background:#c6b67a;
-  margin:50px auto 30px auto;
-}
-
-.end-footer{
-  font-family:'Cormorant Garamond', serif;
-  font-size:20px;
-  line-height:1.7;
-  color:#1a1a1a;
-}
-.end-footer .contact{ margin-top:12px; font-size:18px; }
-
-.end-privacy{
-  margin-top:22px;
-  display:inline-block;
-  font-family:'Montserrat', sans-serif;
-  font-size:12px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  color:#c6b67a;
-  text-decoration:none;
+/* End card uses menu-panel, but should NOT animate like the sliding menu */
+.end-card .menu-panel{
+  opacity:1 !important;
+  transform:none !important;
+  transition:none !important;
 }
 
 /* ================= BOTTOM SLIDER ================= */
 .nav-slider{
   position:fixed;
-  left:84px; right:28px;
+  left:84px;
+  right:28px;
   bottom:14px;
   z-index:92;
   transition:opacity .35s ease;
@@ -276,36 +305,42 @@ body{
   border:none;
 }
 
-/* ================= MENU ================= */
+/* =========================================================
+   AUBERRY-STYLE SLIDING MENU (INDEX VERSION)
+   ========================================================= */
 .menu{
   position:fixed; top:0; left:0;
-  height:100vh; width:380px;
+  height:100vh;
+  width:420px;
   background:#f4f4f2;
   z-index:95;
   transform:translateX(-100%);
-  transition:transform 1.05s cubic-bezier(.77,0,.18,1);
+  transition:transform 1.15s cubic-bezier(.77,0,.18,1);
   will-change:transform;
 }
 .menu.open{ transform:translateX(0); }
 
 .menu-panel{
   height:100%;
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center;
-  padding:60px 30px;
   position:relative;
+  padding:70px 46px 70px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  justify-content:flex-start;
 
   opacity:0;
   transform:translateY(10px);
   transition:opacity .9s ease, transform .9s ease;
-  transition-delay:.2s;
+  transition-delay:.25s;
 }
 .menu.open .menu-panel{ opacity:1; transform:translateY(0); }
 
+/* Back arrow */
 .back-arrow{
   position:absolute;
-  left:34px;
+  left:26px;
   top:50%;
   transform:translateY(-50%);
   font-size:28px;
@@ -313,65 +348,104 @@ body{
   color:#222;
   opacity:.9;
 }
-.menu-logo img{ width:170px; margin-bottom:46px; }
 
+/* Logo */
+.menu-logo{ margin-top:30px; margin-bottom:0px; }
+.menu-logo img{
+  width:240px;
+  height:auto;
+  display:block;
+  margin:0 auto 14px auto;
+  filter:none;
+}
+
+/* Links */
+.menu-links{ margin-top:-10px; }
 .menu-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
-  font-size:30px;
-  margin:18px 0;
+  font-size:22px;
+  font-weight:400;
+  letter-spacing:0;
+  text-transform:none;
+  margin:26px 0;
   text-decoration:none;
   color:#222;
+  transition:opacity .25s ease;
 }
-.menu-links a:hover{ opacity:0.6; }
+.menu-links a:hover{ opacity:.65; }
 
-.divider{
-  width:200px;
+/* Divider */
+.menu-divider{
+  width:260px;
   height:1px;
-  background:#c6b67a;
-  margin:50px auto 30px auto;
+  background:#c6b67a !important;
+  opacity:1 !important;
+  margin:40px 0 22px 0;
 }
 
-.menu-footer{
-  font-family:'Cormorant Garamond', serif;
-  font-size:22px;
-  line-height:1.6;
+/* Address */
+.menu-address{
+  font-family:'Montserrat', sans-serif;
+  font-weight:300;
+  font-size:14px;
+  line-height:1.8;
   color:#222;
+  max-width:320px;
+  text-transform:none;
+  letter-spacing:.4px;
+  margin-top:-4px;
 }
-.menu-footer .contact{ margin-top:15px; font-size:20px; }
 
-.privacy{
-  margin-top:20px;
+/* Phone | Email */
+.menu-contact{
+  margin-top:14px;
+  font-size:13px;
+  font-weight:400;
+  text-transform:none;
+  letter-spacing:.2px;
+}
+.menu-contact a{ color:#222; text-decoration:none; }
+.menu-contact a:hover{ opacity:.65; }
+.menu-contact .dot{ padding:0 10px; opacity:.7; }
+
+/* Privacy */
+.menu-privacy{
+  margin-top:14px;
   display:inline-block;
   font-family:'Montserrat', sans-serif;
-  font-size:12px;
-  letter-spacing:1.5px;
+  font-size:10px;
+  letter-spacing:2px;
   text-transform:uppercase;
   color:#c6b67a;
   text-decoration:none;
 }
+.menu-privacy:hover{ opacity:.7; }
 
+/* When menu open */
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
-/* MOBILE */
+/* Mobile tweaks (index-style) */
 @media (max-width: 900px){
-  .copy-wrap{
-    width:100%;
-    max-width:100%;
-    padding:110px 24px 60px 24px;
+  .split{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 55vh;
   }
-  .nav-slider{ left:24px; right:24px; bottom:12px; }
-  .menu{ width:min(380px, 92vw); }
+  .split-left{ padding:90px 24px 30px 24px; max-width:none; }
+  .aub-heading{ max-width:none; }
+  .aub-text{ max-width:none; }
+
   .end-left{ display:none; }
-  .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
+  .end-card{ flex:0 0 100%; width:100%; }
+  .nav-slider{ left:24px; right:24px; bottom:12px; }
+  .menu{ width:min(420px, 92vw); }
+  .menu-panel{ padding:60px 28px; }
 }
 </style>
 </head>
 
 <body>
-
-
 
 <!-- Burger -->
 <div class="side-bar" id="burger" aria-label="Open menu">
@@ -387,56 +461,68 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 <div class="hwrap">
   <div class="htrack" id="track">
 
-
-
-    <!-- Panel 1: left white text panel (like your screenshot) -->
+    <!-- COPY SLIDE (INDEX STYLE) -->
     <section class="panel panel--copy">
-      <div class="copy-wrap">
-        <div class="copy-title">
-          <span>BURJ</span>
-          <span>KHALIFA</span>
+      <div class="split">
+        <div class="split-left">
+          <div class="aub-heading">
+            <span class="small">Interior Project</span>
+            <span class="big">BURJ KHALIFA</span>
+          </div>
+          <div class="aub-line"></div>
+          <div class="aub-text">
+            <p class="lead">
+              Refined luxury living within the iconic Burj Khalifa — beautifully designed residences finished to exceptional standards.
+            </p>
+            <p class="body">
+              Panoramic skyline views, premium interiors, and an unmatched address in the heart of Downtown Dubai.
+            </p>
+          </div>
         </div>
 
-        <div class="copy-text">
-          Refined luxury living within the iconic Burj Khalifa — beautifully designed residences finished to exceptional standards, offering panoramic skyline views, premium interiors, and an unmatched address in the heart of Downtown Dubai.
+        <div class="split-right">
+          <img class="copy-hero" src="./burjone.png" alt="Burj Khalifa hero">
         </div>
       </div>
     </section>
 
-    <!-- Image panels (use your real extensions .png/.jpg) -->
-    <section class="panel panel--img"><img src="./burjone.png" alt="Burj Khalifa 1"></section>
+    <!-- Remaining image panels -->
     <section class="panel panel--img"><img src="./burjtwo.png" alt="Burj Khalifa 2"></section>
     <section class="panel panel--img"><img src="./burjthree.png" alt="Burj Khalifa 3"></section>
-    
-   
 
     <!-- END SLIDE -->
     <section class="panel panel--end">
       <div class="end-left">
-        <!-- Optional: last image on the left side of end card -->
         <img class="end-img" src="./burjfour.png" alt="Burj Khalifa last">
       </div>
 
+      <!-- INDEX MENU CARD -->
       <div class="end-card">
-        <div class="end-inner">
-          <div class="end-logo">
-            <img src="./logo.png" alt="RR Logo">
+        <div class="menu-panel">
+          <div class="menu-logo">
+            <img src="./logo.png" alt="RR Asset Management Logo">
           </div>
 
-          <nav class="end-links">
+          <nav class="menu-links">
             <a href="index.html">Home</a>
             <a href="expertise.html">Expertise</a>
             <a href="interior-projects.html">Interior Projects</a>
             <a href="press.html">Press</a>
           </nav>
 
-          <div class="end-divider"></div>
+          <div class="menu-divider"></div>
 
-          <div class="end-footer">
-            SUN HOUSE, 428 LONG DRIVE,<br>
-            GREENFORD, UB6 8UH
-            <div class="contact">+44 (0) 20 8575 3700</div>
-            <a class="end-privacy" href="#">Privacy Policy</a>
+          <div class="menu-address">
+            Sun House, 428 Long Drive,<br>
+            Greenford, UB6 8UH
+
+            <div class="menu-contact">
+              <span>+44 (0) 20 8575 3700</span>
+              <span class="dot">|</span>
+              <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+            </div>
+
+            <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
           </div>
         </div>
       </div>
@@ -445,9 +531,10 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   </div>
 </div>
 
-<!-- Sliding menu -->
+<!-- ================= MENU (HTML) ================= -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
+
     <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
 
     <div class="menu-logo">
@@ -461,14 +548,21 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       <a href="press.html">Press</a>
     </nav>
 
-    <div class="divider"></div>
+    <div class="menu-divider"></div>
 
-    <div class="menu-footer">
-      SUN HOUSE, 428 LONG DRIVE,<br>
-      GREENFORD, UB6 8UH
-      <div class="contact">+44 (0) 20 8575 3700</div>
-      <a href="#" class="privacy">Privacy Policy</a>
+    <div class="menu-address">
+      Sun House, 428 Long Drive,<br>
+      Greenford, UB6 8UH
+
+      <div class="menu-contact">
+        <span>+44 (0) 20 8575 3700</span>
+        <span class="dot">|</span>
+        <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+      </div>
+
+      <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
     </div>
+
   </div>
 </div>
 
@@ -495,18 +589,23 @@ const track = document.getElementById("track");
 let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
 
-
 function setPanelWidths(){
   const vh = window.innerHeight;
 
-  // image panels
+  // Copy slide is full viewport
+  const copyPanel = track.querySelector(".panel--copy");
+  if(copyPanel){
+    copyPanel.style.flex = `0 0 ${window.innerWidth}px`;
+    copyPanel.style.width = `${window.innerWidth}px`;
+  }
+
+  // Image panels hug image width
   const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
   imgPanels.forEach(p=>{
     const img = p.querySelector("img");
     if(!img) return;
 
     const apply = () => {
-      // +6 buffer prevents tiny seams
       const w = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 6;
       p.style.flex = `0 0 ${w}px`;
       p.style.width = `${w}px`;
@@ -516,17 +615,7 @@ function setPanelWidths(){
     else img.addEventListener("load", apply, { once:true });
   });
 
-  // copy panel width (fixed)
-  const copyPanel = track.querySelector(".panel--copy");
-  if(copyPanel){
-    // fixed width (matches .copy-wrap width + padding area)
-    // You can change this value if you want wider/narrower text column
-    const w = Math.ceil(copyPanel.getBoundingClientRect().width);
-    copyPanel.style.flex = `0 0 ${w}px`;
-    copyPanel.style.width = `${w}px`;
-  }
-
-  // end panel: (end image width) + (card width)
+  // End panel: (end image width) + (card width)
   const endPanel = track.querySelector(".panel--end");
   if(endPanel){
     const endImg  = endPanel.querySelector(".end-img");
@@ -544,7 +633,6 @@ function setPanelWidths(){
       endPanel.style.flex = `0 0 ${total}px`;
       endPanel.style.width = `${total}px`;
 
-      // also ensure end-left takes imgW so it "touches" the card
       const endLeft = endPanel.querySelector(".end-left");
       if(endLeft){
         endLeft.style.flex = `0 0 ${imgW}px`;
@@ -555,7 +643,6 @@ function setPanelWidths(){
     if(endImg && endImg.complete && endImg.naturalWidth) applyEnd();
     else if(endImg) endImg.addEventListener("load", applyEnd, { once:true });
     else {
-      // if no end image at all, still size to card
       const cardW = Math.ceil(endCard.getBoundingClientRect().width);
       endPanel.style.flex = `0 0 ${cardW}px`;
       endPanel.style.width = `${cardW}px`;
@@ -576,19 +663,12 @@ function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 function totalWidth(){ return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0); }
 function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
 
-function xForIndex(idx){
-  return panels.slice(0, idx).reduce((sum, p) => sum + p.getBoundingClientRect().width, 0);
-}
-
 function raf(){
   currentX += (targetX - currentX) * 0.075;
 
-  // round to device pixels to avoid hairline seams
   const dpr = window.devicePixelRatio || 1;
   const x = Math.round(currentX * dpr) / dpr;
   track.style.transform = `translate3d(${-x}px,0,0)`;
-
-
 
   const maxS = maxScroll();
   navSlider.max = String(Math.max(0, panels.length - 1));
@@ -607,8 +687,9 @@ window.addEventListener("wheel", (e)=>{
   targetX = clamp(targetX + e.deltaY * 0.9, 0, maxScroll());
 },{passive:true});
 
-/* drag / touch */
+/* Drag / touch */
 let isDown=false, startX=0, startTarget=0;
+
 function pointerDown(x){
   if(document.body.classList.contains("menu-open")) return;
   isDown=true; startX=x; startTarget=targetX;
@@ -627,7 +708,7 @@ window.addEventListener("touchstart",(e)=>pointerDown(e.touches[0].clientX),{pas
 window.addEventListener("touchmove",(e)=>pointerMove(e.touches[0].clientX),{passive:true});
 window.addEventListener("touchend",pointerUp);
 
-/* slider */
+/* Slider */
 function sliderToTarget(){
   const maxS = maxScroll();
   const denom = (panels.length - 1) || 1;
@@ -637,17 +718,7 @@ navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
 navSlider.addEventListener("pointerup", ()=>{ isUserSliding = false; sliderToTarget(); });
 navSlider.addEventListener("input", sliderToTarget);
 
-/* optional: menu links can jump to a panel if you add data-goto */
-document.querySelectorAll('[data-goto]').forEach(a=>{
-  a.addEventListener('click', (e)=>{
-    e.preventDefault();
-    const idx = Number(a.dataset.goto);
-    targetX = clamp(xForIndex(idx), 0, maxScroll());
-    closeMenuFn();
-  });
-});
-
-/* keep bounds */
+/* Keep bounds */
 window.addEventListener("resize", ()=>{
   panels = Array.from(track.querySelectorAll(".panel"));
   targetX = clamp(targetX, 0, maxScroll());
