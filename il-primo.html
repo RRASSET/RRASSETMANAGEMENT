@@ -276,36 +276,43 @@ body{
   border:none;
 }
 
-/* ================= MENU ================= */
+
+/* =========================================================
+   AUBERRY-STYLE SLIDING MENU (INDEX VERSION)
+   ========================================================= */
 .menu{
   position:fixed; top:0; left:0;
-  height:100vh; width:380px;
+  height:100vh;
+  width:420px;
   background:#f4f4f2;
   z-index:95;
   transform:translateX(-100%);
-  transition:transform 1.05s cubic-bezier(.77,0,.18,1);
+  transition:transform 1.15s cubic-bezier(.77,0,.18,1);
   will-change:transform;
 }
 .menu.open{ transform:translateX(0); }
 
 .menu-panel{
   height:100%;
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center;
-  padding:60px 30px;
   position:relative;
+  padding:70px 46px 70px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  justify-content:flex-start;
 
   opacity:0;
   transform:translateY(10px);
   transition:opacity .9s ease, transform .9s ease;
-  transition-delay:.2s;
+  transition-delay:.25s;
 }
 .menu.open .menu-panel{ opacity:1; transform:translateY(0); }
 
+/* Back arrow */
 .back-arrow{
   position:absolute;
-  left:34px;
+  left:26px;
   top:50%;
   transform:translateY(-50%);
   font-size:28px;
@@ -313,44 +320,81 @@ body{
   color:#222;
   opacity:.9;
 }
-.menu-logo img{ width:170px; margin-bottom:46px; }
 
+/* Logo */
+.menu-logo{ margin-top:30px; margin-bottom:0px; }
+.menu-logo img{
+  width:240px;
+  height:auto;
+  display:block;
+  margin:0 auto 14px auto;
+  filter:none;
+}
+
+/* Links */
+.menu-links{ margin-top:-10px; }
 .menu-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
-  font-size:30px;
-  margin:18px 0;
+  font-size:22px;
+  font-weight:400;
+  letter-spacing:0;
+  text-transform:none;
+  margin:26px 0;
   text-decoration:none;
   color:#222;
+  transition:opacity .25s ease;
 }
-.menu-links a:hover{ opacity:0.6; }
+.menu-links a:hover{ opacity:.65; }
 
-.divider{
-  width:200px;
+/* Divider */
+.menu-divider{
+  width:260px;
   height:1px;
-  background:#c6b67a;
-  margin:50px auto 30px auto;
+  background:#c6b67a !important;
+  opacity:1 !important;
+  margin:40px 0 22px 0;
 }
 
-.menu-footer{
-  font-family:'Cormorant Garamond', serif;
-  font-size:22px;
-  line-height:1.6;
+/* Address */
+.menu-address{
+  font-family:'Montserrat', sans-serif;
+  font-weight:300;
+  font-size:14px;
+  line-height:1.8;
   color:#222;
+  max-width:320px;
+  text-transform:none;
+  letter-spacing:.4px;
+  margin-top:-4px;
 }
-.menu-footer .contact{ margin-top:15px; font-size:20px; }
 
-.privacy{
-  margin-top:20px;
+/* Phone | Email */
+.menu-contact{
+  margin-top:14px;
+  font-size:13px;
+  font-weight:400;
+  text-transform:none;
+  letter-spacing:.2px;
+}
+.menu-contact a{ color:#222; text-decoration:none; }
+.menu-contact a:hover{ opacity:.65; }
+.menu-contact .dot{ padding:0 10px; opacity:.7; }
+
+/* Privacy */
+.menu-privacy{
+  margin-top:14px;
   display:inline-block;
   font-family:'Montserrat', sans-serif;
-  font-size:12px;
-  letter-spacing:1.5px;
+  font-size:10px;
+  letter-spacing:2px;
   text-transform:uppercase;
   color:#c6b67a;
   text-decoration:none;
 }
+.menu-privacy:hover{ opacity:.7; }
 
+/* When menu open */
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
@@ -362,7 +406,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     padding:110px 24px 60px 24px;
   }
   .nav-slider{ left:24px; right:24px; bottom:12px; }
-  .menu{ width:min(380px, 92vw); }
+  .menu{ width:min(420px, 92vw); }
   .end-left{ display:none; }
   .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
 }
@@ -414,36 +458,44 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       </div>
 
       <div class="end-card">
-        <div class="end-inner">
-          <div class="end-logo">
-            <img src="./logo.png" alt="RR Logo">
-          </div>
+  <div class="menu-panel">
+    <div class="menu-logo">
+      <img src="./logo.png" alt="RR Asset Management Logo">
+    </div>
 
-          <nav class="end-links">
-            <a href="index.html">Home</a>
-            <a href="expertise.html">Expertise</a>
-            <a href="interior-projects.html">Interior Projects</a>
-            <a href="press.html">Press</a>
-          </nav>
+    <nav class="menu-links">
+      <a href="index.html">Home</a>
+      <a href="expertise.html">Expertise</a>
+      <a href="interior-projects.html">Interior Projects</a>
+      <a href="press.html">Press</a>
+    </nav>
 
-          <div class="end-divider"></div>
+    <div class="menu-divider"></div>
 
-          <div class="end-footer">
-            SUN HOUSE, 428 LONG DRIVE,<br>
-            GREENFORD, UB6 8UH
-            <div class="contact">+44 (0) 20 8575 3700</div>
-            <a class="end-privacy" href="#">Privacy Policy</a>
-          </div>
-        </div>
+    <div class="menu-address">
+      Sun House, 428 Long Drive,<br>
+      Greenford, UB6 8UH
+
+      <div class="menu-contact">
+        <span>+44 (0) 20 8575 3700</span>
+        <span class="dot">|</span>
+        <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
       </div>
+
+      <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
+    </div>
+  </div>
+</div>
     </section>
 
   </div>
 </div>
 
-<!-- Sliding menu -->
+
+<!-- ================= MENU (HTML) ================= -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
+
     <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
 
     <div class="menu-logo">
@@ -457,14 +509,21 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       <a href="press.html">Press</a>
     </nav>
 
-    <div class="divider"></div>
+    <div class="menu-divider"></div>
 
-    <div class="menu-footer">
-      SUN HOUSE, 428 LONG DRIVE,<br>
-      GREENFORD, UB6 8UH
-      <div class="contact">+44 (0) 20 8575 3700</div>
-      <a href="#" class="privacy">Privacy Policy</a>
+    <div class="menu-address">
+      Sun House, 428 Long Drive,<br>
+      Greenford, UB6 8UH
+
+      <div class="menu-contact">
+        <span>+44 (0) 20 8575 3700</span>
+        <span class="dot">|</span>
+        <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+      </div>
+
+      <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
     </div>
+
   </div>
 </div>
 
