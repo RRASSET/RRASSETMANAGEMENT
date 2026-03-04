@@ -17,31 +17,31 @@ html,body{height:100%}
   --menuW: clamp(320px, 40vw, 420px);
   --endCardW: clamp(320px, 40vw, 420px);
 
-  /* iOS safe area */
   --sat: env(safe-area-inset-top, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
 
-  /* real viewport height (set by JS) */
-  --vh: 1vh;
+  --vh: 1vh; /* set by JS */
 }
 
 body{
   font-family:'Montserrat', sans-serif;
   background:#000;
-  overflow:hidden; /* we control scroll */
+  overflow:hidden;              /* we control scroll */
   height: calc(var(--vh) * 100);
   overscroll-behavior: none;
   touch-action: pan-y;
 }
 
-/* ===== GLOBAL SAFETY ===== */
+/* prevent weird flex/grid cropping */
 .panel, .split, .split-left, .split-right, .menu, .menu-panel, .end-card, .end-left{ min-height:0; }
 
 /* ================= BACKGROUND VIDEO ================= */
 .bg{ position:fixed; inset:0; z-index:0; overflow:hidden; background:#000; }
 .bg video{ width:100%; height:100%; object-fit:cover; object-position:center; }
 
-/* ================= INTRO LOGO (FADE OUT ON SCROLL) ================= */
+/* ================= INTRO LOGO (HOME ONLY) ================= */
 .intro{
   position:fixed; inset:0; z-index:40;
   display:flex; align-items:center; justify-content:center;
@@ -57,13 +57,13 @@ body{
 }
 @keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
 
-/* ================= FIXED "SCROLL" HINT (ONLY ON HOME) ================= */
+/* ================= FIXED SCROLL HINT (ONLY FIRST SLIDE) ================= */
 .scroll-indicator-fixed{
   position:fixed;
   left:50%;
   bottom: calc(68px + var(--sab));
   transform:translateX(-50%);
-  z-index:1;               /* above video (0) */
+  z-index:1;                 /* above video, below slides */
   font-family:'Montserrat', sans-serif;
   font-weight:400;
   font-size:16px;
@@ -71,27 +71,27 @@ body{
   color:#fff;
   opacity:0;
   pointer-events:none;
-  transition:opacity .35s ease;
+  transition:opacity .25s ease;
 }
 
-/* ================= LEFT BURGER (STRIP + ICON ALWAYS MATCH) ================= */
+/* ================= LEFT BURGER STRIP (ALWAYS) ================= */
 .side-bar{
-  position:fixed;
-  top:0; left:0;
-  width: var(--burgerW);
+  position:fixed; top:0; left:0;
+  width: calc(var(--burgerW) + var(--sal));
   height: calc(var(--vh) * 100);
   background:rgba(255,255,255,0.88);
   backdrop-filter: blur(10px);
   display:flex;
   align-items:center;
-  justify-content:center;   /* ✅ keeps lines centered like Auberry */
-  z-index:100;
+  justify-content:center;
+  z-index:200;
   cursor:pointer;
   transition:background .6s ease;
 }
 .side-bar:hover{ background:rgba(255,255,255,0.94); }
 
 .burger-lines{
+  margin-left: var(--sal);
   opacity:0;
   transform:translateY(8px);
   animation:burgerIn 1.8s cubic-bezier(.22,1,.36,1) forwards;
@@ -135,16 +135,16 @@ body{
 }
 
 /* ================= PANELS ================= */
-/* Default: variable width (we set width in JS for image-only panels) */
+/* Default (image rail like Auberry): panel width = image width (set by JS) */
 .panel{
   flex:0 0 auto;
   height: calc(var(--vh) * 100);
-  background:#000;
   position:relative;
   overflow:hidden;
+  background:#000;
 }
 
-/* Home / Split / End are always full viewport */
+/* Home / Split / End = full viewport */
 .panel--home,
 .panel--split,
 .panel--end{
@@ -152,21 +152,19 @@ body{
   width:100vw;
 }
 
-/* ✅ Home must be transparent so video shows */
+/* Home must be transparent so video shows */
 .panel--home{ background:transparent !important; }
 
-/* ================= IMAGE-ONLY SLIDES ================= */
-/* Image-only panels: panel width is set by JS to match rendered image width */
-.panel:not(.panel--home):not(.panel--split):not(.panel--end){
-  background:#000;
-}
-.panel:not(.panel--home):not(.panel--split):not(.panel--end) .panel-img{
-  height: calc(var(--vh) * 100);
-  width:auto;                 /* ✅ width follows aspect ratio */
+/* Image-only slides:
+   - JS sets panel width to match image aspect ratio * viewport height
+   - Image fills panel => NO gaps */
+.panel.panel--img{ background:#000; }
+.panel.panel--img .panel-img{
+  width:100%;
+  height:100%;
   display:block;
-  object-fit:contain;
+  object-fit:cover;        /* fills panel perfectly (no letterboxing) */
   object-position:center;
-  background:#000;
 }
 
 /* ================= SPLIT SLIDE ================= */
@@ -178,6 +176,7 @@ body{
   grid-template-columns: 40% 60%;
 }
 
+/* TEXT */
 .split-left{
   padding: clamp(70px, 9vh, 120px) clamp(24px, 5vw, 70px)
            clamp(60px, 8vh, 110px) clamp(60px, 8vw, 140px);
@@ -185,10 +184,8 @@ body{
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
-
   width:100%;
   max-width:680px;
-
   max-height: calc(var(--vh) * 100);
   overflow:auto;
   -webkit-overflow-scrolling: touch;
@@ -238,6 +235,7 @@ body{
 .aub-text .lead{ font-style:italic; margin-bottom:42px; }
 .aub-text .body{ font-style:italic; margin-bottom:0; }
 
+/* RIGHT IMAGE IN SPLIT */
 .split-right{
   position:relative;
   overflow:hidden;
@@ -305,11 +303,11 @@ body{
 /* ================= BOTTOM THIN SLIDER ================= */
 .nav-slider{
   position:fixed;
-  left: calc(var(--burgerW) + 20px);
-  right: 28px;
+  left: calc(var(--burgerW) + var(--sal) + 20px);
+  right: calc(28px + var(--sar));
   bottom: calc(14px + var(--sab));
-  z-index:92;
-  transition:opacity .35s ease;
+  z-index:210;
+  transition:opacity .25s ease;
 }
 .nav-slider input[type="range"]{
   width:100%;
@@ -319,6 +317,7 @@ body{
   background:rgba(255,255,255,0.60);
   border-radius:999px;
   outline:none;
+  touch-action:none; /* smoother drag */
 }
 .nav-slider input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance:none;
@@ -344,17 +343,18 @@ body{
   height: calc(var(--vh) * 100);
   width: var(--menuW);
   background:#f4f4f2;
-  z-index:95;
+  z-index:250;
   transform:translateX(-100%);
   transition:transform 1.15s cubic-bezier(.77,0,.18,1);
   will-change:transform;
+  padding-left: var(--sal);
 }
 .menu.open{ transform:translateX(0); }
 
 .menu-panel{
   height:100%;
   position:relative;
-  padding:40px 46px 60px;
+  padding: 26px 46px 56px;  /* UP (logo + links higher) */
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -366,50 +366,42 @@ body{
   opacity:0;
   transform:translateY(10px);
   transition:opacity .9s ease, transform .9s ease;
-  transition-delay:.25s;
+  transition-delay:.2s;
 }
 .menu.open .menu-panel{ opacity:1; transform:translateY(0); }
 .menu-panel::-webkit-scrollbar{ width:0; height:0; }
 .menu-panel{ scrollbar-width:none; }
 
-/* ✅ Auberry-style close arrow (SVG) */
+/* Auberry-style close arrow (always visible) */
 .back-arrow{
   position:absolute;
-  left:18px;
-  top:50%;
+  left: 26px;
+  top: 50%;
   transform:translateY(-50%);
-  width:36px;
-  height:36px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  font-size:34px;
+  line-height:1;
   cursor:pointer;
-  opacity:.9;
+  color:#111;
+  opacity:.95;
   user-select:none;
-}
-.back-arrow svg{
-  width:28px;
-  height:28px;
-  stroke:#111;
-  stroke-width:1.25;
-  fill:none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.menu-logo{ margin-top:10px; margin-bottom:0px; }
+.menu-logo{ margin-top:6px; margin-bottom:6px; }
 .menu-logo img{
   width:240px;
   height:auto;
   display:block;
-  margin:0 auto 14px auto;
+  margin:0 auto 10px auto;
 }
 
-.menu-links{ margin-top:-25px; }
+.menu-links{ margin-top:-6px; }
 .menu-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
   font-size:22px;
   font-weight:400;
-  margin:26px 0;
+  margin:22px 0;
   text-decoration:none;
   color:#222;
   transition:opacity .25s ease;
@@ -421,7 +413,7 @@ body{
   height:1px;
   background:#c6b67a !important;
   opacity:1 !important;
-  margin:40px 0 22px 0;
+  margin:34px 0 18px 0;
 }
 
 .menu-address{
@@ -432,11 +424,11 @@ body{
   color:#222;
   max-width:320px;
   letter-spacing:.4px;
-  margin-top:-4px;
+  margin-top:0;
 }
 
 .menu-contact{
-  margin-top:14px;
+  margin-top:12px;
   font-size:13px;
   font-weight:400;
   letter-spacing:.2px;
@@ -446,7 +438,7 @@ body{
 .menu-contact .dot{ padding:0 10px; opacity:.7; }
 
 .menu-privacy{
-  margin-top:14px;
+  margin-top:12px;
   display:inline-block;
   font-family:'Montserrat', sans-serif;
   font-size:10px;
@@ -457,8 +449,10 @@ body{
 }
 .menu-privacy:hover{ opacity:.7; }
 
+/* when menu open */
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
+body.menu-open #scrollHint{ opacity:0 !important; }
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 900px){
@@ -473,7 +467,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   .end-card{ flex:0 0 100%; width:100%; }
 
   .menu{ width: min(420px, 92vw); }
-  .menu-panel{ padding: calc(60px + var(--sat)) 28px calc(40px + var(--sab)); }
+  .menu-panel{ padding: calc(28px + var(--sat)) 28px calc(38px + var(--sab)); }
 }
 </style>
 </head>
@@ -487,12 +481,12 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   </video>
 </div>
 
-<!-- Intro logo (keep logo.png) -->
+<!-- Intro logo (keep original logo.png) -->
 <div class="intro">
   <img src="./logo.png" alt="RR Logo">
 </div>
 
-<!-- Fixed scroll hint (only shows on home, fades like logo) -->
+<!-- Fixed scroll hint -->
 <div class="scroll-indicator-fixed" id="scrollHint">Scroll</div>
 
 <!-- Burger strip -->
@@ -512,7 +506,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     <!-- Panel 0: video only -->
     <section class="panel panel--home"></section>
 
-    <!-- Split -->
+    <!-- Panel 1: split text + image -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -522,8 +516,8 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
           <div class="aub-line"></div>
           <div class="aub-text">
             <p class="lead">
-             As an ultra-prime developer operating between London and Dubai, R&amp;R Mayfair creates residences that stand as enduring statements of status and sophistication.
-We unite timeless European heritage with the ambition and dynamism of the Middle East, delivering exceptional properties that define the future of global luxury.
+              As an ultra-prime developer operating between London and Dubai, R&amp;R Mayfair creates residences that stand as enduring statements of status and sophistication.
+              We unite timeless European heritage with the ambition and dynamism of the Middle East, delivering exceptional properties that define the future of global luxury.
             </p>
             <p class="body">
               Positioned within the world’s most desirable addresses, R&amp;R Mayfair curates rare opportunities distinguished by architectural integrity, absolute discretion, and long-term capital strength.
@@ -536,11 +530,11 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
       </div>
     </section>
 
-    <!-- Image slides (variable width, NO black gaps) -->
-    <section class="panel"><img class="panel-img" src="./firstpagesecondpic.png" alt="Slide 2"></section>
-    <section class="panel"><img class="panel-img" src="./firstpagethirdpic.png" alt="Slide 3"></section>
+    <!-- Image slides (Auberry-style: width auto from image, no gaps) -->
+    <section class="panel panel--img"><img class="panel-img" src="./firstpagesecondpic.png" alt="Slide 2"></section>
+    <section class="panel panel--img"><img class="panel-img" src="./firstpagethirdpic.png" alt="Slide 3"></section>
 
-    <!-- Split -->
+    <!-- TEXT SECTION -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -565,11 +559,11 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
       </div>
     </section>
 
-    <!-- Images -->
-    <section class="panel"><img class="panel-img" src="./firstpagefifthpic.png" alt="Slide 4"></section>
-    <section class="panel"><img class="panel-img" src="./firstpagesixthpic.png" alt="Slide 5"></section>
+    <!-- Continue images -->
+    <section class="panel panel--img"><img class="panel-img" src="./firstpagefifthpic.png" alt="Slide 4"></section>
+    <section class="panel panel--img"><img class="panel-img" src="./firstpagesixthpic.png" alt="Slide 5"></section>
 
-    <!-- Split -->
+    <!-- AUBERRY STYLE TEXT + IMAGE -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -594,15 +588,16 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
       </div>
     </section>
 
-    <!-- Image -->
-    <section class="panel"><img class="panel-img" src="./firstpageeighthpic.png" alt="Slide 7"></section>
+    <!-- 8th image -->
+    <section class="panel panel--img"><img class="panel-img" src="./firstpageeighthpic.png" alt="Slide 7"></section>
 
-    <!-- End -->
+    <!-- END SLIDE -->
     <section class="panel panel--end">
       <div class="end-left">
         <img class="end-img" src="./firstpageninethpic.png" alt="Last Slide Image">
       </div>
 
+      <!-- END CARD (uses logotwo.png) -->
       <div class="end-card">
         <div class="menu-panel">
           <div class="menu-logo">
@@ -637,15 +632,12 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
   </div>
 </div>
 
-<!-- Slide-out menu -->
+<!-- ================= SLIDING MENU ================= -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
 
-    <div class="back-arrow" id="closeMenu" aria-label="Close menu">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M14.5 5.5L8 12l6.5 6.5"></path>
-      </svg>
-    </div>
+    <!-- Auberry-style close arrow -->
+    <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
 
     <div class="menu-logo">
       <img src="./logotwo.png" alt="RR Asset Management Logo">
@@ -705,90 +697,69 @@ document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn()
 
 /* ===== HORIZONTAL SCROLL ===== */
 const track = document.getElementById("track");
-let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
 const intro = document.querySelector(".intro");
 const scrollHint = document.getElementById("scrollHint");
 
+let panels = Array.from(track.querySelectorAll(".panel"));
+
 let currentX = 0;
 let targetX = 0;
-let isDown=false, startX=0, startTarget=0;
 let isUserSliding = false;
+let isDown = false, startX = 0, startTarget = 0;
 
 function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 
-/* ✅ KEY: set variable widths for image-only panels so there are NO gaps */
-function isImageOnlyPanel(panel){
-  return !panel.classList.contains('panel--home') &&
-         !panel.classList.contains('panel--split') &&
-         !panel.classList.contains('panel--end');
-}
+/* --- Auberry fix: make image-only panel widths match image aspect ratio (no gaps) --- */
+function sizeImagePanels(){
+  const vhPx = window.innerHeight; // already stabilized by --vh
+  const imgPanels = track.querySelectorAll(".panel--img");
 
-function fitImagePanels(){
-  const H = window.innerHeight; // same as (var(--vh)*100)
-  panels = Array.from(track.querySelectorAll(".panel"));
-
-  panels.forEach(p=>{
-    if (p.classList.contains('panel--home') || p.classList.contains('panel--split') || p.classList.contains('panel--end')){
-      p.style.width = '100vw';
-      p.style.flex = '0 0 100vw';
-      return;
-    }
-
-    const img = p.querySelector('img');
+  imgPanels.forEach(panel=>{
+    const img = panel.querySelector("img");
     if(!img) return;
 
-    // Only set when we know natural sizes
-    const nw = img.naturalWidth || 0;
-    const nh = img.naturalHeight || 0;
-    if(nw && nh){
+    const apply = ()=>{
+      const nw = img.naturalWidth || 0;
+      const nh = img.naturalHeight || 0;
+      if(!nw || !nh) return;
       const ratio = nw / nh;
-      const desiredW = Math.max(220, Math.round(H * ratio)); // min width so it never collapses
-      p.style.width = desiredW + 'px';
-      p.style.flex = `0 0 ${desiredW}px`;
-    }
+      const w = Math.max(240, Math.round(ratio * vhPx)); // min width safety
+      panel.style.width = w + "px";
+    };
+
+    if(img.complete) apply();
+    else img.addEventListener("load", apply, {once:true});
   });
+
+  panels = Array.from(track.querySelectorAll(".panel"));
 }
 
 function totalWidth(){
-  return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0);
+  // offsetWidth is stable for flex children after we size image panels
+  return panels.reduce((sum, p) => sum + p.offsetWidth, 0);
 }
 function maxScroll(){
   return Math.max(0, totalWidth() - window.innerWidth);
 }
 function xForIndex(idx){
-  return panels.slice(0, idx).reduce((sum, p) => sum + p.getBoundingClientRect().width, 0);
+  return panels.slice(0, idx).reduce((sum, p) => sum + p.offsetWidth, 0);
 }
 
-/* Run once images load */
-function setupImages(){
-  const imgs = Array.from(document.querySelectorAll('.panel img, .split-right img, .end-left img'));
-  let pending = 0;
-
-  imgs.forEach(img=>{
-    if(img.complete) return;
-    pending++;
-    img.addEventListener('load', ()=>{
-      pending--;
-      if(pending <= 0) {
-        fitImagePanels();
-        targetX = clamp(targetX, 0, maxScroll());
-        currentX = clamp(currentX, 0, maxScroll());
-      }
-    }, {once:true});
-  });
-
-  // If all were already cached
-  fitImagePanels();
+function updateSliderFromX(){
+  const maxS = maxScroll();
+  navSlider.max = String(Math.max(0, panels.length - 1));
+  if(isUserSliding) return;
+  const denom = (panels.length - 1) || 1;
+  const ratio = maxS === 0 ? 0 : (currentX / maxS);
+  navSlider.value = String(Math.round(ratio * denom));
 }
-setupImages();
 
 function raf(){
-  // smoothing normally; while slider dragging we keep it instant (see slider handlers)
-  currentX += (targetX - currentX) * 0.075;
+  currentX += (targetX - currentX) * 0.085;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
 
-  /* Fade intro logo */
+  /* Fade intro logo out */
   if (intro) {
     const fadeStart = 55;
     const fadeEnd   = 320;
@@ -796,14 +767,12 @@ function raf(){
     intro.style.opacity = String(1 - Math.max(0, Math.min(1, t)));
   }
 
-  /* ✅ Scroll text ONLY on first page (never on top of pictures) */
-  if (scrollHint) {
-    // show only when still basically at start
-    const showUntil = 25;
-    const fadeEnd   = 180;
-
+  /* Scroll hint: fixed, only near start, disappears like logo */
+  if (scrollHint && !document.body.classList.contains("menu-open")) {
+    const showUntil = 30;
+    const fadeEnd   = 220;
     let op = 0;
-    if (currentX <= showUntil) op = 1;
+    if (currentX < showUntil) op = 1;
     else {
       const t = (currentX - showUntil) / (fadeEnd - showUntil);
       op = 1 - Math.max(0, Math.min(1, t));
@@ -811,17 +780,9 @@ function raf(){
     scrollHint.style.opacity = String(op);
   }
 
-  const maxS = maxScroll();
-  navSlider.max = String(panels.length - 1);
-
-  if(!isUserSliding){
-    const ratio = maxS === 0 ? 0 : (currentX / maxS);
-    navSlider.value = String(Math.round(ratio * (panels.length - 1)));
-  }
-
+  updateSliderFromX();
   requestAnimationFrame(raf);
 }
-raf();
 
 /* Wheel */
 window.addEventListener("wheel", (e)=>{
@@ -833,14 +794,16 @@ window.addEventListener("wheel", (e)=>{
 /* Drag / touch */
 function pointerDown(x){
   if(document.body.classList.contains("menu-open")) return;
-  isDown=true; startX=x; startTarget=targetX;
+  isDown = true;
+  startX = x;
+  startTarget = targetX;
 }
 function pointerMove(x){
   if(!isDown) return;
   const dx = x - startX;
   targetX = clamp(startTarget - dx, 0, maxScroll());
 }
-function pointerUp(){ isDown=false; }
+function pointerUp(){ isDown = false; }
 
 window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
 window.addEventListener("mousemove",(e)=>pointerMove(e.clientX));
@@ -850,22 +813,24 @@ window.addEventListener("touchstart",(e)=>pointerDown(e.touches[0].clientX),{pas
 window.addEventListener("touchmove",(e)=>pointerMove(e.touches[0].clientX),{passive:true});
 window.addEventListener("touchend",pointerUp);
 
-/* ✅ Slider: smooth + immediate while dragging */
+/* Slider (smoother) */
 function sliderToTarget(){
   const maxS = maxScroll();
   const denom = (panels.length - 1) || 1;
   const ratio = Number(navSlider.value) / denom;
   targetX = clamp(ratio * maxS, 0, maxS);
 }
-
-navSlider.addEventListener("input", ()=>{
-  isUserSliding = true;
-  sliderToTarget();
-  currentX = targetX; // instant response (no lag)
-});
-navSlider.addEventListener("change", ()=>{
+navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
+navSlider.addEventListener("pointerup", ()=>{
   isUserSliding = false;
+  sliderToTarget();
 });
+navSlider.addEventListener("pointercancel", ()=>{
+  isUserSliding = false;
+  sliderToTarget();
+});
+navSlider.addEventListener("input", sliderToTarget);
+navSlider.addEventListener("change", sliderToTarget);
 
 /* data-goto links */
 document.querySelectorAll('[data-goto]').forEach(a=>{
@@ -877,13 +842,23 @@ document.querySelectorAll('[data-goto]').forEach(a=>{
   });
 });
 
-/* Resize: recompute widths + clamp scroll */
-window.addEventListener("resize", ()=>{
+/* Initial sizing + start */
+function refreshAll(){
   setVH();
-  fitImagePanels();
+  sizeImagePanels();
   targetX = clamp(targetX, 0, maxScroll());
   currentX = clamp(currentX, 0, maxScroll());
+  updateSliderFromX();
+}
+
+/* Run once when DOM/images settle */
+window.addEventListener("load", ()=>{
+  refreshAll();
+  raf();
 });
+
+/* Recompute widths on resize */
+window.addEventListener("resize", refreshAll);
 </script>
 
 </body>
