@@ -62,6 +62,25 @@ body{
 }
 @keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
 
+/* ================= FIXED "SCROLL" HINT (LIKE LOGO) ================= */
+.scroll-indicator-fixed{
+  position:fixed;
+  left:50%;
+  bottom: calc(68px + var(--sab));
+  transform:translateX(-50%);
+  z-index:35;                 /* above track, below logo/menu */
+  font-family:'Montserrat', sans-serif;
+  font-weight:400;
+  font-size:16px;
+  letter-spacing:2px;
+  color:#fff;
+  opacity:0;
+  pointer-events:none;
+  animation:scrollFadeIn 2.5s ease forwards;
+  animation-delay:1.2s;
+}
+@keyframes scrollFadeIn{ from{opacity:0;} to{opacity:1;} }
+
 /* ================= LEFT BURGER ================= */
 .side-bar{
   position:fixed; top:0; left:0;
@@ -123,9 +142,8 @@ body{
 }
 
 /* ================= PANELS ================= */
-/* ✅ KEY FIX: every panel is EXACTLY one viewport wide */
 .panel{
-  flex:0 0 100vw;
+  flex:0 0 100vw;   /* one slide per viewport */
   width:100vw;
   height: calc(var(--vh) * 100);
   background:#000;
@@ -133,39 +151,20 @@ body{
   overflow:hidden;
 }
 
-/* Images: consistent fit */
-.panel-img{
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:contain;        /* keep no-crop */
-  object-position:center;
-  background:#000;           /* hides any tiny seams */
-}
-
-/* Home slide always full viewport */
+/* Home slide */
 .panel--home{
   background:transparent;
 }
 
-/* ================= HOME "SCROLL" ================= */
-.panel--home .scroll-indicator{
-  position:absolute;
-  left:50%;
-  bottom:68px;
-  transform:translateX(-50%);
-  z-index:0;
-  font-family:'Montserrat', sans-serif;
-  font-weight:400;
-  font-size:16px;
-  letter-spacing:2px;
-  color:#fff;
-  opacity:0;
-  pointer-events:none;
-  animation:scrollFadeIn 2.5s ease forwards;
-  animation-delay:1.2s;
+/* ===== IMAGE-ONLY SLIDES (NO BLACK GAPS) ===== */
+.panel:not(.panel--split):not(.panel--home):not(.panel--end) .panel-img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;          /* ✅ removes gaps between pictures */
+  object-position:center;
+  background:#000;
 }
-@keyframes scrollFadeIn{ from{opacity:0;} to{opacity:1;} }
 
 /* ================= AUBERRY STYLE TEXT + IMAGE SPLIT SLIDE ================= */
 .panel--split{
@@ -254,10 +253,15 @@ body{
   align-items:stretch;
   justify-content:center;
 }
+
+/* Split slide image behavior (keep Auberry feel: no crop) */
 .panel--split .panel-img{
-  width:100%;
   height:100%;
+  width:auto;
+  max-width:100%;
+  display:block;
   object-fit:contain;
+  object-position:center;
   background:#f4f4f2;
 }
 
@@ -495,6 +499,9 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   <img src="./logo.png" alt="RR Logo">
 </div>
 
+<!-- FIXED Scroll text (stays like logo) -->
+<div class="scroll-indicator-fixed" id="scrollHint">Scroll</div>
+
 <!-- Burger -->
 <div class="side-bar" id="burger" aria-label="Open menu">
   <div class="burger-lines"><i></i></div>
@@ -510,9 +517,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   <div class="htrack" id="track">
 
     <!-- Panel 0: video only -->
-    <section class="panel panel--home">
-      <div class="scroll-indicator">Scroll</div>
-    </section>
+    <section class="panel panel--home"></section>
 
     <!-- Panel 1: split text + image -->
     <section class="panel panel--split">
@@ -538,7 +543,7 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
       </div>
     </section>
 
-    <!-- Image slides (now fixed: each section is 100vw) -->
+    <!-- Image slides -->
     <section class="panel"><img class="panel-img" src="./firstpagesecondpic.png" alt="Slide 2"></section>
     <section class="panel"><img class="panel-img" src="./firstpagethirdpic.png" alt="Slide 3"></section>
 
@@ -706,6 +711,7 @@ const track = document.getElementById("track");
 let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
 const intro = document.querySelector(".intro");
+const scrollHint = document.getElementById("scrollHint");
 
 let currentX = 0;
 let targetX = 0;
@@ -734,6 +740,15 @@ function raf(){
     const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
     const opacity = 1 - Math.max(0, Math.min(1, t));
     intro.style.opacity = String(opacity);
+  }
+
+  /* Fade SCROLL hint out after scroll begins (like logo) */
+  if (scrollHint) {
+    const fadeStart = 30;
+    const fadeEnd   = 220;
+    const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
+    const opacity = 1 - Math.max(0, Math.min(1, t));
+    scrollHint.style.opacity = String(opacity);
   }
 
   const maxS = maxScroll();
