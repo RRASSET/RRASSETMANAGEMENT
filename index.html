@@ -17,18 +17,18 @@ html,body{height:100%}
   --menuW: clamp(320px, 40vw, 420px);
   --endCardW: clamp(320px, 40vw, 420px);
 
+  /* iOS safe area */
   --sat: env(safe-area-inset-top, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
-  --sal: env(safe-area-inset-left, 0px);
-  --sar: env(safe-area-inset-right, 0px);
 
+  /* real viewport height (set by JS) */
   --vh: 1vh;
 }
 
 body{
   font-family:'Montserrat', sans-serif;
   background:#000;
-  overflow:hidden;
+  overflow:hidden; /* we control scroll */
   height: calc(var(--vh) * 100);
   overscroll-behavior: none;
   touch-action: pan-y;
@@ -57,13 +57,13 @@ body{
 }
 @keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
 
-/* ================= FIXED "SCROLL" HINT (ABOVE VIDEO, BELOW SLIDES) ================= */
+/* ================= FIXED "SCROLL" HINT (ONLY ON HOME) ================= */
 .scroll-indicator-fixed{
   position:fixed;
   left:50%;
   bottom: calc(68px + var(--sab));
   transform:translateX(-50%);
-  z-index:1;                 /* above video (0), below slides (2) */
+  z-index:1;               /* above video (0) */
   font-family:'Montserrat', sans-serif;
   font-weight:400;
   font-size:16px;
@@ -74,16 +74,17 @@ body{
   transition:opacity .35s ease;
 }
 
-/* ================= LEFT BURGER (ALWAYS SHOW STRIP + ICON) ================= */
+/* ================= LEFT BURGER (STRIP + ICON ALWAYS MATCH) ================= */
 .side-bar{
-  position:fixed; top:0; left:0;
-  width: calc(var(--burgerW) + var(--sal));
+  position:fixed;
+  top:0; left:0;
+  width: var(--burgerW);
   height: calc(var(--vh) * 100);
   background:rgba(255,255,255,0.88);
   backdrop-filter: blur(10px);
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:center;   /* ✅ keeps lines centered like Auberry */
   z-index:100;
   cursor:pointer;
   transition:background .6s ease;
@@ -91,7 +92,6 @@ body{
 .side-bar:hover{ background:rgba(255,255,255,0.94); }
 
 .burger-lines{
-  margin-left: var(--sal);
   opacity:0;
   transform:translateY(8px);
   animation:burgerIn 1.8s cubic-bezier(.22,1,.36,1) forwards;
@@ -135,7 +135,7 @@ body{
 }
 
 /* ================= PANELS ================= */
-/* Default: variable width (Auberry image rail) */
+/* Default: variable width (we set width in JS for image-only panels) */
 .panel{
   flex:0 0 auto;
   height: calc(var(--vh) * 100);
@@ -144,7 +144,7 @@ body{
   overflow:hidden;
 }
 
-/* Home / Split / End are full viewport */
+/* Home / Split / End are always full viewport */
 .panel--home,
 .panel--split,
 .panel--end{
@@ -152,18 +152,17 @@ body{
   width:100vw;
 }
 
-/* ✅ IMPORTANT: home panel must be transparent so video shows */
-.panel--home{
-  background:transparent !important;
-}
+/* ✅ Home must be transparent so video shows */
+.panel--home{ background:transparent !important; }
 
 /* ================= IMAGE-ONLY SLIDES ================= */
+/* Image-only panels: panel width is set by JS to match rendered image width */
 .panel:not(.panel--home):not(.panel--split):not(.panel--end){
   background:#000;
 }
 .panel:not(.panel--home):not(.panel--split):not(.panel--end) .panel-img{
   height: calc(var(--vh) * 100);
-  width:auto;
+  width:auto;                 /* ✅ width follows aspect ratio */
   display:block;
   object-fit:contain;
   object-position:center;
@@ -306,8 +305,8 @@ body{
 /* ================= BOTTOM THIN SLIDER ================= */
 .nav-slider{
   position:fixed;
-  left: calc(var(--burgerW) + var(--sal) + 20px);
-  right: calc(28px + var(--sar));
+  left: calc(var(--burgerW) + 20px);
+  right: 28px;
   bottom: calc(14px + var(--sab));
   z-index:92;
   transition:opacity .35s ease;
@@ -349,7 +348,6 @@ body{
   transform:translateX(-100%);
   transition:transform 1.15s cubic-bezier(.77,0,.18,1);
   will-change:transform;
-  padding-left: var(--sal);
 }
 .menu.open{ transform:translateX(0); }
 
@@ -374,15 +372,27 @@ body{
 .menu-panel::-webkit-scrollbar{ width:0; height:0; }
 .menu-panel{ scrollbar-width:none; }
 
+/* ✅ Auberry-style close arrow (SVG) */
 .back-arrow{
   position:absolute;
-  left:26px;
+  left:18px;
   top:50%;
   transform:translateY(-50%);
-  font-size:28px;
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   cursor:pointer;
-  color:#222;
   opacity:.9;
+  user-select:none;
+}
+.back-arrow svg{
+  width:28px;
+  height:28px;
+  stroke:#111;
+  stroke-width:1.25;
+  fill:none;
 }
 
 .menu-logo{ margin-top:10px; margin-bottom:0px; }
@@ -470,31 +480,39 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
 <body>
 
+<!-- Background video -->
 <div class="bg">
   <video autoplay muted loop playsinline>
     <source src="./Bg.mp4" type="video/mp4">
   </video>
 </div>
 
+<!-- Intro logo (keep logo.png) -->
 <div class="intro">
   <img src="./logo.png" alt="RR Logo">
 </div>
 
+<!-- Fixed scroll hint (only shows on home, fades like logo) -->
 <div class="scroll-indicator-fixed" id="scrollHint">Scroll</div>
 
+<!-- Burger strip -->
 <div class="side-bar" id="burger" aria-label="Open menu">
   <div class="burger-lines"><i></i></div>
 </div>
 
+<!-- Bottom slider -->
 <div class="nav-slider" aria-label="Slide navigation">
   <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
 </div>
 
+<!-- Horizontal panels -->
 <div class="hwrap">
   <div class="htrack" id="track">
 
+    <!-- Panel 0: video only -->
     <section class="panel panel--home"></section>
 
+    <!-- Split -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -518,9 +536,11 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
       </div>
     </section>
 
+    <!-- Image slides (variable width, NO black gaps) -->
     <section class="panel"><img class="panel-img" src="./firstpagesecondpic.png" alt="Slide 2"></section>
     <section class="panel"><img class="panel-img" src="./firstpagethirdpic.png" alt="Slide 3"></section>
 
+    <!-- Split -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -545,9 +565,11 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
       </div>
     </section>
 
+    <!-- Images -->
     <section class="panel"><img class="panel-img" src="./firstpagefifthpic.png" alt="Slide 4"></section>
     <section class="panel"><img class="panel-img" src="./firstpagesixthpic.png" alt="Slide 5"></section>
 
+    <!-- Split -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -572,8 +594,10 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
       </div>
     </section>
 
+    <!-- Image -->
     <section class="panel"><img class="panel-img" src="./firstpageeighthpic.png" alt="Slide 7"></section>
 
+    <!-- End -->
     <section class="panel panel--end">
       <div class="end-left">
         <img class="end-img" src="./firstpageninethpic.png" alt="Last Slide Image">
@@ -613,9 +637,15 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
   </div>
 </div>
 
+<!-- Slide-out menu -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
-    <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
+
+    <div class="back-arrow" id="closeMenu" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M14.5 5.5L8 12l6.5 6.5"></path>
+      </svg>
+    </div>
 
     <div class="menu-logo">
       <img src="./logotwo.png" alt="RR Asset Management Logo">
@@ -642,6 +672,7 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
 
       <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
     </div>
+
   </div>
 </div>
 
@@ -681,18 +712,83 @@ const scrollHint = document.getElementById("scrollHint");
 
 let currentX = 0;
 let targetX = 0;
+let isDown=false, startX=0, startTarget=0;
 let isUserSliding = false;
 
 function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-function totalWidth(){ return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0); }
-function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
-function xForIndex(idx){ return panels.slice(0, idx).reduce((sum, p) => sum + p.getBoundingClientRect().width, 0); }
+
+/* ✅ KEY: set variable widths for image-only panels so there are NO gaps */
+function isImageOnlyPanel(panel){
+  return !panel.classList.contains('panel--home') &&
+         !panel.classList.contains('panel--split') &&
+         !panel.classList.contains('panel--end');
+}
+
+function fitImagePanels(){
+  const H = window.innerHeight; // same as (var(--vh)*100)
+  panels = Array.from(track.querySelectorAll(".panel"));
+
+  panels.forEach(p=>{
+    if (p.classList.contains('panel--home') || p.classList.contains('panel--split') || p.classList.contains('panel--end')){
+      p.style.width = '100vw';
+      p.style.flex = '0 0 100vw';
+      return;
+    }
+
+    const img = p.querySelector('img');
+    if(!img) return;
+
+    // Only set when we know natural sizes
+    const nw = img.naturalWidth || 0;
+    const nh = img.naturalHeight || 0;
+    if(nw && nh){
+      const ratio = nw / nh;
+      const desiredW = Math.max(220, Math.round(H * ratio)); // min width so it never collapses
+      p.style.width = desiredW + 'px';
+      p.style.flex = `0 0 ${desiredW}px`;
+    }
+  });
+}
+
+function totalWidth(){
+  return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0);
+}
+function maxScroll(){
+  return Math.max(0, totalWidth() - window.innerWidth);
+}
+function xForIndex(idx){
+  return panels.slice(0, idx).reduce((sum, p) => sum + p.getBoundingClientRect().width, 0);
+}
+
+/* Run once images load */
+function setupImages(){
+  const imgs = Array.from(document.querySelectorAll('.panel img, .split-right img, .end-left img'));
+  let pending = 0;
+
+  imgs.forEach(img=>{
+    if(img.complete) return;
+    pending++;
+    img.addEventListener('load', ()=>{
+      pending--;
+      if(pending <= 0) {
+        fitImagePanels();
+        targetX = clamp(targetX, 0, maxScroll());
+        currentX = clamp(currentX, 0, maxScroll());
+      }
+    }, {once:true});
+  });
+
+  // If all were already cached
+  fitImagePanels();
+}
+setupImages();
 
 function raf(){
+  // smoothing normally; while slider dragging we keep it instant (see slider handlers)
   currentX += (targetX - currentX) * 0.075;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
 
-  /* Fade logo */
+  /* Fade intro logo */
   if (intro) {
     const fadeStart = 55;
     const fadeEnd   = 320;
@@ -700,13 +796,14 @@ function raf(){
     intro.style.opacity = String(1 - Math.max(0, Math.min(1, t)));
   }
 
-  /* ✅ Scroll text ONLY on first slide, then fade out like logo */
+  /* ✅ Scroll text ONLY on first page (never on top of pictures) */
   if (scrollHint) {
-    const showUntil = 40;      // keep visible while still basically at start
-    const fadeEnd   = 220;     // fade out by here
-    let op = 0;
+    // show only when still basically at start
+    const showUntil = 25;
+    const fadeEnd   = 180;
 
-    if (currentX < showUntil) op = 1;
+    let op = 0;
+    if (currentX <= showUntil) op = 1;
     else {
       const t = (currentX - showUntil) / (fadeEnd - showUntil);
       op = 1 - Math.max(0, Math.min(1, t));
@@ -734,8 +831,6 @@ window.addEventListener("wheel", (e)=>{
 },{passive:true});
 
 /* Drag / touch */
-let isDown=false, startX=0, startTarget=0;
-
 function pointerDown(x){
   if(document.body.classList.contains("menu-open")) return;
   isDown=true; startX=x; startTarget=targetX;
@@ -755,19 +850,22 @@ window.addEventListener("touchstart",(e)=>pointerDown(e.touches[0].clientX),{pas
 window.addEventListener("touchmove",(e)=>pointerMove(e.touches[0].clientX),{passive:true});
 window.addEventListener("touchend",pointerUp);
 
-/* Slider */
+/* ✅ Slider: smooth + immediate while dragging */
 function sliderToTarget(){
   const maxS = maxScroll();
   const denom = (panels.length - 1) || 1;
   const ratio = Number(navSlider.value) / denom;
   targetX = clamp(ratio * maxS, 0, maxS);
 }
-navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
-navSlider.addEventListener("pointerup", ()=>{
-  isUserSliding = false;
+
+navSlider.addEventListener("input", ()=>{
+  isUserSliding = true;
   sliderToTarget();
+  currentX = targetX; // instant response (no lag)
 });
-navSlider.addEventListener("input", sliderToTarget);
+navSlider.addEventListener("change", ()=>{
+  isUserSliding = false;
+});
 
 /* data-goto links */
 document.querySelectorAll('[data-goto]').forEach(a=>{
@@ -779,8 +877,10 @@ document.querySelectorAll('[data-goto]').forEach(a=>{
   });
 });
 
+/* Resize: recompute widths + clamp scroll */
 window.addEventListener("resize", ()=>{
-  panels = Array.from(track.querySelectorAll(".panel"));
+  setVH();
+  fitImagePanels();
   targetX = clamp(targetX, 0, maxScroll());
   currentX = clamp(currentX, 0, maxScroll());
 });
@@ -788,4 +888,3 @@ window.addEventListener("resize", ()=>{
 
 </body>
 </html>
-
