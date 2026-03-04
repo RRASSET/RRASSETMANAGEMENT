@@ -11,10 +11,30 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
+
+/* ================= VARIABLES ================= */
+:root{
+  --burgerW: clamp(52px, 5.5vw, 64px);
+  --menuW: clamp(320px, 40vw, 420px);
+  --endCardW: clamp(320px, 40vw, 420px);
+
+  /* iOS safe-area */
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+
+  /* real viewport height (set by JS) */
+  --vh: 1vh;
+}
+
 body{
   font-family:'Montserrat', sans-serif;
   background:#000;
   overflow:hidden; /* we control scroll */
+  height: calc(var(--vh) * 100);
+  overscroll-behavior: none;
+  touch-action: pan-y;
 }
 
 /* ===== GLOBAL SAFETY (prevents cropping in flex/grid children) ===== */
@@ -45,8 +65,8 @@ body{
 /* ================= LEFT BURGER ================= */
 .side-bar{
   position:fixed; top:0; left:0;
-  width:64px;
-  height:100vh;
+  width: var(--burgerW);
+  height: calc(var(--vh) * 100);
   background:rgba(255,255,255,0.88);
   backdrop-filter: blur(10px);
   display:flex;
@@ -55,6 +75,7 @@ body{
   z-index:90;
   cursor:pointer;
   transition:background .6s ease;
+  padding-left: var(--sal);
 }
 .side-bar:hover{ background:rgba(255,255,255,0.94); }
 
@@ -88,7 +109,7 @@ body{
 .hwrap{
   position:relative;
   z-index:30;
-  height:100vh;
+  height: calc(var(--vh) * 100);
   width:100vw;
   overflow:hidden;
 }
@@ -97,39 +118,43 @@ body{
   display:flex;
   will-change:transform;
   transform:translate3d(0,0,0);
+  position:relative;
+  z-index:2;
 }
 
 /* ================= PANELS ================= */
+/* ✅ KEY FIX: every panel is EXACTLY one viewport wide */
 .panel{
-  flex:0 0 auto;     /* variable-width rail (Auberry style) */
-  height:100vh;
+  flex:0 0 100vw;
+  width:100vw;
+  height: calc(var(--vh) * 100);
   background:#000;
   position:relative;
+  overflow:hidden;
 }
 
-/* Images: never crop, never stretch */
+/* Images: consistent fit */
 .panel-img{
-  height:100vh;
-  width:auto;
+  width:100%;
+  height:100%;
   display:block;
-  object-fit:contain;
+  object-fit:contain;        /* keep no-crop */
   object-position:center;
+  background:#000;           /* hides any tiny seams */
 }
 
 /* Home slide always full viewport */
 .panel--home{
-  flex:0 0 100vw;
-  width:100vw;
   background:transparent;
 }
 
-/* ================= HOME "SCROLL" — ONLY ON FIRST SLIDE + BEHIND SLIDES ================= */
+/* ================= HOME "SCROLL" ================= */
 .panel--home .scroll-indicator{
   position:absolute;
   left:50%;
   bottom:68px;
   transform:translateX(-50%);
-  z-index:0;                 /* behind everything */
+  z-index:0;
   font-family:'Montserrat', sans-serif;
   font-weight:400;
   font-size:16px;
@@ -142,18 +167,10 @@ body{
 }
 @keyframes scrollFadeIn{ from{opacity:0;} to{opacity:1;} }
 
-/* Ensure slides paint above scroll text */
-.htrack{ position:relative; z-index:2; }
-.panel{ position:relative; z-index:2; }
-.panel-img{ position:relative; z-index:2; }
-
 /* ================= AUBERRY STYLE TEXT + IMAGE SPLIT SLIDE ================= */
 .panel--split{
-  flex:0 0 100vw;
-  width:100vw;
   background:#f4f4f2;
 }
-
 .split{
   width:100%;
   height:100%;
@@ -161,25 +178,19 @@ body{
   grid-template-columns: 40% 60%;
 }
 
-/* ================= AUBERRY TEXT SYSTEM (FOR ALL TEXT SLIDES) ================= */
+/* ================= TEXT SYSTEM ================= */
 .split-left{
-  /* responsive padding so shorter screens don't crop */
   padding: clamp(70px, 9vh, 120px) clamp(24px, 5vw, 70px) clamp(60px, 8vh, 110px) clamp(60px, 8vw, 140px);
   color:#1a1a1a;
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
-
   width:100%;
   max-width:680px;
-
-  /* IMPORTANT: never crop text */
-  max-height:100vh;
+  max-height: calc(var(--vh) * 100);
   overflow:auto;
   -webkit-overflow-scrolling: touch;
 }
-
-/* optional: hide scrollbar but keep scroll */
 .split-left::-webkit-scrollbar{ width:0; height:0; }
 .split-left{ scrollbar-width:none; }
 
@@ -189,7 +200,6 @@ body{
   margin-bottom:0;
   max-width:560px;
 }
-
 .aub-heading .small{
   display:block;
   font-style:italic;
@@ -197,10 +207,7 @@ body{
   font-size:clamp(26px, 2vw, 42px);
   margin-bottom:10px;
   color:#1a1a1a;
-  overflow-wrap:normal;
-  word-break:normal;
 }
-
 .aub-heading .big{
   display:block;
   font-style:normal;
@@ -210,9 +217,6 @@ body{
   letter-spacing:2px;
   color:#1a1a1a;
   white-space:normal;
-  overflow-wrap:normal;
-  word-break:normal;
-  hyphens:none;
 }
 
 /* GOLD LINE */
@@ -231,9 +235,6 @@ body{
   max-width:420px;
   font-size:clamp(18px, 1.25vw, 20px);
   line-height:1.75;
-  overflow-wrap:normal;
-  word-break:normal;
-  hyphens:none;
 }
 .aub-text .lead{
   font-style:italic;
@@ -253,28 +254,21 @@ body{
   align-items:stretch;
   justify-content:center;
 }
-
 .panel--split .panel-img{
+  width:100%;
   height:100%;
-  width:auto;
-  margin:0 auto;
   object-fit:contain;
-  object-position:center;
+  background:#f4f4f2;
 }
 
-/* ================= END SLIDE (TRUE LAST SLIDE — NO GAP) ================= */
+/* ================= END SLIDE ================= */
 .panel--end{
-  flex:0 0 100vw;
-  width:100vw;
-  height:100vh;
   display:flex;
   align-items:stretch;
   justify-content:flex-end;
   background:#000;
   overflow:hidden;
 }
-
-/* Left side fills remaining space INSIDE 100vw */
 .end-left{
   flex:1 1 auto;
   min-width:0;
@@ -292,10 +286,8 @@ body{
   object-position:center;
   display:block;
 }
-
-/* Right menu card container */
 .end-card{
-  flex:0 0 420px;
+  flex:0 0 var(--endCardW);
   height:100%;
   background:#f4f4f2;
   display:flex;
@@ -304,31 +296,23 @@ body{
   border-left:1px solid rgba(0,0,0,0.08);
   padding:0;
 }
-
-/* End card uses menu-panel, but should NOT animate like the sliding menu */
 .end-card .menu-panel{
   opacity:1 !important;
   transform:none !important;
   transition:none !important;
-
-  /* IMPORTANT: never crop end-card content */
   overflow:auto !important;
   -webkit-overflow-scrolling: touch;
 }
 .end-card .menu-panel::-webkit-scrollbar{ width:0; height:0; }
 .end-card .menu-panel{ scrollbar-width:none; }
-
-/* Lift address slightly ONLY on end card */
-.end-card .menu-address{
-  margin-top:-14px;
-}
+.end-card .menu-address{ margin-top:-14px; }
 
 /* ================= BOTTOM THIN SLIDER ================= */
 .nav-slider{
   position:fixed;
-  left:84px;
-  right:28px;
-  bottom:14px;
+  left: calc(var(--burgerW) + 20px);
+  right: 28px;
+  bottom: calc(14px + var(--sab));
   z-index:92;
   transition:opacity .35s ease;
 }
@@ -344,14 +328,14 @@ body{
 .nav-slider input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance:none;
   appearance:none;
-  width:80px;
+  width: clamp(46px, 10vw, 80px);
   height:6px;
   border-radius:999px;
   background:rgba(0,0,0,0.60);
   cursor:pointer;
 }
 .nav-slider input[type="range"]::-moz-range-thumb{
-  width:80px;
+  width: clamp(46px, 10vw, 80px);
   height:6px;
   border-radius:999px;
   background:rgba(0,0,0,0.60);
@@ -360,17 +344,18 @@ body{
 }
 
 /* =========================================================
-   AUBERRY-STYLE SLIDING MENU (NO CROPPING)
+   AUBERRY-STYLE SLIDING MENU
    ========================================================= */
 .menu{
   position:fixed; top:0; left:0;
-  height:100vh;
-  width:420px;
+  height: calc(var(--vh) * 100);
+  width: var(--menuW);
   background:#f4f4f2;
   z-index:95;
   transform:translateX(-100%);
   transition:transform 1.15s cubic-bezier(.77,0,.18,1);
   will-change:transform;
+  padding-left: var(--sal);
 }
 .menu.open{ transform:translateX(0); }
 
@@ -383,8 +368,6 @@ body{
   align-items:center;
   text-align:center;
   justify-content:flex-start;
-
-  /* IMPORTANT: never crop menu on short laptops */
   overflow:auto;
   -webkit-overflow-scrolling: touch;
 
@@ -394,12 +377,9 @@ body{
   transition-delay:.25s;
 }
 .menu.open .menu-panel{ opacity:1; transform:translateY(0); }
-
-/* optional: hide scrollbar but keep scroll */
 .menu-panel::-webkit-scrollbar{ width:0; height:0; }
 .menu-panel{ scrollbar-width:none; }
 
-/* Back arrow */
 .back-arrow{
   position:absolute;
   left:26px;
@@ -411,7 +391,6 @@ body{
   opacity:.9;
 }
 
-/* Logo */
 .menu-logo{ margin-top:30px; margin-bottom:0px; }
 .menu-logo img{
   width:240px;
@@ -421,7 +400,6 @@ body{
   filter:none;
 }
 
-/* Links */
 .menu-links{ margin-top:-10px; }
 .menu-links a{
   display:block;
@@ -437,7 +415,6 @@ body{
 }
 .menu-links a:hover{ opacity:.65; }
 
-/* Divider */
 .menu-divider{
   width:260px;
   height:1px;
@@ -446,7 +423,6 @@ body{
   margin:40px 0 22px 0;
 }
 
-/* Address */
 .menu-address{
   font-family:'Montserrat', sans-serif;
   font-weight:300;
@@ -459,7 +435,6 @@ body{
   margin-top:-4px;
 }
 
-/* Phone | Email */
 .menu-contact{
   margin-top:14px;
   font-size:13px;
@@ -471,7 +446,6 @@ body{
 .menu-contact a:hover{ opacity:.65; }
 .menu-contact .dot{ padding:0 10px; opacity:.7; }
 
-/* Privacy */
 .menu-privacy{
   margin-top:14px;
   display:inline-block;
@@ -484,11 +458,10 @@ body{
 }
 .menu-privacy:hover{ opacity:.7; }
 
-/* When menu open */
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
-/* Mobile tweaks */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 900px){
   .split{
     grid-template-columns: 1fr;
@@ -500,9 +473,10 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
   .end-left{ display:none; }
   .end-card{ flex:0 0 100%; width:100%; }
-  .nav-slider{ left:24px; right:24px; bottom:12px; }
-  .menu{ width:min(420px, 92vw); }
-  .menu-panel{ padding:60px 28px; }
+  .nav-slider{ left: calc(18px + var(--sal)); right: calc(18px + var(--sar)); bottom: calc(12px + var(--sab)); }
+
+  .menu{ width: min(420px, 92vw); }
+  .menu-panel{ padding: calc(60px + var(--sat)) 28px calc(40px + var(--sab)); }
 }
 </style>
 </head>
@@ -550,11 +524,11 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
           <div class="aub-line"></div>
           <div class="aub-text">
             <p class="lead">
-             As an ultra-prime developer operating between London and Dubai, R&R Mayfair creates residences that stand as enduring statements of status and sophistication.
+             As an ultra-prime developer operating between London and Dubai, R&amp;R Mayfair creates residences that stand as enduring statements of status and sophistication.
 We unite timeless European heritage with the ambition and dynamism of the Middle East, delivering exceptional properties that define the future of global luxury.
             </p>
             <p class="body">
-              Positioned within the world’s most desirable addresses, R&R Mayfair curates rare opportunities distinguished by architectural integrity, absolute discretion, and long-term capital strength.
+              Positioned within the world’s most desirable addresses, R&amp;R Mayfair curates rare opportunities distinguished by architectural integrity, absolute discretion, and long-term capital strength.
             </p>
           </div>
         </div>
@@ -564,7 +538,7 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
       </div>
     </section>
 
-    <!-- Image slides -->
+    <!-- Image slides (now fixed: each section is 100vw) -->
     <section class="panel"><img class="panel-img" src="./firstpagesecondpic.png" alt="Slide 2"></section>
     <section class="panel"><img class="panel-img" src="./firstpagethirdpic.png" alt="Slide 3"></section>
 
@@ -624,15 +598,13 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
 
     <!-- 8th image -->
     <section class="panel"><img class="panel-img" src="./firstpageeighthpic.png" alt="Slide 7"></section>
-     
 
- <!-- END SLIDE -->
+    <!-- END SLIDE -->
     <section class="panel panel--end">
       <div class="end-left">
         <img class="end-img" src="./firstpageninethpic.png" alt="Last Slide Image">
       </div>
 
-      <!-- END CARD uses SAME markup/classes as burger menu -->
       <div class="end-card">
         <div class="menu-panel">
           <div class="menu-logo">
@@ -703,6 +675,15 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
 </div>
 
 <script>
+/* ===== MOBILE/SAFARI 100vh FIX (ALSO STABILIZES MAC SAFARI RESIZE) ===== */
+function setVH(){
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+setVH();
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', setVH);
+
 /* ===== MENU ===== */
 const menu = document.getElementById("menu");
 const burger = document.getElementById("burger");
@@ -803,7 +784,6 @@ function sliderToTarget(){
   const ratio = Number(navSlider.value) / denom;
   targetX = clamp(ratio * maxS, 0, maxS);
 }
-
 navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
 navSlider.addEventListener("pointerup", ()=>{
   isUserSliding = false;
