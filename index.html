@@ -17,6 +17,11 @@ body{
   overflow:hidden; /* we control scroll */
 }
 
+/* ===== GLOBAL SAFETY (prevents cropping in flex/grid children) ===== */
+.panel, .split, .split-left, .split-right, .menu, .menu-panel, .end-card, .end-left{
+  min-height:0;
+}
+
 /* ================= BACKGROUND VIDEO ================= */
 .bg{ position:fixed; inset:0; z-index:0; overflow:hidden; background:#000; }
 .bg video{ width:100%; height:100%; object-fit:cover; object-position:center; }
@@ -158,7 +163,8 @@ body{
 
 /* ================= AUBERRY TEXT SYSTEM (FOR ALL TEXT SLIDES) ================= */
 .split-left{
-  padding:120px 70px 110px 140px;
+  /* responsive padding so shorter screens don't crop */
+  padding: clamp(70px, 9vh, 120px) clamp(24px, 5vw, 70px) clamp(60px, 8vh, 110px) clamp(60px, 8vw, 140px);
   color:#1a1a1a;
   display:flex;
   flex-direction:column;
@@ -166,8 +172,16 @@ body{
 
   width:100%;
   max-width:680px;
-  overflow:hidden;
+
+  /* IMPORTANT: never crop text */
+  max-height:100vh;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
 }
+
+/* optional: hide scrollbar but keep scroll */
+.split-left::-webkit-scrollbar{ width:0; height:0; }
+.split-left{ scrollbar-width:none; }
 
 .aub-heading{
   font-family:'Cormorant Garamond', serif;
@@ -274,8 +288,8 @@ body{
   height:100%;
   width:100%;
   max-width:100%;
-  object-fit:cover;              /* was contain */
-  object-position:center;        /* or right center if you prefer */
+  object-fit:cover;
+  object-position:center;
   display:block;
 }
 
@@ -288,7 +302,7 @@ body{
   align-items:stretch;
   justify-content:center;
   border-left:1px solid rgba(0,0,0,0.08);
-  padding:0; /* important: menu-panel handles padding */
+  padding:0;
 }
 
 /* End card uses menu-panel, but should NOT animate like the sliding menu */
@@ -296,11 +310,17 @@ body{
   opacity:1 !important;
   transform:none !important;
   transition:none !important;
+
+  /* IMPORTANT: never crop end-card content */
+  overflow:auto !important;
+  -webkit-overflow-scrolling: touch;
 }
+.end-card .menu-panel::-webkit-scrollbar{ width:0; height:0; }
+.end-card .menu-panel{ scrollbar-width:none; }
 
 /* Lift address slightly ONLY on end card */
 .end-card .menu-address{
-  margin-top:-14px; /* adjust -10 to -20 if needed */
+  margin-top:-14px;
 }
 
 /* ================= BOTTOM THIN SLIDER ================= */
@@ -340,7 +360,7 @@ body{
 }
 
 /* =========================================================
-   AUBERRY-STYLE SLIDING MENU (SPACING FIXED)
+   AUBERRY-STYLE SLIDING MENU (NO CROPPING)
    ========================================================= */
 .menu{
   position:fixed; top:0; left:0;
@@ -364,12 +384,20 @@ body{
   text-align:center;
   justify-content:flex-start;
 
+  /* IMPORTANT: never crop menu on short laptops */
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
+
   opacity:0;
   transform:translateY(10px);
   transition:opacity .9s ease, transform .9s ease;
   transition-delay:.25s;
 }
 .menu.open .menu-panel{ opacity:1; transform:translateY(0); }
+
+/* optional: hide scrollbar but keep scroll */
+.menu-panel::-webkit-scrollbar{ width:0; height:0; }
+.menu-panel{ scrollbar-width:none; }
 
 /* Back arrow */
 .back-arrow{
@@ -602,7 +630,6 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
     <section class="panel panel--end">
       <div class="end-left">
         <img class="end-img" src="./firstpageninethpic.png" alt="Last Slide Image">
-    
       </div>
 
       <!-- END CARD uses SAME markup/classes as burger menu -->
