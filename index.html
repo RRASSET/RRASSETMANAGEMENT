@@ -57,13 +57,13 @@ body{
 }
 @keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
 
-/* ================= FIXED "SCROLL" HINT (BEHIND SLIDES) ================= */
+/* ================= FIXED "SCROLL" HINT (ABOVE VIDEO, BELOW SLIDES) ================= */
 .scroll-indicator-fixed{
   position:fixed;
   left:50%;
   bottom: calc(68px + var(--sab));
   transform:translateX(-50%);
-  z-index:1;                 /* behind slides, above video */
+  z-index:1;                 /* above video (0), below slides (2) */
   font-family:'Montserrat', sans-serif;
   font-weight:400;
   font-size:16px;
@@ -71,15 +71,13 @@ body{
   color:#fff;
   opacity:0;
   pointer-events:none;
-  animation:scrollFadeIn 2.5s ease forwards;
-  animation-delay:1.2s;
+  transition:opacity .35s ease;
 }
-@keyframes scrollFadeIn{ from{opacity:0;} to{opacity:1;} }
 
 /* ================= LEFT BURGER (ALWAYS SHOW STRIP + ICON) ================= */
 .side-bar{
   position:fixed; top:0; left:0;
-  width: calc(var(--burgerW) + var(--sal));          /* ✅ strip includes safe-area */
+  width: calc(var(--burgerW) + var(--sal));
   height: calc(var(--vh) * 100);
   background:rgba(255,255,255,0.88);
   backdrop-filter: blur(10px);
@@ -92,7 +90,6 @@ body{
 }
 .side-bar:hover{ background:rgba(255,255,255,0.94); }
 
-/* keep icon visually centered inside the strip */
 .burger-lines{
   margin-left: var(--sal);
   opacity:0;
@@ -140,7 +137,7 @@ body{
 /* ================= PANELS ================= */
 /* Default: variable width (Auberry image rail) */
 .panel{
-  flex:0 0 auto;                     /* ✅ variable width */
+  flex:0 0 auto;
   height: calc(var(--vh) * 100);
   background:#000;
   position:relative;
@@ -155,16 +152,18 @@ body{
   width:100vw;
 }
 
-/* ================= IMAGE-ONLY SLIDES ================= */
-/* ✅ IMPORTANT: panel shrink-wraps to image width (no side gaps) */
-.panel:not(.panel--home):not(.panel--split):not(.panel--end){
-  background:#000; /* will not show because panel fits image */
+/* ✅ IMPORTANT: home panel must be transparent so video shows */
+.panel--home{
+  background:transparent !important;
 }
 
-/* image-only slides */
+/* ================= IMAGE-ONLY SLIDES ================= */
+.panel:not(.panel--home):not(.panel--split):not(.panel--end){
+  background:#000;
+}
 .panel:not(.panel--home):not(.panel--split):not(.panel--end) .panel-img{
   height: calc(var(--vh) * 100);
-  width:auto;                         /* ✅ width defines panel width */
+  width:auto;
   display:block;
   object-fit:contain;
   object-position:center;
@@ -173,7 +172,6 @@ body{
 
 /* ================= SPLIT SLIDE ================= */
 .panel--split{ background:#f4f4f2; }
-
 .split{
   width:100%;
   height:100%;
@@ -181,7 +179,6 @@ body{
   grid-template-columns: 40% 60%;
 }
 
-/* ================= TEXT SYSTEM ================= */
 .split-left{
   padding: clamp(70px, 9vh, 120px) clamp(24px, 5vw, 70px)
            clamp(60px, 8vh, 110px) clamp(60px, 8vw, 140px);
@@ -222,7 +219,6 @@ body{
   text-transform:uppercase;
   letter-spacing:2px;
   color:#1a1a1a;
-  white-space:normal;
 }
 
 .aub-line{
@@ -251,8 +247,6 @@ body{
   align-items:stretch;
   justify-content:center;
 }
-
-/* Split image fills right side like Auberry */
 .panel--split .panel-img{
   width:100%;
   height:100%;
@@ -271,7 +265,6 @@ body{
   background:#000;
   overflow:hidden;
 }
-
 .end-left{
   flex:1 1 auto;
   min-width:0;
@@ -289,7 +282,6 @@ body{
   object-position:center;
   display:block;
 }
-
 .end-card{
   flex:0 0 var(--endCardW);
   height:100%;
@@ -300,7 +292,6 @@ body{
   border-left:1px solid rgba(0,0,0,0.08);
   padding:0;
 }
-
 .end-card .menu-panel{
   opacity:1 !important;
   transform:none !important;
@@ -348,9 +339,7 @@ body{
   border:none;
 }
 
-/* =========================================================
-   AUBERRY-STYLE SLIDING MENU
-   ========================================================= */
+/* ================= MENU ================= */
 .menu{
   position:fixed; top:0; left:0;
   height: calc(var(--vh) * 100);
@@ -481,39 +470,31 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
 <body>
 
-<!-- Background video -->
 <div class="bg">
   <video autoplay muted loop playsinline>
     <source src="./Bg.mp4" type="video/mp4">
   </video>
 </div>
 
-<!-- Logo -->
 <div class="intro">
   <img src="./logo.png" alt="RR Logo">
 </div>
 
-<!-- Scroll hint (behind slides) -->
 <div class="scroll-indicator-fixed" id="scrollHint">Scroll</div>
 
-<!-- Burger -->
 <div class="side-bar" id="burger" aria-label="Open menu">
   <div class="burger-lines"><i></i></div>
 </div>
 
-<!-- Bottom slider -->
 <div class="nav-slider" aria-label="Slide navigation">
   <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
 </div>
 
-<!-- Horizontal panels -->
 <div class="hwrap">
   <div class="htrack" id="track">
 
-    <!-- Panel 0: video only -->
     <section class="panel panel--home"></section>
 
-    <!-- Panel 1: split text + image -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -537,11 +518,9 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
       </div>
     </section>
 
-    <!-- Image slides (variable width = no black gaps) -->
     <section class="panel"><img class="panel-img" src="./firstpagesecondpic.png" alt="Slide 2"></section>
     <section class="panel"><img class="panel-img" src="./firstpagethirdpic.png" alt="Slide 3"></section>
 
-    <!-- TEXT SECTION -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -566,11 +545,9 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
       </div>
     </section>
 
-    <!-- Continue images -->
     <section class="panel"><img class="panel-img" src="./firstpagefifthpic.png" alt="Slide 4"></section>
     <section class="panel"><img class="panel-img" src="./firstpagesixthpic.png" alt="Slide 5"></section>
 
-    <!-- AUBERRY STYLE TEXT + IMAGE -->
     <section class="panel panel--split">
       <div class="split">
         <div class="split-left">
@@ -595,10 +572,8 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
       </div>
     </section>
 
-    <!-- 8th image -->
     <section class="panel"><img class="panel-img" src="./firstpageeighthpic.png" alt="Slide 7"></section>
 
-    <!-- END SLIDE -->
     <section class="panel panel--end">
       <div class="end-left">
         <img class="end-img" src="./firstpageninethpic.png" alt="Last Slide Image">
@@ -638,10 +613,8 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
   </div>
 </div>
 
-<!-- ================= MENU ================= -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
-
     <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
 
     <div class="menu-logo">
@@ -669,7 +642,6 @@ We unite timeless European heritage with the ambition and dynamism of the Middle
 
       <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
     </div>
-
   </div>
 </div>
 
@@ -712,16 +684,9 @@ let targetX = 0;
 let isUserSliding = false;
 
 function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-
-function totalWidth(){
-  return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0);
-}
-function maxScroll(){
-  return Math.max(0, totalWidth() - window.innerWidth);
-}
-function xForIndex(idx){
-  return panels.slice(0, idx).reduce((sum, p) => sum + p.getBoundingClientRect().width, 0);
-}
+function totalWidth(){ return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0); }
+function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
+function xForIndex(idx){ return panels.slice(0, idx).reduce((sum, p) => sum + p.getBoundingClientRect().width, 0); }
 
 function raf(){
   currentX += (targetX - currentX) * 0.075;
@@ -735,12 +700,18 @@ function raf(){
     intro.style.opacity = String(1 - Math.max(0, Math.min(1, t)));
   }
 
-  /* Fade scroll hint */
+  /* ✅ Scroll text ONLY on first slide, then fade out like logo */
   if (scrollHint) {
-    const fadeStart = 30;
-    const fadeEnd   = 220;
-    const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
-    scrollHint.style.opacity = String(1 - Math.max(0, Math.min(1, t)));
+    const showUntil = 40;      // keep visible while still basically at start
+    const fadeEnd   = 220;     // fade out by here
+    let op = 0;
+
+    if (currentX < showUntil) op = 1;
+    else {
+      const t = (currentX - showUntil) / (fadeEnd - showUntil);
+      op = 1 - Math.max(0, Math.min(1, t));
+    }
+    scrollHint.style.opacity = String(op);
   }
 
   const maxS = maxScroll();
