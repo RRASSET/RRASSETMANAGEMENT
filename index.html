@@ -62,13 +62,14 @@ body{
 }
 @keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
 
-/* ================= FIXED "SCROLL" HINT (LIKE LOGO) ================= */
+/* ================= FIXED "SCROLL" HINT (BEHIND SLIDES) ================= */
+/* Shows over VIDEO, but NOT on top of images/slides */
 .scroll-indicator-fixed{
   position:fixed;
   left:50%;
   bottom: calc(68px + var(--sab));
   transform:translateX(-50%);
-  z-index:35;                 /* above track, below logo/menu */
+  z-index:1;                 /* ✅ behind slides (track is z-index 2), above video (z-index 0) */
   font-family:'Montserrat', sans-serif;
   font-weight:400;
   font-size:16px;
@@ -138,12 +139,12 @@ body{
   will-change:transform;
   transform:translate3d(0,0,0);
   position:relative;
-  z-index:2;
+  z-index:2; /* ✅ slides sit above scroll hint */
 }
 
 /* ================= PANELS ================= */
 .panel{
-  flex:0 0 100vw;   /* one slide per viewport */
+  flex:0 0 100vw;              /* ✅ one slide per screen (no collage/peeking) */
   width:100vw;
   height: calc(var(--vh) * 100);
   background:#000;
@@ -151,19 +152,26 @@ body{
   overflow:hidden;
 }
 
-/* Home slide */
+/* Home slide always full viewport */
 .panel--home{
   background:transparent;
 }
 
-/* ===== IMAGE-ONLY SLIDES (NO BLACK GAPS) ===== */
-.panel:not(.panel--split):not(.panel--home):not(.panel--end) .panel-img{
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:cover;          /* ✅ removes gaps between pictures */
-  object-position:center;
+/* ================= IMAGE-ONLY SLIDES ================= */
+/* ✅ Auberry-like: image fits height (no zoom), centered, responsive */
+.panel:not(.panel--split):not(.panel--home):not(.panel--end){
+  display:flex;
+  align-items:center;
+  justify-content:center;
   background:#000;
+}
+.panel:not(.panel--split):not(.panel--home):not(.panel--end) .panel-img{
+  height: calc(var(--vh) * 100);
+  width:auto;
+  max-width:100vw;
+  display:block;
+  object-fit:contain;          /* ✅ no “too big” zoom */
+  object-position:center;
 }
 
 /* ================= AUBERRY STYLE TEXT + IMAGE SPLIT SLIDE ================= */
@@ -254,13 +262,12 @@ body{
   justify-content:center;
 }
 
-/* Split slide image behavior (keep Auberry feel: no crop) */
+/* ✅ Make the split image fill the right column properly (no “small” look) */
 .panel--split .panel-img{
+  width:100%;
   height:100%;
-  width:auto;
-  max-width:100%;
   display:block;
-  object-fit:contain;
+  object-fit:cover;            /* fills right column like Auberry */
   object-position:center;
   background:#f4f4f2;
 }
@@ -499,7 +506,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   <img src="./logo.png" alt="RR Logo">
 </div>
 
-<!-- FIXED Scroll text (stays like logo) -->
+<!-- Fixed Scroll hint (behind slides) -->
 <div class="scroll-indicator-fixed" id="scrollHint">Scroll</div>
 
 <!-- Burger -->
@@ -718,7 +725,6 @@ let targetX = 0;
 let isUserSliding = false;
 
 function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-
 function totalWidth(){
   return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0);
 }
@@ -742,7 +748,7 @@ function raf(){
     intro.style.opacity = String(opacity);
   }
 
-  /* Fade SCROLL hint out after scroll begins (like logo) */
+  /* Fade SCROLL hint out after scroll begins (and it sits behind slides) */
   if (scrollHint) {
     const fadeStart = 30;
     const fadeEnd   = 220;
