@@ -105,6 +105,7 @@ body{
   backdrop-filter: blur(10px);
   opacity:0;
   transition:opacity .6s ease;
+  z-index:0;        /* IMPORTANT */
 }
 
 /* Hover (after it's visible) */
@@ -124,9 +125,7 @@ body.ui-ready .side-bar::before{
 /* Burger icon should be above ::before */
 .burger-lines{
   position:relative;
-  z-index:1;
-
-  /* start hidden */
+  z-index:2;
   opacity:0;
   transform:translateY(8px);
   transition:opacity .6s ease, transform .6s ease;
@@ -137,6 +136,27 @@ body.ui-ready .burger-lines{
   opacity:1;
   transform:translateY(0);
 }
+/* THE 3 BURGER LINES (you were missing this) */
+.burger-lines i{
+  width:22px;
+  height:2px;
+  background:#111;
+  display:block;
+  position:relative;
+}
+.burger-lines i::before,
+.burger-lines i::after{
+  content:"";
+  position:absolute;
+  left:0;
+  width:22px;
+  height:2px;
+  background:#111;
+}
+.burger-lines i::before{ top:-7px; }
+.burger-lines i::after{ top:7px; }
+
+  
 /* ================= HORIZONTAL SCROLL AREA ================= */
 .hwrap{
   position:relative;
