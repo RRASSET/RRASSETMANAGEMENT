@@ -74,49 +74,69 @@ body{
   transition:opacity .25s ease;
 }
 
-/* ================= LEFT BURGER STRIP (ALWAYS) ================= */
+/* ================= LEFT BURGER STRIP (DELAYED APPEAR) ================= */
 .side-bar{
   position:fixed; top:0; left:0;
   width: calc(var(--burgerW) + var(--sal));
   height: calc(var(--vh) * 100);
-  background:rgba(255,255,255,0.88);
-  backdrop-filter: blur(10px);
+
+  /* START hidden so no white strip on load */
+  background:transparent;
+  backdrop-filter:none;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   z-index:200;
   cursor:pointer;
-  transition:background .6s ease;
-}
-.side-bar:hover{ background:rgba(255,255,255,0.94); }
 
-.burger-lines{
-  margin-left: var(--sal);
-  opacity:0;
-  transform:translateY(8px);
-  animation:burgerIn 2s cubic-bezier(.22,1,.36,1) forwards;
-  animation-delay:0.85s;
+  opacity:0;                 /* hidden */
+  pointer-events:none;       /* don't block anything */
+  transition:opacity .6s ease;
 }
-@keyframes burgerIn{ to{opacity:1; transform:translateY(0);} }
 
-.burger-lines i{
-  width:22px; height:1.6px;
-  background:#111;
-  position:relative;
-  display:block;
-}
-.burger-lines i::before,
-.burger-lines i::after{
+/* White/blur layer (so we can fade it in nicely) */
+.side-bar::before{
   content:"";
   position:absolute;
-  left:0;
-  width:22px;
-  height:1.6px;
-  background:#111;
+  inset:0;
+  background:rgba(255,255,255,0.88);
+  backdrop-filter: blur(10px);
+  opacity:0;
+  transition:opacity .6s ease;
 }
-.burger-lines i::before{ top:-7px; }
-.burger-lines i::after{ top:7px; }
 
+/* Hover (after it's visible) */
+body.ui-ready .side-bar:hover::before{
+  background:rgba(255,255,255,0.94);
+}
+
+/* When ready -> show strip */
+body.ui-ready .side-bar{
+  opacity:1;
+  pointer-events:auto;
+}
+body.ui-ready .side-bar::before{
+  opacity:1;
+}
+
+/* Burger icon should be above ::before */
+.burger-lines{
+  position:relative;
+  z-index:1;
+
+  /* start hidden */
+  opacity:0;
+  transform:translateY(8px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+
+/* show burger with the strip */
+body.ui-ready .burger-lines{
+  opacity:1;
+  transform:translateY(0);
+}
 /* ================= HORIZONTAL SCROLL AREA ================= */
 .hwrap{
   position:relative;
@@ -669,8 +689,15 @@ body.menu-open #scrollHint{ opacity:0 !important; }
 </div>
 
 <script>
+
+/* SHOW BURGER + WHITE STRIP AFTER 2 SECONDS */
+document.addEventListener("DOMContentLoaded", ()=>{
+  setTimeout(()=> document.body.classList.add("ui-ready"), 2000);
+});
+
 /* ===== 100vh FIX ===== */
 function setVH(){
+  
   const vh = window.innerHeight * 0.01;
   document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
