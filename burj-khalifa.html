@@ -37,16 +37,23 @@ body{
 /* prevent weird flex/grid cropping */
 .panel, .split, .split-left, .split-right, .menu, .menu-panel, .end-card, .end-left{ min-height:0; }
 
-
+/* ================= SLOW PAGE APPEAR ================= */
+.page-shell{
+  opacity:0;
+  transform:scale(1.015);
+  transition:opacity 1.35s ease, transform 1.8s cubic-bezier(.22,1,.36,1);
+  transform-origin:center center;
+}
+body.loaded .page-shell{
+  opacity:1;
+  transform:scale(1);
+}
 
 /* ================= LEFT BURGER STRIP ================= */
 .side-bar{
   position:fixed; top:0; left:0;
   width: calc(var(--burgerW) + var(--sal));
   height: calc(var(--vh) * 100);
-
-  background:transparent;
-  backdrop-filter:none;
 
   display:flex;
   align-items:center;
@@ -55,10 +62,9 @@ body{
   z-index:200;
   cursor:pointer;
 
-  opacity:0;
-  pointer-events:none;
-  transform:translateX(-10px);
-  transition:opacity .6s ease, transform .8s cubic-bezier(.22,1,.36,1);
+  opacity:1;
+  pointer-events:auto;
+  transform:none;
 }
 
 .side-bar::before{
@@ -67,32 +73,21 @@ body{
   inset:0;
   background:rgba(255,255,255,0.88);
   backdrop-filter: blur(10px);
-  opacity:0;
-  transition:opacity .6s ease;
+  opacity:1;
+  transition:background .35s ease;
   z-index:0;
 }
 
-body.ui-ready .side-bar{
-  opacity:1;
-  transform:translateX(0);
-  pointer-events:auto;
-}
-body.ui-ready .side-bar::before{ opacity:1; }
-
-body.ui-ready .side-bar:hover::before{
+.side-bar:hover::before{
   background:rgba(255,255,255,0.94);
 }
 
 .burger-lines{
   position:relative;
   z-index:2;
-  opacity:0;
-  transform:translateY(8px);
-  transition:opacity .6s ease, transform .6s ease;
-}
-body.ui-ready .burger-lines{
   opacity:1;
-  transform:translateY(0);
+  transform:none;
+  transition:none;
 }
 
 .burger-lines i{
@@ -474,86 +469,88 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
 <body>
 
-
-
 <!-- Burger -->
 <div class="side-bar" id="burger" aria-label="Open menu">
   <div class="burger-lines"><i></i></div>
 </div>
 
-<!-- Bottom slider -->
-<div class="nav-slider" aria-label="Slide navigation">
-  <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
-</div>
+<div class="page-shell">
 
-<!-- Horizontal panels -->
-<div class="hwrap">
-  <div class="htrack" id="track">
+  <!-- Bottom slider -->
+  <div class="nav-slider" aria-label="Slide navigation">
+    <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
+  </div>
 
-    <section class="panel panel--copy">
-      <div class="split">
-        <div class="split-left">
-          <div class="aub-heading">
-            <span class="small">Interior Project</span>
-            <span class="big">Burj Khalifa</span>
+  <!-- Horizontal panels -->
+  <div class="hwrap">
+    <div class="htrack" id="track">
+
+      <section class="panel panel--copy">
+        <div class="split">
+          <div class="split-left">
+            <div class="aub-heading">
+              <span class="small">Interior Project</span>
+              <span class="big">Burj Khalifa</span>
+            </div>
+            <div class="aub-line"></div>
+            <div class="aub-text">
+              <p class="lead">
+                Refined luxury living within the iconic Burj Khalifa, where beautifully designed residences are finished to the highest standards of craftsmanship and detail.
+              </p>
+              <p class="body">
+                Framed by breathtaking panoramic skyline views, each space features premium materials, sophisticated interiors, and an address that stands among the most prestigious in the world — in the heart of Downtown Dubai.
+              </p>
+            </div>
           </div>
-          <div class="aub-line"></div>
-          <div class="aub-text">
-            <p class="lead">
-              Refined luxury living within the iconic Burj Khalifa, where beautifully designed residences are finished to the highest standards of craftsmanship and detail.
-            </p>
-            <p class="body">
-              Framed by breathtaking panoramic skyline views, each space features premium materials, sophisticated interiors, and an address that stands among the most prestigious in the world — in the heart of Downtown Dubai.
-            </p>
+
+          <div class="split-right">
+            <img class="copy-hero" src="./burjone.png" alt="Burj Khalifa hero">
           </div>
         </div>
+      </section>
 
-        <div class="split-right">
-          <img class="copy-hero" src="./burjone.png" alt="Burj Khalifa hero">
+      <section class="panel panel--img"><img src="./burjtwo.png" alt="Burj Khalifa 2"></section>
+      <section class="panel panel--img"><img src="./burjthree.png" alt="Burj Khalifa 3"></section>
+
+      <section class="panel panel--end">
+        <div class="end-left">
+          <img class="end-img" src="./burjfour.png" alt="Burj Khalifa last">
         </div>
-      </div>
-    </section>
 
-    <section class="panel panel--img"><img src="./burjtwo.png" alt="Burj Khalifa 2"></section>
-    <section class="panel panel--img"><img src="./burjthree.png" alt="Burj Khalifa 3"></section>
-
-    <section class="panel panel--end">
-      <div class="end-left">
-        <img class="end-img" src="./burjfour.png" alt="Burj Khalifa last">
-      </div>
-
-      <div class="end-card">
-        <div class="menu-panel">
-          <div class="menu-logo">
-            <img src="./logotwo.png" alt="RR Asset Management Logo">
-          </div>
-
-          <nav class="menu-links">
-            <a href="index.html">Home</a>
-            <a href="expertise.html">Expertise</a>
-            <a href="interior-projects.html">Interior Projects</a>
-            <a href="press.html">Press</a>
-          </nav>
-
-          <div class="menu-divider"></div>
-
-          <div class="menu-address">
-            Sun House, 428 Long Drive,<br>
-            Greenford, UB6 8UH
-
-            <div class="menu-contact">
-              <span>+44 (0) 20 8575 3700</span>
-              <span class="dot">|</span>
-              <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+        <div class="end-card">
+          <div class="menu-panel">
+            <div class="menu-logo">
+              <img src="./logotwo.png" alt="RR Asset Management Logo">
             </div>
 
-            <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
+            <nav class="menu-links">
+              <a href="index.html">Home</a>
+              <a href="expertise.html">Expertise</a>
+              <a href="interior-projects.html">Interior Projects</a>
+              <a href="press.html">Press</a>
+            </nav>
+
+            <div class="menu-divider"></div>
+
+            <div class="menu-address">
+              Sun House, 428 Long Drive,<br>
+              Greenford, UB6 8UH
+
+              <div class="menu-contact">
+                <span>+44 (0) 20 8575 3700</span>
+                <span class="dot">|</span>
+                <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+              </div>
+
+              <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
+    </div>
   </div>
+
 </div>
 
 <div class="menu" id="menu" aria-label="Menu">
@@ -600,12 +597,12 @@ setVH();
 window.addEventListener('resize', setVH);
 window.addEventListener('orientationchange', setVH);
 
-/* ===== intro / ui timing ===== */
-document.addEventListener("DOMContentLoaded", ()=>{
-  setTimeout(()=> document.body.classList.add("ui-ready"), 2000);
+/* ===== SLOW PAGE APPEAR ===== */
+window.addEventListener("load", ()=>{
+  requestAnimationFrame(()=>{
+    document.body.classList.add("loaded");
+  });
 });
-
-
 
 /* ===== MENU ===== */
 const menu = document.getElementById("menu");
@@ -627,7 +624,6 @@ document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn()
 /* ===== SIZING ===== */
 const track = document.getElementById("track");
 const navSlider = document.getElementById("navSlider");
-const intro = document.querySelector(".intro");
 
 let panels = Array.from(track.querySelectorAll(".panel"));
 let currentX = 0;
@@ -722,17 +718,8 @@ function updateSliderFromX(){
 
 function raf(){
   rafStarted = true;
-
   currentX += (targetX - currentX) * 0.085;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
-
-  if (intro) {
-    const fadeStart = 55;
-    const fadeEnd = 320;
-    const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
-    intro.style.opacity = String(1 - Math.max(0, Math.min(1, t)));
-  }
-
   updateSliderFromX();
   requestAnimationFrame(raf);
 }
