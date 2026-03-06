@@ -5,23 +5,39 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>RR Asset Management — Burj Khalifa</title>
 
-<!-- Auberry-like fonts (same as index) -->
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
+
+/* ================= VARIABLES ================= */
+:root{
+  --burgerW: clamp(52px, 5.5vw, 64px);
+  --menuW: clamp(320px, 40vw, 420px);
+  --endCardW: clamp(320px, 40vw, 420px);
+
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+
+  --vh: 1vh;
+}
+
 body{
   font-family:'Montserrat', sans-serif;
   background:#000;
-  overflow:hidden; /* horizontal scroll controlled in JS */
+  overflow:hidden;
+  height: calc(var(--vh) * 100);
+  overscroll-behavior:none;
+  touch-action:pan-y;
 }
 
-/* ================= BACKGROUND VIDEO ================= */
-.bg{ position:fixed; inset:0; z-index:0; overflow:hidden; background:#000; }
-.bg video{ width:100%; height:100%; object-fit:cover; object-position:center; }
+/* prevent weird flex/grid cropping */
+.panel, .split, .split-left, .split-right, .menu, .menu-panel, .end-card, .end-left{ min-height:0; }
 
-/* ================= INTRO LOGO (OPTIONAL) ================= */
+/* ================= INTRO LOGO ================= */
 .intro{
   position:fixed; inset:0; z-index:40;
   display:flex; align-items:center; justify-content:center;
@@ -37,35 +53,68 @@ body{
 }
 @keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
 
-/* ================= LEFT BURGER ================= */
+/* ================= LEFT BURGER STRIP (HOMEPAGE STYLE) ================= */
 .side-bar{
   position:fixed; top:0; left:0;
-  width:64px;
-  height:100vh;
-  background:rgba(255,255,255,0.88);
-  backdrop-filter: blur(10px);
+  width: calc(var(--burgerW) + var(--sal));
+  height: calc(var(--vh) * 100);
+
+  background:transparent;
+  backdrop-filter:none;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:90;
+
+  z-index:200;
   cursor:pointer;
-  transition:background .6s ease;
+
+  opacity:0;
+  pointer-events:none;
+  transform:translateX(-10px);
+  transition:opacity .6s ease, transform .8s cubic-bezier(.22,1,.36,1);
 }
-.side-bar:hover{ background:rgba(255,255,255,0.94); }
+
+.side-bar::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,0.88);
+  backdrop-filter: blur(10px);
+  opacity:0;
+  transition:opacity .6s ease;
+  z-index:0;
+}
+
+body.ui-ready .side-bar{
+  opacity:1;
+  transform:translateX(0);
+  pointer-events:auto;
+}
+body.ui-ready .side-bar::before{ opacity:1; }
+
+body.ui-ready .side-bar:hover::before{
+  background:rgba(255,255,255,0.94);
+}
 
 .burger-lines{
+  position:relative;
+  z-index:2;
   opacity:0;
   transform:translateY(8px);
-  animation:burgerIn 1.8s cubic-bezier(.22,1,.36,1) forwards;
-  animation-delay:0.85s;
+  transition:opacity .6s ease, transform .6s ease;
 }
-@keyframes burgerIn{ to{opacity:1; transform:translateY(0);} }
+body.ui-ready .burger-lines{
+  opacity:1;
+  transform:translateY(0);
+}
 
 .burger-lines i{
-  width:22px; height:1.6px;
+  width:22px;
+  height:2px;
   background:#111;
-  position:relative;
   display:block;
+  position:relative;
 }
 .burger-lines i::before,
 .burger-lines i::after{
@@ -73,7 +122,7 @@ body{
   position:absolute;
   left:0;
   width:22px;
-  height:1.6px;
+  height:2px;
   background:#111;
 }
 .burger-lines i::before{ top:-7px; }
@@ -83,7 +132,7 @@ body{
 .hwrap{
   position:relative;
   z-index:30;
-  height:100vh;
+  height: calc(var(--vh) * 100);
   width:100vw;
   overflow:hidden;
 }
@@ -94,19 +143,21 @@ body{
   transform:translate3d(0,0,0);
   gap:0;
   align-items:stretch;
+  position:relative;
+  z-index:2;
 }
 
 /* ================= PANELS ================= */
 .panel{
   flex:0 0 auto;
-  height:100vh;
+  height: calc(var(--vh) * 100);
   background:#000;
   position:relative;
   flex-shrink:0;
-  margin-right:-2px; /* seam killer */
+  overflow:hidden;
 }
 
-/* ================= COPY SLIDE (INDEX STYLE: text + image) ================= */
+/* ================= COPY SLIDE ================= */
 .panel--copy{
   flex:0 0 100vw;
   width:100vw;
@@ -120,16 +171,20 @@ body{
 }
 
 .split-left{
-  padding:120px 70px 110px 140px;
+  padding: clamp(70px, 9vh, 120px) clamp(24px, 5vw, 70px)
+           clamp(60px, 8vh, 110px) clamp(60px, 8vw, 140px);
   color:#1a1a1a;
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
-
   width:100%;
   max-width:680px;
-  overflow:hidden;
+  max-height: calc(var(--vh) * 100);
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
 }
+.split-left::-webkit-scrollbar{ width:0; height:0; }
+.split-left{ scrollbar-width:none; }
 
 .aub-heading{
   font-family:'Cormorant Garamond', serif;
@@ -137,7 +192,6 @@ body{
   margin-bottom:0;
   max-width:560px;
 }
-
 .aub-heading .small{
   display:block;
   font-style:italic;
@@ -145,10 +199,7 @@ body{
   font-size:clamp(26px, 2vw, 42px);
   margin-bottom:10px;
   color:#1a1a1a;
-  overflow-wrap:normal;
-  word-break:normal;
 }
-
 .aub-heading .big{
   display:block;
   font-style:normal;
@@ -157,13 +208,8 @@ body{
   text-transform:uppercase;
   letter-spacing:2px;
   color:#1a1a1a;
-  white-space:normal;
-  overflow-wrap:normal;
-  word-break:normal;
-  hyphens:none;
 }
 
-/* GOLD LINE */
 .aub-line{
   width:64px;
   height:1px;
@@ -171,7 +217,6 @@ body{
   margin:22px 0 70px 0;
 }
 
-/* Body text */
 .aub-text{
   font-family:'Cormorant Garamond', serif;
   color:#1a1a1a;
@@ -179,9 +224,6 @@ body{
   max-width:420px;
   font-size:clamp(18px, 1.25vw, 20px);
   line-height:1.75;
-  overflow-wrap:normal;
-  word-break:normal;
-  hyphens:none;
 }
 .aub-text .lead{
   font-style:italic;
@@ -192,7 +234,7 @@ body{
   margin-bottom:0;
 }
 
-/* RIGHT image area */
+/* ================= RIGHT IMAGE ================= */
 .split-right{
   position:relative;
   overflow:hidden;
@@ -201,18 +243,16 @@ body{
   align-items:stretch;
   justify-content:center;
 }
-
-/* hero image inside copy slide */
 .copy-hero{
+  width:100%;
   height:100%;
-  width:auto;
-  margin:0 auto;
-  object-fit:contain;
-  object-position:center;
   display:block;
+  object-fit:cover;
+  object-position:center;
+  background:#f4f4f2;
 }
 
-/* ================= IMAGE PANELS (HUG IMAGE) ================= */
+/* ================= IMAGE PANELS ================= */
 .panel--img{
   display:flex;
   align-items:stretch;
@@ -220,39 +260,40 @@ body{
   background:#000;
 }
 .panel--img img{
-  height:100vh;
+  height: calc(var(--vh) * 100);
   width:auto;
   object-fit:contain;
   display:block;
 }
 
-/* ================= END SLIDE (IMAGE + INDEX MENU CARD) ================= */
+/* ================= END SLIDE ================= */
 .panel--end{
-  flex:0 0 auto;
-  width:auto;
-  height:100vh;
+  height: calc(var(--vh) * 100);
   display:flex;
   align-items:stretch;
   justify-content:flex-end;
-  background:transparent;
+  background:#000;
   overflow:hidden;
 }
 .end-left{
-  flex:0 0 auto;
+  flex:1 1 auto;
+  min-width:0;
   display:flex;
   align-items:stretch;
-  justify-content:flex-start;
+  justify-content:flex-end;
+  overflow:hidden;
+  background:#000;
 }
 .end-img{
-  height:100vh;
-  width:auto;
-  object-fit:contain;
+  height:100%;
+  width:100%;
+  max-width:100%;
+  object-fit:cover;
+  object-position:center;
   display:block;
 }
-
-/* Index-style card sizing */
 .end-card{
-  flex:0 0 420px;
+  flex:0 0 var(--endCardW);
   height:100%;
   background:#f4f4f2;
   display:flex;
@@ -261,22 +302,25 @@ body{
   border-left:1px solid rgba(0,0,0,0.08);
   padding:0;
 }
-
-/* End card uses menu-panel, but should NOT animate like the sliding menu */
 .end-card .menu-panel{
   opacity:1 !important;
   transform:none !important;
   transition:none !important;
+  overflow:auto !important;
+  -webkit-overflow-scrolling:touch;
 }
+.end-card .menu-panel::-webkit-scrollbar{ width:0; height:0; }
+.end-card .menu-panel{ scrollbar-width:none; }
+.end-card .menu-address{ margin-top:-14px; }
 
-/* ================= BOTTOM SLIDER ================= */
+/* ================= BOTTOM THIN SLIDER ================= */
 .nav-slider{
   position:fixed;
-  left:84px;
-  right:28px;
-  bottom:14px;
-  z-index:92;
-  transition:opacity .35s ease;
+  left: calc(var(--burgerW) + var(--sal) + 20px);
+  right: calc(28px + var(--sar));
+  bottom: calc(14px + var(--sab));
+  z-index:210;
+  transition:opacity .25s ease;
 }
 .nav-slider input[type="range"]{
   width:100%;
@@ -286,18 +330,19 @@ body{
   background:rgba(255,255,255,0.60);
   border-radius:999px;
   outline:none;
+  touch-action:none;
 }
 .nav-slider input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance:none;
   appearance:none;
-  width:80px;
+  width: clamp(46px, 10vw, 80px);
   height:6px;
   border-radius:999px;
   background:rgba(0,0,0,0.60);
   cursor:pointer;
 }
 .nav-slider input[type="range"]::-moz-range-thumb{
-  width:80px;
+  width: clamp(46px, 10vw, 80px);
   height:6px;
   border-radius:999px;
   background:rgba(0,0,0,0.60);
@@ -305,86 +350,84 @@ body{
   border:none;
 }
 
-/* =========================================================
-   AUBERRY-STYLE SLIDING MENU (INDEX VERSION)
-   ========================================================= */
+/* ================= MENU ================= */
 .menu{
   position:fixed; top:0; left:0;
-  height:100vh;
-  width:420px;
+  height: calc(var(--vh) * 100);
+  width: var(--menuW);
   background:#f4f4f2;
-  z-index:95;
+  z-index:250;
   transform:translateX(-100%);
   transition:transform 1.15s cubic-bezier(.77,0,.18,1);
   will-change:transform;
+  padding-left: var(--sal);
 }
 .menu.open{ transform:translateX(0); }
 
 .menu-panel{
   height:100%;
   position:relative;
-  padding:70px 46px 70px;
+  padding: 26px 46px 56px;
   display:flex;
   flex-direction:column;
   align-items:center;
   text-align:center;
   justify-content:flex-start;
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
 
   opacity:0;
   transform:translateY(10px);
   transition:opacity .9s ease, transform .9s ease;
-  transition-delay:.25s;
+  transition-delay:.2s;
 }
 .menu.open .menu-panel{ opacity:1; transform:translateY(0); }
+.menu-panel::-webkit-scrollbar{ width:0; height:0; }
+.menu-panel{ scrollbar-width:none; }
 
-/* Back arrow */
 .back-arrow{
   position:absolute;
   left:26px;
   top:50%;
   transform:translateY(-50%);
-  font-size:28px;
+  font-size:34px;
+  line-height:1;
   cursor:pointer;
-  color:#222;
-  opacity:.9;
+  color:#111;
+  opacity:.95;
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
 }
 
-/* Logo */
-.menu-logo{ margin-top:30px; margin-bottom:0px; }
+.menu-logo{ margin-top:6px; margin-bottom:6px; }
 .menu-logo img{
   width:240px;
   height:auto;
   display:block;
-  margin:0 auto 14px auto;
-  filter:none;
+  margin:0 auto 10px auto;
 }
 
-/* Links */
-.menu-links{ margin-top:-10px; }
+.menu-links{ margin-top:-6px; }
 .menu-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
   font-size:22px;
   font-weight:400;
-  letter-spacing:0;
-  text-transform:none;
-  margin:26px 0;
+  margin:22px 0;
   text-decoration:none;
   color:#222;
   transition:opacity .25s ease;
 }
 .menu-links a:hover{ opacity:.65; }
 
-/* Divider */
 .menu-divider{
   width:260px;
   height:1px;
   background:#c6b67a !important;
   opacity:1 !important;
-  margin:40px 0 22px 0;
+  margin:34px 0 18px 0;
 }
 
-/* Address */
 .menu-address{
   font-family:'Montserrat', sans-serif;
   font-weight:300;
@@ -392,26 +435,22 @@ body{
   line-height:1.8;
   color:#222;
   max-width:320px;
-  text-transform:none;
   letter-spacing:.4px;
-  margin-top:-4px;
+  margin-top:0;
 }
 
-/* Phone | Email */
 .menu-contact{
-  margin-top:14px;
+  margin-top:12px;
   font-size:13px;
   font-weight:400;
-  text-transform:none;
   letter-spacing:.2px;
 }
 .menu-contact a{ color:#222; text-decoration:none; }
 .menu-contact a:hover{ opacity:.65; }
 .menu-contact .dot{ padding:0 10px; opacity:.7; }
 
-/* Privacy */
 .menu-privacy{
-  margin-top:14px;
+  margin-top:12px;
   display:inline-block;
   font-family:'Montserrat', sans-serif;
   font-size:10px;
@@ -422,30 +461,36 @@ body{
 }
 .menu-privacy:hover{ opacity:.7; }
 
-/* When menu open */
+/* when menu open */
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
-/* Mobile tweaks (index-style) */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 900px){
   .split{
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 55vh;
+    grid-template-columns:1fr;
+    grid-template-rows:auto 55vh;
   }
-  .split-left{ padding:90px 24px 30px 24px; max-width:none; }
-  .aub-heading{ max-width:none; }
-  .aub-text{ max-width:none; }
+  .split-left{
+    padding:90px 24px 30px 24px;
+    max-width:none;
+  }
+  .aub-heading, .aub-text{ max-width:none; }
 
   .end-left{ display:none; }
   .end-card{ flex:0 0 100%; width:100%; }
-  .nav-slider{ left:24px; right:24px; bottom:12px; }
+
   .menu{ width:min(420px, 92vw); }
-  .menu-panel{ padding:60px 28px; }
+  .menu-panel{ padding: calc(28px + var(--sat)) 28px calc(38px + var(--sab)); }
 }
 </style>
 </head>
 
 <body>
+
+<div class="intro">
+  <img src="./logo.png" alt="RR Logo">
+</div>
 
 <!-- Burger -->
 <div class="side-bar" id="burger" aria-label="Open menu">
@@ -461,7 +506,6 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 <div class="hwrap">
   <div class="htrack" id="track">
 
-    <!-- COPY SLIDE (INDEX STYLE) -->
     <section class="panel panel--copy">
       <div class="split">
         <div class="split-left">
@@ -486,17 +530,14 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       </div>
     </section>
 
-    <!-- Remaining image panels -->
     <section class="panel panel--img"><img src="./burjtwo.png" alt="Burj Khalifa 2"></section>
     <section class="panel panel--img"><img src="./burjthree.png" alt="Burj Khalifa 3"></section>
 
-    <!-- END SLIDE -->
     <section class="panel panel--end">
       <div class="end-left">
         <img class="end-img" src="./burjfour.png" alt="Burj Khalifa last">
       </div>
 
-      <!-- INDEX MENU CARD -->
       <div class="end-card">
         <div class="menu-panel">
           <div class="menu-logo">
@@ -531,7 +572,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   </div>
 </div>
 
-<!-- ================= MENU (HTML) ================= -->
+<!-- ================= MENU ================= -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
 
@@ -567,6 +608,20 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 </div>
 
 <script>
+/* ===== 100vh FIX ===== */
+function setVH(){
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+setVH();
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', setVH);
+
+/* ===== intro / ui timing ===== */
+document.addEventListener("DOMContentLoaded", ()=>{
+  setTimeout(()=> document.body.classList.add("ui-ready"), 2000);
+});
+
 /* ===== MENU ===== */
 const menu = document.getElementById("menu");
 const burger = document.getElementById("burger");
@@ -584,121 +639,137 @@ burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
 document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
 
-/* ===== SIZING: image panels + end panel ===== */
+/* ===== SIZING ===== */
 const track = document.getElementById("track");
-let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
+const intro = document.querySelector(".intro");
+
+let panels = Array.from(track.querySelectorAll(".panel"));
+let currentX = 0;
+let targetX = 0;
+let isUserSliding = false;
+let isDown = false, startX = 0, startTarget = 0;
+let rafStarted = false;
+
+function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 
 function setPanelWidths(){
-  const vh = window.innerHeight;
+  const vhPx = window.innerHeight;
 
-  // Copy slide is full viewport
   const copyPanel = track.querySelector(".panel--copy");
   if(copyPanel){
     copyPanel.style.flex = `0 0 ${window.innerWidth}px`;
     copyPanel.style.width = `${window.innerWidth}px`;
   }
 
-  // Image panels hug image width
   const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
-  imgPanels.forEach(p=>{
-    const img = p.querySelector("img");
+  imgPanels.forEach(panel=>{
+    const img = panel.querySelector("img");
     if(!img) return;
 
-    const apply = () => {
-      const w = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 6;
-      p.style.flex = `0 0 ${w}px`;
-      p.style.width = `${w}px`;
+    const apply = ()=>{
+      const nw = img.naturalWidth || 0;
+      const nh = img.naturalHeight || 0;
+      if(!nw || !nh) return;
+      const ratio = nw / nh;
+      const w = Math.max(240, Math.round(ratio * vhPx));
+      panel.style.flex = `0 0 ${w}px`;
+      panel.style.width = `${w}px`;
     };
 
-    if(img.complete && img.naturalWidth) apply();
-    else img.addEventListener("load", apply, { once:true });
+    if(img.complete) apply();
+    else img.addEventListener("load", apply, {once:true});
   });
 
-  // End panel: (end image width) + (card width)
   const endPanel = track.querySelector(".panel--end");
   if(endPanel){
-    const endImg  = endPanel.querySelector(".end-img");
+    const endImg = endPanel.querySelector(".end-img");
     const endCard = endPanel.querySelector(".end-card");
+    const endLeft = endPanel.querySelector(".end-left");
 
-    const applyEnd = () => {
+    const applyEnd = ()=>{
       const cardW = Math.ceil(endCard.getBoundingClientRect().width);
-      let imgW = 0;
 
-      if(endImg && endImg.naturalWidth){
-        imgW = Math.ceil((endImg.naturalWidth / endImg.naturalHeight) * vh) + 6;
+      if(window.innerWidth <= 900){
+        endPanel.style.flex = `0 0 ${window.innerWidth}px`;
+        endPanel.style.width = `${window.innerWidth}px`;
+        if(endLeft){
+          endLeft.style.flex = `0 0 0px`;
+          endLeft.style.width = `0px`;
+        }
+        return;
       }
-      const total = imgW + cardW;
 
+      let imgW = 0;
+      if(endImg && endImg.naturalWidth && endImg.naturalHeight){
+        imgW = Math.max(240, Math.round((endImg.naturalWidth / endImg.naturalHeight) * vhPx));
+      }
+
+      const total = imgW + cardW;
       endPanel.style.flex = `0 0 ${total}px`;
       endPanel.style.width = `${total}px`;
 
-      const endLeft = endPanel.querySelector(".end-left");
       if(endLeft){
         endLeft.style.flex = `0 0 ${imgW}px`;
         endLeft.style.width = `${imgW}px`;
       }
     };
 
-    if(endImg && endImg.complete && endImg.naturalWidth) applyEnd();
-    else if(endImg) endImg.addEventListener("load", applyEnd, { once:true });
-    else {
-      const cardW = Math.ceil(endCard.getBoundingClientRect().width);
-      endPanel.style.flex = `0 0 ${cardW}px`;
-      endPanel.style.width = `${cardW}px`;
-    }
+    if(endImg && endImg.complete) applyEnd();
+    else if(endImg) endImg.addEventListener("load", applyEnd, {once:true});
+    else applyEnd();
   }
 
   panels = Array.from(track.querySelectorAll(".panel"));
 }
-window.addEventListener("load", setPanelWidths);
-window.addEventListener("resize", setPanelWidths);
 
-/* ===== HORIZONTAL SCROLL ===== */
-let currentX = 0;
-let targetX = 0;
-let isUserSliding = false;
-
-function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-function totalWidth(){ return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0); }
+function totalWidth(){ return panels.reduce((sum, p) => sum + p.offsetWidth, 0); }
 function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
 
-function raf(){
-  currentX += (targetX - currentX) * 0.075;
-
-  const dpr = window.devicePixelRatio || 1;
-  const x = Math.round(currentX * dpr) / dpr;
-  track.style.transform = `translate3d(${-x}px,0,0)`;
-
+function updateSliderFromX(){
   const maxS = maxScroll();
   navSlider.max = String(Math.max(0, panels.length - 1));
+  if(isUserSliding) return;
+  const denom = (panels.length - 1) || 1;
+  const ratio = maxS === 0 ? 0 : (currentX / maxS);
+  navSlider.value = String(Math.round(ratio * denom));
+}
 
-  if(!isUserSliding){
-    const ratio = maxS === 0 ? 0 : (currentX / maxS);
-    navSlider.value = String(Math.round(ratio * (panels.length - 1)));
+function raf(){
+  rafStarted = true;
+
+  currentX += (targetX - currentX) * 0.085;
+  track.style.transform = `translate3d(${-currentX}px,0,0)`;
+
+  if (intro) {
+    const fadeStart = 55;
+    const fadeEnd = 320;
+    const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
+    intro.style.opacity = String(1 - Math.max(0, Math.min(1, t)));
   }
 
+  updateSliderFromX();
   requestAnimationFrame(raf);
 }
-raf();
 
+/* wheel */
 window.addEventListener("wheel", (e)=>{
   if(document.body.classList.contains("menu-open")) return;
   targetX = clamp(targetX + e.deltaY * 0.9, 0, maxScroll());
 },{passive:true});
 
-/* Drag / touch */
-let isDown=false, startX=0, startTarget=0;
-
+/* drag / touch */
 function pointerDown(x){
   if(document.body.classList.contains("menu-open")) return;
-  isDown=true; startX=x; startTarget=targetX;
+  isDown = true;
+  startX = x;
+  startTarget = targetX;
 }
 function pointerMove(x){
   if(!isDown) return;
   targetX = clamp(startTarget - (x - startX), 0, maxScroll());
 }
-function pointerUp(){ isDown=false; }
+function pointerUp(){ isDown = false; }
 
 window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
 window.addEventListener("mousemove",(e)=>pointerMove(e.clientX));
@@ -708,21 +779,40 @@ window.addEventListener("touchstart",(e)=>pointerDown(e.touches[0].clientX),{pas
 window.addEventListener("touchmove",(e)=>pointerMove(e.touches[0].clientX),{passive:true});
 window.addEventListener("touchend",pointerUp);
 
-/* Slider */
+/* slider */
 function sliderToTarget(){
   const maxS = maxScroll();
   const denom = (panels.length - 1) || 1;
-  targetX = clamp((Number(navSlider.value) / denom) * maxS, 0, maxS);
+  const ratio = Number(navSlider.value) / denom;
+  targetX = clamp(ratio * maxS, 0, maxS);
 }
 navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
-navSlider.addEventListener("pointerup", ()=>{ isUserSliding = false; sliderToTarget(); });
+navSlider.addEventListener("pointerup", ()=>{
+  isUserSliding = false;
+  sliderToTarget();
+});
+navSlider.addEventListener("pointercancel", ()=>{
+  isUserSliding = false;
+  sliderToTarget();
+});
 navSlider.addEventListener("input", sliderToTarget);
+navSlider.addEventListener("change", sliderToTarget);
 
-/* Keep bounds */
-window.addEventListener("resize", ()=>{
-  panels = Array.from(track.querySelectorAll(".panel"));
+/* init */
+function refreshAll(){
+  setVH();
+  setPanelWidths();
   targetX = clamp(targetX, 0, maxScroll());
   currentX = clamp(currentX, 0, maxScroll());
+  updateSliderFromX();
+}
+
+window.addEventListener("load", refreshAll);
+window.addEventListener("resize", refreshAll);
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  refreshAll();
+  if(!rafStarted) raf();
 });
 </script>
 
