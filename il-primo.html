@@ -34,14 +34,13 @@ body{
   touch-action:pan-y;
 }
 
-/* prevent weird flex/grid cropping */
 .panel, .split, .split-left, .split-right, .menu, .menu-panel, .end-card, .end-left{ min-height:0; }
 
-/* ================= SLOW PAGE APPEAR ================= */
+/* ================= PAGE APPEAR ================= */
 .page-shell{
   opacity:0;
   transform:scale(1.015);
-  transition:opacity 1.35s ease, transform 1.8s cubic-bezier(.22,1,.36,1);
+  transition:opacity 1.2s ease, transform 1.6s cubic-bezier(.22,1,.36,1);
   transform-origin:center center;
 }
 body.loaded .page-shell{
@@ -61,7 +60,6 @@ body.loaded .page-shell{
   cursor:pointer;
   opacity:1;
   pointer-events:auto;
-  transform:none;
 }
 
 .side-bar::before{
@@ -82,9 +80,6 @@ body.loaded .page-shell{
 .burger-lines{
   position:relative;
   z-index:2;
-  opacity:1;
-  transform:none;
-  transition:none;
 }
 
 .burger-lines i{
@@ -486,16 +481,16 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
         <div class="split">
           <div class="split-left">
             <div class="aub-heading">
-              <span class="small">Signature Residence</span>
-              <span class="big">Il Primo</span>
+              <span class="small">A Landmark Address</span>
+              <span class="big">IL PRIMO</span>
             </div>
             <div class="aub-line"></div>
             <div class="aub-text">
               <p class="lead">
-                An elevated expression of contemporary luxury, Il Primo offers beautifully crafted residences with exceptional scale, privacy, and refinement.
+                Positioned beside the Burj Khalifa and Dubai Opera, Il Primo represents a rare expression of elevated city living, defined by scale, privacy, and architectural distinction.
               </p>
               <p class="body">
-                Set in the heart of Downtown Dubai, each home is defined by sweeping views, sophisticated interiors, and a level of elegance reserved for the city’s most prestigious addresses.
+                Each residence is crafted with exceptional attention to detail, offering expansive interiors, panoramic views, and a level of refinement reserved for one of Downtown Dubai’s most prestigious addresses.
               </p>
             </div>
           </div>
@@ -523,8 +518,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
             <nav class="menu-links">
               <a href="index.html">Home</a>
               <a href="expertise.html">Expertise</a>
-              <a href="interior-projects.html">Interior Projects</a>
-              <a href="press.html">Press</a>
+              <a href="interior-projects.html">Portfolio Selection</a>
             </nav>
 
             <div class="menu-divider"></div>
@@ -550,6 +544,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
 </div>
 
+<!-- Sliding menu -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
 
@@ -562,8 +557,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     <nav class="menu-links">
       <a href="index.html">Home</a>
       <a href="expertise.html">Expertise</a>
-      <a href="interior-projects.html">Interior Projects</a>
-      <a href="press.html">Press</a>
+      <a href="interior-projects.html">Portfolio Selection</a>
     </nav>
 
     <div class="menu-divider"></div>
@@ -594,10 +588,11 @@ setVH();
 window.addEventListener('resize', setVH);
 window.addEventListener('orientationchange', setVH);
 
-/* ===== SLOW PAGE APPEAR ===== */
+/* ===== PAGE APPEAR ===== */
 window.addEventListener("load", ()=>{
   requestAnimationFrame(()=>{
     document.body.classList.add("loaded");
+    refreshAll();
   });
 });
 
@@ -776,7 +771,6 @@ function refreshAll(){
   updateSliderFromX();
 }
 
-window.addEventListener("load", refreshAll);
 window.addEventListener("resize", refreshAll);
 
 document.addEventListener("DOMContentLoaded", ()=>{
