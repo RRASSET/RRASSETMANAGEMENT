@@ -50,22 +50,19 @@ body.loaded .page-shell{
 }
 
 /* ================= LEFT BURGER STRIP ================= */
-/* same look as homepage, but visible immediately */
 .side-bar{
-  position:fixed; top:0; left:0;
+  position:fixed;
+  top:0;
+  left:0;
   width: calc(var(--burgerW) + var(--sal));
   height: calc(var(--vh) * 100);
-
   background:transparent;
   backdrop-filter:none;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   z-index:200;
   cursor:pointer;
-
   opacity:1;
   pointer-events:auto;
   transform:translateX(0);
@@ -79,7 +76,7 @@ body.loaded .page-shell{
   background:rgba(255,255,255,0.88);
   backdrop-filter: blur(10px);
   opacity:1;
-  transition:opacity .6s ease;
+  transition:background .35s ease;
   z-index:0;
 }
 
@@ -141,7 +138,6 @@ body.loaded .page-shell{
   overflow:hidden;
   background:#000;
   flex-shrink:0;
- 
 }
 
 /* ================= IMAGE-ONLY PANELS ================= */
@@ -327,7 +323,9 @@ body.loaded .page-shell{
 
 /* ================= MENU ================= */
 .menu{
-  position:fixed; top:0; left:0;
+  position:fixed;
+  top:0;
+  left:0;
   height: calc(var(--vh) * 100);
   width: var(--menuW);
   background:#f4f4f2;
@@ -350,13 +348,15 @@ body.loaded .page-shell{
   justify-content:flex-start;
   overflow:auto;
   -webkit-overflow-scrolling: touch;
-
   opacity:0;
   transform:translateY(10px);
   transition:opacity .9s ease, transform .9s ease;
   transition-delay:.2s;
 }
-.menu.open .menu-panel{ opacity:1; transform:translateY(0); }
+.menu.open .menu-panel{
+  opacity:1;
+  transform:translateY(0);
+}
 .menu-panel::-webkit-scrollbar{ width:0; height:0; }
 .menu-panel{ scrollbar-width:none; }
 
@@ -441,13 +441,26 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
 /* MOBILE */
 @media (max-width: 900px){
-  .split{ flex-direction:column; }
+  .split{
+    flex-direction:column;
+  }
+
   .split-copy{
     width:100% !important;
     flex:0 0 auto !important;
     padding:70px 24px 40px 24px;
   }
-  .split-media img{ height:55vh; }
+
+  .split-media{
+    width:100% !important;
+    flex:0 0 auto !important;
+  }
+
+  .split-media img{
+    height:55vh;
+    width:100%;
+    object-fit:cover;
+  }
 
   .end-left{ display:none; }
   .end-card{ flex:0 0 100%; width:100%; }
@@ -460,6 +473,10 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
   .menu{ width:min(420px, 92vw); }
   .menu-panel{ padding: calc(28px + var(--sat)) 28px calc(38px + var(--sab)); }
+
+  .aub-heading .small{ font-size:24px; }
+  .aub-heading .big{ font-size:42px; }
+  .aub-line{ margin:0 0 50px 0; }
 }
 </style>
 </head>
@@ -649,7 +666,7 @@ setVH();
 window.addEventListener('resize', setVH);
 window.addEventListener('orientationchange', setVH);
 
-/* ===== SLOW PAGE APPEAR ===== */
+/* ===== PAGE APPEAR ===== */
 window.addEventListener("load", ()=>{
   requestAnimationFrame(()=>{
     document.body.classList.add("loaded");
@@ -672,136 +689,166 @@ function closeMenuFn(){
 }
 burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
-document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape") closeMenuFn();
+});
 
 /* ===== HORIZONTAL SCROLL ===== */
 const track = document.getElementById("track");
 const navSlider = document.getElementById("navSlider");
-let panels = Array.from(track.querySelectorAll(".panel"));
 
+let panels = Array.from(track.querySelectorAll(".panel"));
 let currentX = 0;
 let targetX = 0;
 let isUserSliding = false;
-let isDown = false, startX = 0, startTarget = 0;
+let isDown = false;
+let startX = 0;
+let startTarget = 0;
+let rafStarted = false;
 
-function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+function clamp(v, min, max){
+  return Math.max(min, Math.min(max, v));
+}
 
 function setPanelWidths(){
-  const vh = window.innerHeight;
+  const vhPx = window.innerHeight;
 
- const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
-imgPanels.forEach(panel=>{
-  const img = panel.querySelector("img");
-  if(!img) return;
-
-  const apply = ()=>{
-    const nw = img.naturalWidth || 0;
-    const nh = img.naturalHeight || 0;
-    if(!nw || !nh) return;
-
-    const ratio = nw / nh;
-    const w = Math.max(240, Math.round(ratio * vh));
-    panel.style.flex = `0 0 ${w}px`;
-    panel.style.width = `${w}px`;
-  };
-
-  if(img.complete) apply();
-  else img.addEventListener("load", apply, { once:true });
-});
-
-  const splitPanels = Array.from(track.querySelectorAll(".panel--split"));
-  splitPanels.forEach(p=>{
-    const img  = p.querySelector(".split-media img");
-    const media = p.querySelector(".split-media");
-    if(!img || !media) return;
+  const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
+  imgPanels.forEach(panel=>{
+    const img = panel.querySelector("img");
+    if(!img) return;
 
     const apply = ()=>{
-      const copyW = Math.round(window.innerWidth * 0.42);
-      const imgW  = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 6;
+      const nw = img.naturalWidth || 0;
+      const nh = img.naturalHeight || 0;
+      if(!nw || !nh) return;
 
-      p.style.setProperty("--copyW", copyW + "px");
-      media.style.flex = `0 0 ${imgW}px`;
-      media.style.width = `${imgW}px`;
-
-      const total = copyW + imgW;
-      p.style.flex = `0 0 ${total}px`;
-      p.style.width = `${total}px`;
+      const ratio = nw / nh;
+      const w = Math.max(240, Math.round(ratio * vhPx));
+      panel.style.flex = `0 0 ${w}px`;
+      panel.style.width = `${w}px`;
     };
 
     if(img.complete && img.naturalWidth) apply();
     else img.addEventListener("load", apply, { once:true });
   });
 
- const endPanel = track.querySelector(".panel--end");
-if(endPanel){
-  const endCard = endPanel.querySelector(".end-card");
-  const endLeft = endPanel.querySelector(".end-left");
-  const endImg = endPanel.querySelector(".end-img");
+  const splitPanels = Array.from(track.querySelectorAll(".panel--split"));
+  splitPanels.forEach(panel=>{
+    const img = panel.querySelector(".split-media img");
+    const media = panel.querySelector(".split-media");
+    if(!img || !media) return;
 
-  const applyEnd = ()=>{
-    const cardW = Math.ceil(endCard.getBoundingClientRect().width);
+    const apply = ()=>{
+      let copyW;
+      let imgW;
 
-    if(window.innerWidth <= 900){
-      endPanel.style.flex = `0 0 ${window.innerWidth}px`;
-      endPanel.style.width = `${window.innerWidth}px`;
+      if(window.innerWidth <= 900){
+        copyW = window.innerWidth;
+        imgW = window.innerWidth;
+
+        panel.style.setProperty("--copyW", copyW + "px");
+        media.style.flex = `0 0 ${imgW}px`;
+        media.style.width = `${imgW}px`;
+
+        const total = copyW;
+        panel.style.flex = `0 0 ${total}px`;
+        panel.style.width = `${total}px`;
+        return;
+      }
+
+      copyW = Math.round(window.innerWidth * 0.42);
+      imgW = Math.max(240, Math.round((img.naturalWidth / img.naturalHeight) * vhPx));
+
+      panel.style.setProperty("--copyW", copyW + "px");
+      media.style.flex = `0 0 ${imgW}px`;
+      media.style.width = `${imgW}px`;
+
+      const total = copyW + imgW;
+      panel.style.flex = `0 0 ${total}px`;
+      panel.style.width = `${total}px`;
+    };
+
+    if(img.complete && img.naturalWidth) apply();
+    else img.addEventListener("load", apply, { once:true });
+  });
+
+  const endPanel = track.querySelector(".panel--end");
+  if(endPanel){
+    const endCard = endPanel.querySelector(".end-card");
+    const endLeft = endPanel.querySelector(".end-left");
+    const endImg = endPanel.querySelector(".end-img");
+
+    const applyEnd = ()=>{
+      const cardW = Math.ceil(endCard.getBoundingClientRect().width);
+
+      if(window.innerWidth <= 900){
+        endPanel.style.flex = `0 0 ${window.innerWidth}px`;
+        endPanel.style.width = `${window.innerWidth}px`;
+
+        if(endLeft){
+          endLeft.style.flex = `0 0 0px`;
+          endLeft.style.width = `0px`;
+        }
+        return;
+      }
+
+      let imgW = 0;
+      if(endImg && endImg.naturalWidth && endImg.naturalHeight){
+        imgW = Math.max(240, Math.round((endImg.naturalWidth / endImg.naturalHeight) * vhPx));
+      }
+
+      const total = imgW + cardW;
+      endPanel.style.flex = `0 0 ${total}px`;
+      endPanel.style.width = `${total}px`;
 
       if(endLeft){
-        endLeft.style.flex = `0 0 0px`;
-        endLeft.style.width = `0px`;
+        endLeft.style.flex = `0 0 ${imgW}px`;
+        endLeft.style.width = `${imgW}px`;
       }
-      return;
-    }
+    };
 
-    let imgW = 0;
+    if(endImg && endImg.complete) applyEnd();
+    else if(endImg) endImg.addEventListener("load", applyEnd, { once:true });
+    else applyEnd();
+  }
 
-    if(endImg && endImg.naturalWidth && endImg.naturalHeight){
-      imgW = Math.max(
-        240,
-        Math.round((endImg.naturalWidth / endImg.naturalHeight) * window.innerHeight)
-      );
-    }
-
-    const total = imgW + cardW;
-
-    endPanel.style.flex = `0 0 ${total}px`;
-    endPanel.style.width = `${total}px`;
-
-    if(endLeft){
-      endLeft.style.flex = `0 0 ${imgW}px`;
-      endLeft.style.width = `${imgW}px`;
-    }
-  };
-
-  if(endImg && endImg.complete) applyEnd();
-  else if(endImg) endImg.addEventListener("load", applyEnd, { once:true });
-  else applyEnd();
+  panels = Array.from(track.querySelectorAll(".panel"));
 }
 
-function totalWidth(){ return panels.reduce((sum, p) => sum + p.offsetWidth, 0); }
-function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
+function totalWidth(){
+  return panels.reduce((sum, p) => sum + p.offsetWidth, 0);
+}
+
+function maxScroll(){
+  return Math.max(0, totalWidth() - window.innerWidth);
+}
 
 function updateSliderFromX(){
   const maxS = maxScroll();
   navSlider.max = String(Math.max(0, panels.length - 1));
   if(isUserSliding) return;
+
   const denom = (panels.length - 1) || 1;
   const ratio = maxS === 0 ? 0 : (currentX / maxS);
   navSlider.value = String(Math.round(ratio * denom));
 }
 
 function raf(){
+  rafStarted = true;
   currentX += (targetX - currentX) * 0.085;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
   updateSliderFromX();
   requestAnimationFrame(raf);
 }
-raf();
 
+/* wheel */
 window.addEventListener("wheel", (e)=>{
   if(document.body.classList.contains("menu-open")) return;
   targetX = clamp(targetX + e.deltaY * 0.9, 0, maxScroll());
 },{passive:true});
 
+/* drag / touch */
 function pointerDown(x){
   if(document.body.classList.contains("menu-open")) return;
   isDown = true;
@@ -812,20 +859,24 @@ function pointerMove(x){
   if(!isDown) return;
   targetX = clamp(startTarget - (x - startX), 0, maxScroll());
 }
-function pointerUp(){ isDown = false; }
+function pointerUp(){
+  isDown = false;
+}
 
-window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
-window.addEventListener("mousemove",(e)=>pointerMove(e.clientX));
-window.addEventListener("mouseup",pointerUp);
+window.addEventListener("mousedown", (e)=>pointerDown(e.clientX));
+window.addEventListener("mousemove", (e)=>pointerMove(e.clientX));
+window.addEventListener("mouseup", pointerUp);
 
-window.addEventListener("touchstart",(e)=>pointerDown(e.touches[0].clientX),{passive:true});
-window.addEventListener("touchmove",(e)=>pointerMove(e.touches[0].clientX),{passive:true});
-window.addEventListener("touchend",pointerUp);
+window.addEventListener("touchstart", (e)=>pointerDown(e.touches[0].clientX), {passive:true});
+window.addEventListener("touchmove", (e)=>pointerMove(e.touches[0].clientX), {passive:true});
+window.addEventListener("touchend", pointerUp);
 
+/* slider */
 function sliderToTarget(){
   const maxS = maxScroll();
   const denom = (panels.length - 1) || 1;
-  targetX = clamp((Number(navSlider.value) / denom) * maxS, 0, maxS);
+  const ratio = Number(navSlider.value) / denom;
+  targetX = clamp(ratio * maxS, 0, maxS);
 }
 navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
 navSlider.addEventListener("pointerup", ()=>{
@@ -839,6 +890,7 @@ navSlider.addEventListener("pointercancel", ()=>{
 navSlider.addEventListener("input", sliderToTarget);
 navSlider.addEventListener("change", sliderToTarget);
 
+/* init */
 function refreshAll(){
   setVH();
   setPanelWidths();
@@ -848,7 +900,11 @@ function refreshAll(){
 }
 
 window.addEventListener("resize", refreshAll);
-document.addEventListener("DOMContentLoaded", refreshAll);
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  refreshAll();
+  if(!rafStarted) raf();
+});
 </script>
 
 </body>
