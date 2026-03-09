@@ -490,7 +490,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 <div class="page-shell">
 
   <div class="nav-slider" aria-label="Slide navigation">
-    <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
+    <input id="navSlider" type="range" min="0" max="1000" step="1" value="0">
   </div>
 
   <div class="hwrap">
@@ -826,12 +826,10 @@ function maxScroll(){
 
 function updateSliderFromX(){
   const maxS = maxScroll();
-  navSlider.max = String(Math.max(0, panels.length - 1));
   if(isUserSliding) return;
 
-  const denom = (panels.length - 1) || 1;
   const ratio = maxS === 0 ? 0 : (currentX / maxS);
-  navSlider.value = String(Math.round(ratio * denom));
+  navSlider.value = String(Math.round(ratio * 1000));
 }
 
 function raf(){
@@ -874,8 +872,7 @@ window.addEventListener("touchend", pointerUp);
 /* slider */
 function sliderToTarget(){
   const maxS = maxScroll();
-  const denom = (panels.length - 1) || 1;
-  const ratio = Number(navSlider.value) / denom;
+  const ratio = Number(navSlider.value) / 1000;
   targetX = clamp(ratio * maxS, 0, maxS);
 }
 navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
