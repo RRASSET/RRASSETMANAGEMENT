@@ -5,51 +5,110 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>RR Asset Management — Expertise</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
+
+/* ================= VARIABLES ================= */
+:root{
+  --burgerW: clamp(52px, 5.5vw, 64px);
+  --menuW: clamp(320px, 40vw, 420px);
+  --endCardW: clamp(320px, 40vw, 420px);
+
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+
+  --vh: 1vh;
+}
+
 body{
-  font-family: Arial, sans-serif;
+  font-family:'Montserrat', sans-serif;
   background:#000;
   overflow:hidden;
+  height: calc(var(--vh) * 100);
+  overscroll-behavior:none;
+  touch-action:pan-y;
 }
 
+/* prevent weird flex/grid cropping */
+.panel, .split, .split-copy, .split-media, .menu, .menu-panel, .end-card, .end-left{ min-height:0; }
 
+/* ================= SLOW PAGE APPEAR ================= */
+.page-shell{
+  opacity:0;
+  transform:scale(1.015);
+  transition:opacity 1.35s ease, transform 1.8s cubic-bezier(.22,1,.36,1);
+  transform-origin:center center;
+}
+body.loaded .page-shell{
+  opacity:1;
+  transform:scale(1);
+}
 
-
-/* ================= LEFT BURGER ================= */
+/* ================= LEFT BURGER STRIP ================= */
+/* same look as homepage, but visible immediately */
 .side-bar{
   position:fixed; top:0; left:0;
-  width:64px; height:100vh;
+  width: calc(var(--burgerW) + var(--sal));
+  height: calc(var(--vh) * 100);
+
+  background:transparent;
+  backdrop-filter:none;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  z-index:200;
+  cursor:pointer;
+
+  opacity:1;
+  pointer-events:auto;
+  transform:translateX(0);
+  transition:none;
+}
+
+.side-bar::before{
+  content:"";
+  position:absolute;
+  inset:0;
   background:rgba(255,255,255,0.88);
   backdrop-filter: blur(10px);
-  display:flex; align-items:center; justify-content:center;
-  z-index:90; cursor:pointer;
-  transition:background .6s ease;
+  opacity:1;
+  transition:opacity .6s ease;
+  z-index:0;
 }
-.side-bar:hover{ background:rgba(255,255,255,0.94); }
+
+.side-bar:hover::before{
+  background:rgba(255,255,255,0.94);
+}
 
 .burger-lines{
-  opacity:0;
-  transform:translateY(8px);
-  animation:burgerIn 1.8s cubic-bezier(.22,1,.36,1) forwards;
-  animation-delay:0.85s;
+  position:relative;
+  z-index:2;
+  opacity:1;
+  transform:translateY(0);
+  transition:none;
 }
-@keyframes burgerIn{ to{opacity:1; transform:translateY(0);} }
 
 .burger-lines i{
-  width:22px; height:1.6px;
+  width:22px;
+  height:2px;
   background:#111;
-  position:relative;
   display:block;
+  position:relative;
 }
 .burger-lines i::before,
 .burger-lines i::after{
   content:"";
-  position:absolute; left:0;
-  width:22px; height:1.6px;
+  position:absolute;
+  left:0;
+  width:22px;
+  height:2px;
   background:#111;
 }
 .burger-lines i::before{ top:-7px; }
@@ -59,7 +118,8 @@ body{
 .hwrap{
   position:relative;
   z-index:30;
-  height:100vh; width:100vw;
+  height: calc(var(--vh) * 100);
+  width:100vw;
   overflow:hidden;
 }
 .htrack{
@@ -67,20 +127,24 @@ body{
   display:flex;
   will-change:transform;
   transform:translate3d(0,0,0);
-  gap:0;                 /* ADDED: ensure no flex gap */
-  align-items:stretch;   /* ADDED: stretch panels */
+  gap:0;
+  align-items:stretch;
+  position:relative;
+  z-index:2;
 }
 
 /* ================= PANELS BASE ================= */
-.panel{ flex:0 0 auto; height:100vh; }
-
-/* ADDED: seam killer (tiny overlap) */
 .panel{
+  flex:0 0 auto;
+  height: calc(var(--vh) * 100);
+  position:relative;
+  overflow:hidden;
+  background:#000;
   flex-shrink:0;
-  margin-right:-2px;   /* overlap next panel slightly to eliminate hairline gaps */
+  margin-right:-2px;
 }
 
-/* ================= IMAGE-ONLY PANELS (HUG IMAGE) ================= */
+/* ================= IMAGE-ONLY PANELS ================= */
 .panel--img{
   display:flex;
   align-items:stretch;
@@ -88,24 +152,22 @@ body{
   background:#000;
 }
 .panel--img img{
-  height:100vh;
+  height: calc(var(--vh) * 100);
   width:auto;
   object-fit:contain;
   display:block;
 }
 
-
-
-/* ================= SPLIT PANELS (TEXT + IMAGE) ================= */
+/* ================= SPLIT PANELS ================= */
 .panel--split{
-  flex:0 0 auto;   /* IMPORTANT: not 100vw */
+  flex:0 0 auto;
   width:auto;
   background:#f4f4f2;
 }
 
 .split{
   height:100%;
-  display:flex;    /* IMPORTANT: no grid */
+  display:flex;
   width:auto;
 }
 
@@ -123,18 +185,20 @@ body{
 
 .aub-heading{
   font-family:'Cormorant Garamond', serif;
-  font-weight:400;
   line-height:1.04;
   margin:0 0 26px 0;
 }
 .aub-heading .small{
   display:block;
   font-style:italic;
+  font-weight:300;
   font-size:30px;
   margin-bottom:6px;
 }
 .aub-heading .big{
   display:block;
+  font-style:normal;
+  font-weight:400;
   font-size:60px;
   text-transform:uppercase;
   letter-spacing:.6px;
@@ -154,7 +218,7 @@ body{
   line-height:2.05;
   max-width:340px;
   color:#1f1f1f;
-  letter-spacing:0.2px;
+  letter-spacing:.2px;
 }
 .aub-text p{ margin:0; }
 
@@ -173,92 +237,65 @@ body{
   display:block;
 }
 
-/* ================= END SLIDE (IMAGE + CARD) ================= */
-.end-card{
-  flex:0 0 min(520px, 42vw);      /* SAME width as before */
-  width:min(520px, 42vw);
-  height:100%;
-  background:#f4f4f2;
+/* ================= END SLIDE ================= */
+.panel--end{
+  height: calc(var(--vh) * 100);
   display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:110px 60px;
-  border-left:0;
+  align-items:stretch;
+  justify-content:flex-end;
+  background:#000;
+  overflow:hidden;
 }
 
 .end-left{
-  flex:0 0 auto;
+  flex:1 1 auto;
+  min-width:0;
   display:flex;
   align-items:stretch;
-  justify-content:flex-start;
+  justify-content:flex-end;
+  overflow:hidden;
+  background:#000;
 }
+
 .end-img{
-  height:100vh;
-  width:auto;
-  object-fit:contain;
+  height:100%;
+  width:100%;
+  max-width:100%;
+  object-fit:cover;
+  object-position:center;
   display:block;
 }
 
-/* Card width stays EXACTLY the same */
 .end-card{
-  flex:0 0 min(520px, 42vw);
+  flex:0 0 var(--endCardW);
   height:100%;
   background:#f4f4f2;
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
-  text-align:center;
-  padding:110px 60px;
   border-left:1px solid rgba(0,0,0,0.08);
-}
-.end-inner{ width:100%; max-width:520px; }
-.end-logo img{ width:170px; margin-bottom:44px; }
-
-.end-links a{
-  display:block;
-  font-family:'Cormorant Garamond', serif;
-  font-size:28px;
-  margin:14px 0;
-  text-decoration:none;
-  color:#1a1a1a;
-  transition:opacity .25s ease;
-}
-.end-links a:hover{ opacity:.6; }
-
-.end-divider{
-  width:200px;
-  height:1px;
-  background:#c6b67a;
-  margin:50px auto 30px auto;
+  padding:0;
 }
 
-.end-footer{
-  font-family:'Cormorant Garamond', serif;
-  font-size:20px;
-  line-height:1.7;
-  color:#1a1a1a;
+.end-card .menu-panel{
+  opacity:1 !important;
+  transform:none !important;
+  transition:none !important;
+  overflow:auto !important;
+  -webkit-overflow-scrolling: touch;
 }
-.end-footer .contact{ margin-top:12px; font-size:18px; }
+.end-card .menu-panel::-webkit-scrollbar{ width:0; height:0; }
+.end-card .menu-panel{ scrollbar-width:none; }
+.end-card .menu-address{ margin-top:-14px; }
 
-.end-privacy{
-  margin-top:22px;
-  display:inline-block;
-  font-family:'Montserrat', sans-serif;
-  font-size:12px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  color:#c6b67a;
-  text-decoration:none;
-}
-
-/* ================= BOTTOM SLIDER ================= */
+/* ================= BOTTOM THIN SLIDER ================= */
 .nav-slider{
   position:fixed;
-  left:84px; right:28px;
-  bottom:14px;
-  z-index:92;
-  transition:opacity .35s ease;
+  left: calc(var(--burgerW) + var(--sal) + 20px);
+  right: calc(28px + var(--sar));
+  bottom: calc(14px + var(--sab));
+  z-index:210;
+  transition:opacity .25s ease;
 }
 .nav-slider input[type="range"]{
   width:100%;
@@ -268,41 +305,51 @@ body{
   background:rgba(255,255,255,0.60);
   border-radius:999px;
   outline:none;
+  touch-action:none;
 }
 .nav-slider input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance:none;
   appearance:none;
-  width:80px;
+  width: clamp(46px, 10vw, 80px);
   height:6px;
   border-radius:999px;
   background:rgba(0,0,0,0.60);
   cursor:pointer;
 }
 .nav-slider input[type="range"]::-moz-range-thumb{
-  width:80px;height:6px;border-radius:999px;
+  width: clamp(46px, 10vw, 80px);
+  height:6px;
+  border-radius:999px;
   background:rgba(0,0,0,0.60);
-  cursor:pointer;border:none;
+  cursor:pointer;
+  border:none;
 }
 
 /* ================= MENU ================= */
 .menu{
   position:fixed; top:0; left:0;
-  height:100vh; width:380px;
+  height: calc(var(--vh) * 100);
+  width: var(--menuW);
   background:#f4f4f2;
-  z-index:95;
+  z-index:250;
   transform:translateX(-100%);
-  transition:transform 1.05s cubic-bezier(.77,0,.18,1);
+  transition:transform 1.15s cubic-bezier(.77,0,.18,1);
   will-change:transform;
+  padding-left: var(--sal);
 }
 .menu.open{ transform:translateX(0); }
 
 .menu-panel{
   height:100%;
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center;
-  padding:60px 30px;
   position:relative;
+  padding: 26px 46px 56px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  justify-content:flex-start;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
 
   opacity:0;
   transform:translateY(10px);
@@ -310,52 +357,84 @@ body{
   transition-delay:.2s;
 }
 .menu.open .menu-panel{ opacity:1; transform:translateY(0); }
+.menu-panel::-webkit-scrollbar{ width:0; height:0; }
+.menu-panel{ scrollbar-width:none; }
 
 .back-arrow{
   position:absolute;
-  left:34px;
-  top:50%;
+  left: 26px;
+  top: 50%;
   transform:translateY(-50%);
-  font-size:28px;
+  font-size:34px;
+  line-height:1;
   cursor:pointer;
-  color:#222;
-  opacity:.9;
+  color:#111;
+  opacity:.95;
+  user-select:none;
+  -webkit-tap-highlight-color: transparent;
 }
-.menu-logo img{ width:170px; margin-bottom:46px; }
 
+.menu-logo{ margin-top:6px; margin-bottom:6px; }
+.menu-logo img{
+  width:240px;
+  height:auto;
+  display:block;
+  margin:0 auto 10px auto;
+}
+
+.menu-links{ margin-top:-6px; }
 .menu-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
-  font-size:30px;
-  margin:18px 0;
+  font-size:22px;
+  font-weight:400;
+  margin:22px 0;
   text-decoration:none;
   color:#222;
+  transition:opacity .25s ease;
 }
-.menu-links a:hover{ opacity:0.6; }
+.menu-links a:hover{ opacity:.65; }
 
-.divider{
-  width:200px;height:1px;background:#c6b67a;
-  margin:50px auto 30px auto;
+.menu-divider{
+  width:260px;
+  height:1px;
+  background:#c6b67a !important;
+  opacity:1 !important;
+  margin:34px 0 18px 0;
 }
 
-.menu-footer{
-  font-family:'Cormorant Garamond', serif;
-  font-size:22px;
-  line-height:1.6;
+.menu-address{
+  font-family:'Montserrat', sans-serif;
+  font-weight:300;
+  font-size:14px;
+  line-height:1.8;
   color:#222;
+  max-width:320px;
+  letter-spacing:.4px;
+  margin-top:0;
 }
-.menu-footer .contact{ margin-top:15px; font-size:20px; }
 
-.privacy{
-  margin-top:20px;
+.menu-contact{
+  margin-top:12px;
+  font-size:13px;
+  font-weight:400;
+  letter-spacing:.2px;
+}
+.menu-contact a{ color:#222; text-decoration:none; }
+.menu-contact a:hover{ opacity:.65; }
+.menu-contact .dot{ padding:0 10px; opacity:.7; }
+
+.menu-privacy{
+  margin-top:12px;
   display:inline-block;
   font-family:'Montserrat', sans-serif;
-  font-size:12px;
-  letter-spacing:1.5px;
+  font-size:10px;
+  letter-spacing:2px;
   text-transform:uppercase;
   color:#c6b67a;
   text-decoration:none;
 }
+.menu-privacy:hover{ opacity:.7; }
 
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
@@ -369,157 +448,163 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     padding:70px 24px 40px 24px;
   }
   .split-media img{ height:55vh; }
+
   .end-left{ display:none; }
-  .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
-  .nav-slider{ left:24px; right:24px; bottom:12px; }
-  .menu{ width:min(380px, 92vw); }
+  .end-card{ flex:0 0 100%; width:100%; }
+
+  .nav-slider{
+    left: calc(24px + var(--sal));
+    right: calc(24px + var(--sar));
+    bottom: calc(12px + var(--sab));
+  }
+
+  .menu{ width:min(420px, 92vw); }
+  .menu-panel{ padding: calc(28px + var(--sat)) 28px calc(38px + var(--sab)); }
 }
 </style>
 </head>
 
 <body>
 
-
-
-
 <div class="side-bar" id="burger" aria-label="Open menu">
   <div class="burger-lines"><i></i></div>
 </div>
 
-<div class="nav-slider" aria-label="Slide navigation">
-  <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
-</div>
+<div class="page-shell">
 
-<div class="hwrap">
-  <div class="htrack" id="track">
+  <div class="nav-slider" aria-label="Slide navigation">
+    <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
+  </div>
 
-  
+  <div class="hwrap">
+    <div class="htrack" id="track">
 
-    <!-- TEXT 1 BEFORE expertiseone -->
-    <section class="panel panel--split">
-      <div class="split">
-        <div class="split-copy">
-          <div class="copy-inner">
-            <div class="aub-heading">
-              <span class="small">Bespoke</span>
-              <span class="big">INTERIORS</span>
+      <section class="panel panel--split">
+        <div class="split">
+          <div class="split-copy">
+            <div class="copy-inner">
+              <div class="aub-heading">
+                <span class="small">Bespoke</span>
+                <span class="big">INTERIORS</span>
+              </div>
+              <div class="aub-line"></div>
+              <div class="aub-text">
+                <p>R&amp;R Mayfair is a premier real estate advisory specialising in luxury and ultra-prime properties in Dubai’s most prestigious and sought-after locations.</p>
+              </div>
             </div>
-            <div class="aub-line"></div>
-            <div class="aub-text">
-              <p>R&amp;R Mayfair is a premier real estate advisory specialising in luxury and ultra-prime properties in Dubai’s most prestigious and sought-after locations.</p>
+          </div>
+          <div class="split-media">
+            <img src="./expertiseone.png" alt="Expertise 1">
+          </div>
+        </div>
+      </section>
+
+      <section class="panel panel--img"><img src="./expertisetwo.png" alt="Expertise 2"></section>
+      <section class="panel panel--img"><img src="./expertisethree.png" alt="Expertise 3"></section>
+
+      <section class="panel panel--split">
+        <div class="split">
+          <div class="split-copy">
+            <div class="copy-inner">
+              <div class="aub-heading">
+                <span class="small">Thoughtful</span>
+                <span class="big">ARCHITECTURE</span>
+              </div>
+              <div class="aub-line"></div>
+              <div class="aub-text">
+                <p>R&amp;R Mayfair is a premier real estate advisory specialising in luxury and ultra-prime properties in Dubai’s most prestigious and sought-after locations.</p>
+              </div>
+            </div>
+          </div>
+          <div class="split-media">
+            <img src="./expertisefour.png" alt="Expertise 4">
+          </div>
+        </div>
+      </section>
+
+      <section class="panel panel--img"><img src="./expertisefive.png" alt="Expertise 5"></section>
+      <section class="panel panel--img"><img src="./expertisesix.png" alt="Expertise 6"></section>
+
+      <section class="panel panel--split">
+        <div class="split">
+          <div class="split-copy">
+            <div class="copy-inner">
+              <div class="aub-heading">
+                <span class="small">Strategic</span>
+                <span class="big">ADVISORY</span>
+              </div>
+              <div class="aub-line"></div>
+              <div class="aub-text">
+                <p>R&amp;R Mayfair is a premier real estate advisory specialising in luxury and ultra-prime properties in Dubai’s most prestigious and sought-after locations.</p>
+              </div>
+            </div>
+          </div>
+          <div class="split-media">
+            <img src="./expertiseseven.png" alt="Expertise 7">
+          </div>
+        </div>
+      </section>
+
+      <section class="panel panel--img"><img src="./expertiseeight.png" alt="Expertise 8"></section>
+      <section class="panel panel--img"><img src="./expertisenine.png" alt="Expertise 9"></section>
+
+      <section class="panel panel--split">
+        <div class="split">
+          <div class="split-copy">
+            <div class="copy-inner">
+              <div class="aub-heading">
+                <span class="small">Curated</span>
+                <span class="big">OPPORTUNITIES</span>
+              </div>
+              <div class="aub-line"></div>
+              <div class="aub-text">
+                <p>R&amp;R Mayfair is a premier real estate advisory specialising in luxury and ultra-prime properties in Dubai’s most prestigious and sought-after locations.</p>
+              </div>
+            </div>
+          </div>
+          <div class="split-media">
+            <img src="./expertiseten.png" alt="Expertise 10">
+          </div>
+        </div>
+      </section>
+
+      <section class="panel panel--img"><img src="./expertiseeleven.png" alt="Expertise 11"></section>
+      <section class="panel panel--img"><img src="./expertisetwelve.png" alt="Expertise 12"></section>
+
+      <section class="panel panel--end">
+        <div class="end-left"></div>
+
+        <div class="end-card">
+          <div class="menu-panel">
+            <div class="menu-logo">
+              <img src="./logotwo.png" alt="RR Asset Management Logo">
+            </div>
+
+            <nav class="menu-links">
+              <a href="index.html">Home</a>
+              <a href="expertise.html">Expertise</a>
+              <a href="interior-projects.html">Portfolio Selection</a>
+            </nav>
+
+            <div class="menu-divider"></div>
+
+            <div class="menu-address">
+              Sun House, 428 Long Drive,<br>
+              Greenford, UB6 8UH
+
+              <div class="menu-contact">
+                <span>+44 (0) 20 8575 3700</span>
+                <span class="dot">|</span>
+                <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+              </div>
+
+              <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
             </div>
           </div>
         </div>
-        <div class="split-media">
-          <img src="./expertiseone.png" alt="Expertise 1">
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="panel panel--img"><img src="./expertisetwo.png" alt="Expertise 2"></section>
-    <section class="panel panel--img"><img src="./expertisethree.png" alt="Expertise 3"></section>
-
-    <!-- TEXT 2 BEFORE expertisefour -->
-    <section class="panel panel--split">
-      <div class="split">
-        <div class="split-copy">
-          <div class="copy-inner">
-            <div class="aub-heading">
-              <span class="small">Thoughtful</span>
-              <span class="big">ARCHITECTURE</span>
-            </div>
-            <div class="aub-line"></div>
-            <div class="aub-text">
-              <p>R&amp;R Mayfair is a premier real estate advisory specialising in luxury and ultra-prime properties in Dubai’s most prestigious and sought-after locations.</p>
-            </div>
-          </div>
-        </div>
-        <div class="split-media">
-          <img src="./expertisefour.png" alt="Expertise 4">
-        </div>
-      </div>
-    </section>
-
-    <section class="panel panel--img"><img src="./expertisefive.png" alt="Expertise 5"></section>
-    <section class="panel panel--img"><img src="./expertisesix.png" alt="Expertise 6"></section>
-
-    <!-- TEXT 3 BEFORE expertiseseven -->
-    <section class="panel panel--split">
-      <div class="split">
-        <div class="split-copy">
-          <div class="copy-inner">
-            <div class="aub-heading">
-              <span class="small">Strategic</span>
-              <span class="big">ADVISORY</span>
-            </div>
-          <div class="aub-line"></div>
-            <div class="aub-text">
-              <p>R&amp;R Mayfair is a premier real estate advisory specialising in luxury and ultra-prime properties in Dubai’s most prestigious and sought-after locations.</p>
-            </div>
-          </div>
-        </div>
-        <div class="split-media">
-          <img src="./expertiseseven.png" alt="Expertise 7">
-        </div>
-      </div>
-    </section>
-
-    <section class="panel panel--img"><img src="./expertiseeight.png" alt="Expertise 8"></section>
-    <section class="panel panel--img"><img src="./expertisenine.png" alt="Expertise 9"></section>
-
-    <!-- TEXT 4 BEFORE expertiseten -->
-    <section class="panel panel--split">
-      <div class="split">
-        <div class="split-copy">
-          <div class="copy-inner">
-            <div class="aub-heading">
-              <span class="small">Curated</span>
-              <span class="big">OPPORTUNITIES</span>
-            </div>
-            <div class="aub-line"></div>
-            <div class="aub-text">
-              <p>R&amp;R Mayfair is a premier real estate advisory specialising in luxury and ultra-prime properties in Dubai’s most prestigious and sought-after locations.</p>
-            </div>
-          </div>
-        </div>
-        <div class="split-media">
-          <img src="./expertiseten.png" alt="Expertise 10">
-        </div>
-      </div>
-    </section>
-
-    <section class="panel panel--img"><img src="./expertiseeleven.png" alt="Expertise 11"></section>
-    <section class="panel panel--img"><img src="./expertisetwelve.png" alt="Expertise 12"></section>
-
-    <!-- END SLIDE -->
-    <section class="panel panel--end">
-      
-
-      <div class="end-card">
-        <div class="end-inner">
-          <div class="end-logo">
-            <img src="./logo.png" alt="RR Logo">
-          </div>
-
-          <nav class="end-links">
-            <a href="index.html">Home</a>
-            <a href="expertise.html" aria-current="page">Expertise</a>
-            <a href="interior-projects.html">Interior Projects</a>
-            <a href="press.html">Press</a>
-          </nav>
-
-          <div class="end-divider"></div>
-
-          <div class="end-footer">
-            SUN HOUSE, 428 LONG DRIVE,<br>
-            GREENFORD, UB6 8UH
-            <div class="contact">+44 (0) 20 8575 3700</div>
-            <a class="end-privacy" href="#">Privacy Policy</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
+    </div>
   </div>
 </div>
 
@@ -528,28 +613,50 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
 
     <div class="menu-logo">
-      <img src="./logo.png" alt="RR Asset Management Logo">
+      <img src="./logotwo.png" alt="RR Asset Management Logo">
     </div>
 
     <nav class="menu-links">
       <a href="index.html">Home</a>
-      <a href="expertise.html" aria-current="page">Expertise</a>
-      <a href="interior-projects.html">Interior Projects</a>
-      <a href="press.html">Press</a>
+      <a href="expertise.html">Expertise</a>
+      <a href="interior-projects.html">Portfolio Selection</a>
     </nav>
 
-    <div class="divider"></div>
+    <div class="menu-divider"></div>
 
-    <div class="menu-footer">
-      SUN HOUSE, 428 LONG DRIVE,<br>
-      GREENFORD, UB6 8UH
-      <div class="contact">+44 (0) 20 8575 3700</div>
-      <a href="#" class="privacy">Privacy Policy</a>
+    <div class="menu-address">
+      Sun House, 428 Long Drive,<br>
+      Greenford, UB6 8UH
+
+      <div class="menu-contact">
+        <span>+44 (0) 20 8575 3700</span>
+        <span class="dot">|</span>
+        <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+      </div>
+
+      <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
     </div>
   </div>
 </div>
 
 <script>
+/* ===== 100vh FIX ===== */
+function setVH(){
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+setVH();
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', setVH);
+
+/* ===== SLOW PAGE APPEAR ===== */
+window.addEventListener("load", ()=>{
+  requestAnimationFrame(()=>{
+    document.body.classList.add("loaded");
+    refreshAll();
+  });
+});
+
 /* ===== MENU ===== */
 const menu = document.getElementById("menu");
 const burger = document.getElementById("burger");
@@ -567,23 +674,27 @@ burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
 document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
 
-/* ===== SIZING: image panels + split panels + end panel ===== */
+/* ===== HORIZONTAL SCROLL ===== */
 const track = document.getElementById("track");
-let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
+let panels = Array.from(track.querySelectorAll(".panel"));
 
+let currentX = 0;
+let targetX = 0;
+let isUserSliding = false;
+let isDown = false, startX = 0, startTarget = 0;
+
+function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 
 function setPanelWidths(){
   const vh = window.innerHeight;
 
-  // image-only panels
   const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
   imgPanels.forEach(p=>{
     const img = p.querySelector("img");
     if(!img) return;
 
-    const apply = () => {
-      /* CHANGED: +6 for extra buffer to prevent seams */
+    const apply = ()=>{
       const w = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 6;
       p.style.flex = `0 0 ${w}px`;
       p.style.width = `${w}px`;
@@ -593,17 +704,14 @@ function setPanelWidths(){
     else img.addEventListener("load", apply, { once:true });
   });
 
-  // split panels: (text width) + (image width)
   const splitPanels = Array.from(track.querySelectorAll(".panel--split"));
   splitPanels.forEach(p=>{
     const img  = p.querySelector(".split-media img");
-    const copy = p.querySelector(".split-copy");
     const media = p.querySelector(".split-media");
-    if(!img || !copy || !media) return;
+    if(!img || !media) return;
 
-    const apply = () => {
+    const apply = ()=>{
       const copyW = Math.round(window.innerWidth * 0.42);
-      /* CHANGED: +6 for extra buffer to prevent seams */
       const imgW  = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 6;
 
       p.style.setProperty("--copyW", copyW + "px");
@@ -619,56 +727,36 @@ function setPanelWidths(){
     else img.addEventListener("load", apply, { once:true });
   });
 
-
- // end panel: card only (NO end image)
-const endPanel = track.querySelector(".panel--end");
-if (endPanel) {
-  const endCard = endPanel.querySelector(".end-card");
-
-  const applyEnd = () => {
-    if (!endCard) return;
-    const cardW = Math.ceil(endCard.getBoundingClientRect().width);
-
-    endPanel.style.flex = `0 0 ${cardW}px`;
-    endPanel.style.width = `${cardW}px`;
-  };
-
-  requestAnimationFrame(applyEnd);
-}
+  const endPanel = track.querySelector(".panel--end");
+  if(endPanel){
+    const panelW = window.innerWidth;
+    endPanel.style.flex = `0 0 ${panelW}px`;
+    endPanel.style.width = `${panelW}px`;
+  }
 
   panels = Array.from(track.querySelectorAll(".panel"));
 }
 
-window.addEventListener("load", setPanelWidths);
-window.addEventListener("resize", setPanelWidths);
-
-/* ===== HORIZONTAL SCROLL ===== */
-let currentX = 0;
-let targetX = 0;
-let isUserSliding = false;
-
-function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 function totalWidth(){ return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0); }
 function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
+
+function updateSliderFromX(){
+  const maxS = maxScroll();
+  navSlider.max = String(Math.max(0, panels.length - 1));
+  if(isUserSliding) return;
+  const denom = (panels.length - 1) || 1;
+  const ratio = maxS === 0 ? 0 : (currentX / maxS);
+  navSlider.value = String(Math.round(ratio * denom));
+}
 
 function raf(){
   currentX += (targetX - currentX) * 0.075;
 
-  /* ADDED: round transform to device pixels to avoid subpixel seams */
   const dpr = window.devicePixelRatio || 1;
   const x = Math.round(currentX * dpr) / dpr;
   track.style.transform = `translate3d(${-x}px,0,0)`;
 
-  
-
-  const maxS = maxScroll();
-  navSlider.max = String(Math.max(0, panels.length - 1));
-
-  if(!isUserSliding){
-    const ratio = maxS === 0 ? 0 : (currentX / maxS);
-    navSlider.value = String(Math.round(ratio * (panels.length - 1)));
-  }
-
+  updateSliderFromX();
   requestAnimationFrame(raf);
 }
 raf();
@@ -678,17 +766,17 @@ window.addEventListener("wheel", (e)=>{
   targetX = clamp(targetX + e.deltaY * 0.9, 0, maxScroll());
 },{passive:true});
 
-/* drag / touch */
-let isDown=false, startX=0, startTarget=0;
 function pointerDown(x){
   if(document.body.classList.contains("menu-open")) return;
-  isDown=true; startX=x; startTarget=targetX;
+  isDown = true;
+  startX = x;
+  startTarget = targetX;
 }
 function pointerMove(x){
   if(!isDown) return;
   targetX = clamp(startTarget - (x - startX), 0, maxScroll());
 }
-function pointerUp(){ isDown=false; }
+function pointerUp(){ isDown = false; }
 
 window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
 window.addEventListener("mousemove",(e)=>pointerMove(e.clientX));
@@ -698,21 +786,33 @@ window.addEventListener("touchstart",(e)=>pointerDown(e.touches[0].clientX),{pas
 window.addEventListener("touchmove",(e)=>pointerMove(e.touches[0].clientX),{passive:true});
 window.addEventListener("touchend",pointerUp);
 
-/* slider */
 function sliderToTarget(){
   const maxS = maxScroll();
   const denom = (panels.length - 1) || 1;
   targetX = clamp((Number(navSlider.value) / denom) * maxS, 0, maxS);
 }
 navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
-navSlider.addEventListener("pointerup", ()=>{ isUserSliding = false; sliderToTarget(); });
+navSlider.addEventListener("pointerup", ()=>{
+  isUserSliding = false;
+  sliderToTarget();
+});
+navSlider.addEventListener("pointercancel", ()=>{
+  isUserSliding = false;
+  sliderToTarget();
+});
 navSlider.addEventListener("input", sliderToTarget);
+navSlider.addEventListener("change", sliderToTarget);
 
-/* keep bounds */
-window.addEventListener("resize", ()=>{
+function refreshAll(){
+  setVH();
+  setPanelWidths();
   targetX = clamp(targetX, 0, maxScroll());
   currentX = clamp(currentX, 0, maxScroll());
-});
+  updateSliderFromX();
+}
+
+window.addEventListener("resize", refreshAll);
+document.addEventListener("DOMContentLoaded", refreshAll);
 </script>
 
 </body>
