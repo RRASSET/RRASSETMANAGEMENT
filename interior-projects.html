@@ -613,44 +613,24 @@ function setPanelWidths(){
     else img.addEventListener("load", apply, {once:true});
   });
 
-  const endPanel = track.querySelector(".panel--end");
-  if(endPanel){
-    const endImg = endPanel.querySelector(".end-img");
-    const endCard = endPanel.querySelector(".end-card");
-    const endLeft = endPanel.querySelector(".end-left");
+const endOnly = track.querySelector(".panel--end-only");
+if(endOnly){
+  const endCard = endOnly.querySelector(".end-card");
 
-    const applyEnd = ()=>{
-      const cardW = Math.ceil(endCard.getBoundingClientRect().width);
+  const applyEndOnly = ()=>{
+    let cardW = Math.ceil(endCard.getBoundingClientRect().width);
 
-      if(window.innerWidth <= 900){
-        endPanel.style.flex = `0 0 ${window.innerWidth}px`;
-        endPanel.style.width = `${window.innerWidth}px`;
-        if(endLeft){
-          endLeft.style.flex = `0 0 0px`;
-          endLeft.style.width = `0px`;
-        }
-        return;
-      }
+    if(window.innerWidth <= 900){
+      cardW = window.innerWidth;
+    }
 
-      let imgW = 0;
-      if(endImg && endImg.naturalWidth && endImg.naturalHeight){
-        imgW = Math.max(240, Math.round((endImg.naturalWidth / endImg.naturalHeight) * vhPx));
-      }
+    endOnly.style.flex = `0 0 ${cardW}px`;
+    endOnly.style.width = `${cardW}px`;
+  };
 
-      const total = imgW + cardW;
-      endPanel.style.flex = `0 0 ${total}px`;
-      endPanel.style.width = `${total}px`;
-
-      if(endLeft){
-        endLeft.style.flex = `0 0 ${imgW}px`;
-        endLeft.style.width = `${imgW}px`;
-      }
-    };
-
-    if(endImg && endImg.complete) applyEnd();
-    else if(endImg) endImg.addEventListener("load", applyEnd, {once:true});
-    else applyEnd();
-  }
+  applyEndOnly();
+  requestAnimationFrame(applyEndOnly);
+}
 
   panels = Array.from(track.querySelectorAll(".panel"));
 }
