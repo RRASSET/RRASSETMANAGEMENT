@@ -10,44 +10,82 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
-body{
-  font-family: Arial, sans-serif;
-  background:#000;
-  overflow:hidden;
+
+/* ================= VARIABLES ================= */
+:root{
+  --burgerW: clamp(52px, 5.5vw, 64px);
+  --menuW: clamp(320px, 40vw, 420px);
+  --endCardW: clamp(320px, 40vw, 420px);
+
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+
+  --vh: 1vh;
 }
 
+body{
+  font-family:'Montserrat', sans-serif;
+  background:#000;
+  overflow:hidden;
+  height: calc(var(--vh) * 100);
+  overscroll-behavior:none;
+  touch-action:pan-y;
+}
 
+/* ================= PAGE APPEAR ================= */
+.page-shell{
+  opacity:0;
+  transform:scale(1.015);
+  transition:opacity 1.2s ease, transform 1.6s cubic-bezier(.22,1,.36,1);
+  transform-origin:center center;
+}
+body.loaded .page-shell{
+  opacity:1;
+  transform:scale(1);
+}
 
-
-/* ================= LEFT BURGER ================= */
+/* ================= LEFT BURGER STRIP ================= */
 .side-bar{
   position:fixed; top:0; left:0;
-  width:64px;
-  height:100vh;
-  background:rgba(255,255,255,0.88);
-  backdrop-filter: blur(10px);
+  width: calc(var(--burgerW) + var(--sal));
+  height: calc(var(--vh) * 100);
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:90;
+  z-index:200;
   cursor:pointer;
-  transition:background .6s ease;
+  opacity:1;
+  pointer-events:auto;
 }
-.side-bar:hover{ background:rgba(255,255,255,0.94); }
+
+.side-bar::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,0.88);
+  backdrop-filter: blur(10px);
+  opacity:1;
+  transition:background .35s ease;
+  z-index:0;
+}
+
+.side-bar:hover::before{
+  background:rgba(255,255,255,0.94);
+}
 
 .burger-lines{
-  opacity:0;
-  transform:translateY(8px);
-  animation:burgerIn 1.8s cubic-bezier(.22,1,.36,1) forwards;
-  animation-delay:0.85s;
+  position:relative;
+  z-index:2;
 }
-@keyframes burgerIn{ to{opacity:1; transform:translateY(0);} }
 
 .burger-lines i{
-  width:22px; height:1.6px;
+  width:22px;
+  height:2px;
   background:#111;
-  position:relative;
   display:block;
+  position:relative;
 }
 .burger-lines i::before,
 .burger-lines i::after{
@@ -55,7 +93,7 @@ body{
   position:absolute;
   left:0;
   width:22px;
-  height:1.6px;
+  height:2px;
   background:#111;
 }
 .burger-lines i::before{ top:-7px; }
@@ -65,11 +103,10 @@ body{
 .hwrap{
   position:relative;
   z-index:30;
-  height:100vh;
+  height: calc(var(--vh) * 100);
   width:100vw;
   overflow:hidden;
 }
-
 .htrack{
   height:100%;
   display:flex;
@@ -77,12 +114,19 @@ body{
   transform:translate3d(0,0,0);
   gap:0;
   align-items:stretch;
+  position:relative;
+  z-index:2;
 }
 
-/* ================= PANELS BASE ================= */
-.panel{ flex:0 0 auto; height:100vh; }
+/* ================= PANELS ================= */
+.panel{
+  flex:0 0 auto;
+  height: calc(var(--vh) * 100);
+  position:relative;
+  overflow:hidden;
+}
 
-/* ================= TILE PANELS (HUG IMAGE, HOVER OVERLAY) ================= */
+/* ================= TILE PANELS ================= */
 .panel--tile{
   flex:0 0 auto;
   width:auto;
@@ -94,7 +138,7 @@ body{
   overflow:hidden;
 }
 .panel--tile img{
-  height:100vh;
+  height: calc(var(--vh) * 100);
   width:auto;
   object-fit:contain;
   display:block;
@@ -144,7 +188,6 @@ body{
   transition:opacity .35s ease;
 }
 
-/* Darken on hover */
 .panel--tile::after{
   content:"";
   position:absolute;
@@ -158,7 +201,6 @@ body{
 .panel--tile:hover .tile-cta{ opacity:1; }
 .panel--tile:hover .tile-inner{ transform:translateY(0); }
 
-/* Click layer */
 .tile-link{
   position:absolute;
   inset:0;
@@ -166,79 +208,61 @@ body{
   text-indent:-9999px;
 }
 
-/* ================= END SLIDE (MENU CARD ONLY) ================= */
-.panel--end-only{
-  flex:0 0 auto;
-  width:auto;
-  height:100vh;
+/* ================= END SLIDE ================= */
+.panel--end{
+  height: calc(var(--vh) * 100);
   display:flex;
   align-items:stretch;
-  justify-content:flex-start; /* IMPORTANT: no center gap */
-  background:transparent;
+  justify-content:flex-end;
+  background:#000;
   overflow:hidden;
 }
-
-/* Card width stays same */
+.end-left{
+  flex:1 1 auto;
+  min-width:0;
+  display:flex;
+  align-items:stretch;
+  justify-content:flex-end;
+  overflow:hidden;
+  background:#000;
+}
+.end-img{
+  height:100%;
+  width:100%;
+  max-width:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+}
 .end-card{
-  flex:0 0 min(520px, 42vw);
+  flex:0 0 var(--endCardW);
   height:100%;
   background:#f4f4f2;
   display:flex;
-  align-items:center;
+  align-items:stretch;
   justify-content:center;
-  text-align:center;
-  padding:110px 60px;
   border-left:1px solid rgba(0,0,0,0.08);
+  padding:0;
 }
-
-.end-inner{ width:100%; max-width:520px; }
-.end-logo img{ width:170px; margin-bottom:44px; }
-
-.end-links a{
-  display:block;
-  font-family:'Cormorant Garamond', serif;
-  font-size:28px;
-  margin:14px 0;
-  text-decoration:none;
-  color:#1a1a1a;
-  transition:opacity .25s ease;
+.end-card .menu-panel{
+  opacity:1 !important;
+  transform:none !important;
+  transition:none !important;
+  overflow:auto !important;
+  -webkit-overflow-scrolling:touch;
 }
-.end-links a:hover{ opacity:.6; }
+.end-card .menu-panel::-webkit-scrollbar{ width:0; height:0; }
+.end-card .menu-panel{ scrollbar-width:none; }
+.end-card .menu-address{ margin-top:-14px; }
 
-.end-divider{
-  width:200px;
-  height:1px;
-  background:#c6b67a;
-  margin:50px auto 30px auto;
-}
-
-.end-footer{
-  font-family:'Cormorant Garamond', serif;
-  font-size:20px;
-  line-height:1.7;
-  color:#1a1a1a;
-}
-.end-footer .contact{ margin-top:12px; font-size:18px; }
-
-.end-privacy{
-  margin-top:22px;
-  display:inline-block;
-  font-family:'Montserrat', sans-serif;
-  font-size:12px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  color:#c6b67a;
-  text-decoration:none;
-}
-
-/* ================= BOTTOM SLIDER ================= */
+/* ================= BOTTOM THIN SLIDER ================= */
 .nav-slider{
   position:fixed;
-  left:84px;
-  right:28px;
-  bottom:14px;
-  z-index:92;
-  transition:opacity .35s ease;
+  left: calc(var(--burgerW) + var(--sal) + 20px);
+  right: calc(28px + var(--sar));
+  bottom: calc(14px + var(--sab));
+  z-index:210;
+  transition:opacity .25s ease;
 }
 .nav-slider input[type="range"]{
   width:100%;
@@ -248,18 +272,19 @@ body{
   background:rgba(255,255,255,0.60);
   border-radius:999px;
   outline:none;
+  touch-action:none;
 }
 .nav-slider input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance:none;
   appearance:none;
-  width:80px;
+  width: clamp(46px, 10vw, 80px);
   height:6px;
   border-radius:999px;
   background:rgba(0,0,0,0.60);
   cursor:pointer;
 }
 .nav-slider input[type="range"]::-moz-range-thumb{
-  width:80px;
+  width: clamp(46px, 10vw, 80px);
   height:6px;
   border-radius:999px;
   background:rgba(0,0,0,0.60);
@@ -267,25 +292,31 @@ body{
   border:none;
 }
 
-/* ================= MENU (BURGER OVERLAY) ================= */
+/* ================= MENU ================= */
 .menu{
   position:fixed; top:0; left:0;
-  height:100vh; width:380px;
+  height: calc(var(--vh) * 100);
+  width: var(--menuW);
   background:#f4f4f2;
-  z-index:95;
+  z-index:250;
   transform:translateX(-100%);
-  transition:transform 1.05s cubic-bezier(.77,0,.18,1);
+  transition:transform 1.15s cubic-bezier(.77,0,.18,1);
   will-change:transform;
+  padding-left: var(--sal);
 }
 .menu.open{ transform:translateX(0); }
 
 .menu-panel{
   height:100%;
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center;
-  padding:60px 30px;
   position:relative;
+  padding: 26px 46px 56px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  justify-content:flex-start;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
 
   opacity:0;
   transform:translateY(10px);
@@ -293,198 +324,261 @@ body{
   transition-delay:.2s;
 }
 .menu.open .menu-panel{ opacity:1; transform:translateY(0); }
+.menu-panel::-webkit-scrollbar{ width:0; height:0; }
+.menu-panel{ scrollbar-width:none; }
 
 .back-arrow{
   position:absolute;
-  left:34px;
+  left:26px;
   top:50%;
   transform:translateY(-50%);
-  font-size:28px;
+  font-size:34px;
+  line-height:1;
   cursor:pointer;
-  color:#222;
-  opacity:.9;
+  color:#111;
+  opacity:.95;
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
 }
 
-.menu-logo img{ width:170px; margin-bottom:46px; }
+.menu-logo{ margin-top:6px; margin-bottom:6px; }
+
+.menu-logo img{
+  width:240px;
+  height:auto;
+  display:block;
+  margin:0 auto 10px auto;
+}
+
+.menu-links{ margin-top:-6px; }
 
 .menu-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
-  font-size:30px;
-  margin:18px 0;
+  font-size:22px;
+  font-weight:400;
+  margin:22px 0;
   text-decoration:none;
   color:#222;
+  transition:opacity .25s ease;
 }
-.menu-links a:hover{ opacity:0.6; }
+.menu-links a:hover{ opacity:.65; }
 
-.divider{
-  width:200px;
+.menu-divider{
+  width:260px;
   height:1px;
-  background:#c6b67a;
-  margin:50px auto 30px auto;
+  background:#c6b67a !important;
+  opacity:1 !important;
+  margin:34px 0 18px 0;
 }
 
-.menu-footer{
-  font-family:'Cormorant Garamond', serif;
-  font-size:22px;
-  line-height:1.6;
+.menu-address{
+  font-family:'Montserrat', sans-serif;
+  font-weight:300;
+  font-size:14px;
+  line-height:1.8;
   color:#222;
+  max-width:320px;
+  letter-spacing:.4px;
+  margin-top:0;
 }
-.menu-footer .contact{ margin-top:15px; font-size:20px; }
 
-.privacy{
-  margin-top:20px;
+.menu-contact{
+  margin-top:12px;
+  font-size:13px;
+  font-weight:400;
+  letter-spacing:.2px;
+}
+.menu-contact a{ color:#222; text-decoration:none; }
+.menu-contact a:hover{ opacity:.65; }
+.menu-contact .dot{ padding:0 10px; opacity:.7; }
+
+.menu-privacy{
+  margin-top:12px;
   display:inline-block;
   font-family:'Montserrat', sans-serif;
-  font-size:12px;
-  letter-spacing:1.5px;
+  font-size:10px;
+  letter-spacing:2px;
   text-transform:uppercase;
   color:#c6b67a;
   text-decoration:none;
 }
+.menu-privacy:hover{ opacity:.7; }
 
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
-/* MOBILE */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 900px){
-  .nav-slider{ left:24px; right:24px; bottom:12px; }
-  .menu{ width:min(380px, 92vw); }
-  .end-card{ flex:0 0 100%; width:100%; padding:70px 24px; }
+  .end-left{ display:none; }
+  .end-card{ flex:0 0 100%; width:100%; }
+
+  .menu{ width:min(420px, 92vw); }
+  .menu-panel{ padding: calc(28px + var(--sat)) 28px calc(38px + var(--sab)); }
 }
 </style>
 </head>
 
 <body>
 
-
-
 <!-- Burger -->
 <div class="side-bar" id="burger" aria-label="Open menu">
   <div class="burger-lines"><i></i></div>
 </div>
 
-<!-- Bottom slider -->
-<div class="nav-slider" aria-label="Slide navigation">
-  <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
-</div>
+<div class="page-shell">
 
-<!-- Horizontal panels -->
-<div class="hwrap">
-  <div class="htrack" id="track">
-
-
-    <!-- SLIDES -->
-    <section class="panel panel--tile">
-      <a class="tile-link" href="https://rrasset.github.io/RRASSETMANAGEMENT/il-primo.html" aria-label="View project 1">View project</a>
-      <img src="./interiorprojectone.png" alt="Interior Project 1">
-      <div class="tile-overlay"><div class="tile-inner">
-        <div class="tile-title">IL PRIMO</div>
-        <div class="tile-line"></div>
-        <div class="tile-cta">VIEW PROJECT</div>
-      </div></div>
-    </section>
-
-    <section class="panel panel--tile">
-      <a class="tile-link" href="https://rrasset.github.io/RRASSETMANAGEMENT/burj-khalifa.html" aria-label="View project 2">View project</a>
-      <img src="./interiorprojecttwo.png" alt="Interior Project 2">
-      <div class="tile-overlay"><div class="tile-inner">
-        <div class="tile-title">BURJ KHALIFA</div>
-        <div class="tile-line"></div>
-        <div class="tile-cta">VIEW PROJECT</div>
-      </div></div>
-    </section>
-
-    <section class="panel panel--tile">
-      <a class="tile-link" href="https://rrasset.github.io/RRASSETMANAGEMENT/paramount.html" aria-label="View project 3">View project</a>
-      <img src="./interiorprojectthree.png" alt="Interior Project 3">
-      <div class="tile-overlay"><div class="tile-inner">
-        <div class="tile-title">PARAMOUNT</div>
-        <div class="tile-line"></div>
-        <div class="tile-cta">VIEW PROJECT</div>
-      </div></div>
-    </section>
-
-    <section class="panel panel--tile">
-      <a class="tile-link" href="https://rrasset.github.io/RRASSETMANAGEMENT/charles-street.html" aria-label="View project 4">View project</a>
-      <img src="./interiorprojectfour.png" alt="Interior Project 4">
-      <div class="tile-overlay"><div class="tile-inner">
-        <div class="tile-title">CHARLES STREET</div>
-        <div class="tile-line"></div>
-        <div class="tile-cta">VIEW PROJECT</div>
-      </div></div>
-    </section>
-
-    <section class="panel panel--tile">
-      <a class="tile-link" href="https://rrasset.github.io/RRASSETMANAGEMENT/west-london-business-park.html" aria-label="View project 5">View project</a>
-      <img src="./interiorprojectfive.png" alt="Interior Project 5">
-      <div class="tile-overlay"><div class="tile-inner">
-        <div class="tile-title">WEST LONDON BUSINESS PARK</div>
-        <div class="tile-line"></div>
-        <div class="tile-cta">VIEW PROJECT</div>
-      </div></div>
-    </section>
-
-    <!-- END SLIDE: MENU CARD ONLY (TOUCHES LAST IMAGE) -->
-    <section class="panel panel--end-only">
-      <div class="end-card">
-        <div class="end-inner">
-
-          <div class="end-logo">
-            <img src="./logo.png" alt="RR Logo">
-          </div>
-
-          <nav class="end-links">
-            <a href="index.html">Home</a>
-            <a href="expertise.html">Expertise</a>
-            <a href="interior-projects.html" aria-current="page">Interior Projects</a>
-            <a href="press.html">Press</a>
-          </nav>
-
-          <div class="end-divider"></div>
-
-          <div class="end-footer">
-            SUN HOUSE, 428 LONG DRIVE,<br>
-            GREENFORD, UB6 8UH
-            <div class="contact">+44 (0) 20 8575 3700</div>
-            <a href="#" class="end-privacy">Privacy Policy</a>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
+  <!-- Bottom slider -->
+  <div class="nav-slider" aria-label="Slide navigation">
+    <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
   </div>
+
+  <!-- Horizontal panels -->
+  <div class="hwrap">
+    <div class="htrack" id="track">
+
+      <section class="panel panel--tile">
+        <a class="tile-link" href="https://rrasset.github.io/RRASSETMANAGEMENT/il-primo.html" aria-label="View project 1">View project</a>
+        <img src="./interiorprojectone.png" alt="Interior Project 1">
+        <div class="tile-overlay"><div class="tile-inner">
+          <div class="tile-title">IL PRIMO</div>
+          <div class="tile-line"></div>
+          <div class="tile-cta">VIEW PROJECT</div>
+        </div></div>
+      </section>
+
+      <section class="panel panel--tile">
+        <a class="tile-link" href="https://rrasset.github.io/RRASSETMANAGEMENT/burj-khalifa.html" aria-label="View project 2">View project</a>
+        <img src="./interiorprojecttwo.png" alt="Interior Project 2">
+        <div class="tile-overlay"><div class="tile-inner">
+          <div class="tile-title">BURJ KHALIFA</div>
+          <div class="tile-line"></div>
+          <div class="tile-cta">VIEW PROJECT</div>
+        </div></div>
+      </section>
+
+      <section class="panel panel--tile">
+        <a class="tile-link" href="https://rrasset.github.io/RRASSETMANAGEMENT/paramount.html" aria-label="View project 3">View project</a>
+        <img src="./interiorprojectthree.png" alt="Interior Project 3">
+        <div class="tile-overlay"><div class="tile-inner">
+          <div class="tile-title">PARAMOUNT</div>
+          <div class="tile-line"></div>
+          <div class="tile-cta">VIEW PROJECT</div>
+        </div></div>
+      </section>
+
+      <section class="panel panel--tile">
+        <a class="tile-link" href="https://rrasset.github.io/RRASSETMANAGEMENT/charles-street.html" aria-label="View project 4">View project</a>
+        <img src="./interiorprojectfour.png" alt="Interior Project 4">
+        <div class="tile-overlay"><div class="tile-inner">
+          <div class="tile-title">CHARLES STREET</div>
+          <div class="tile-line"></div>
+          <div class="tile-cta">VIEW PROJECT</div>
+        </div></div>
+      </section>
+
+      <section class="panel panel--tile">
+        <a class="tile-link" href="https://rrasset.github.io/RRASSETMANAGEMENT/west-london-business-park.html" aria-label="View project 5">View project</a>
+        <img src="./interiorprojectfive.png" alt="Interior Project 5">
+        <div class="tile-overlay"><div class="tile-inner">
+          <div class="tile-title">WEST LONDON BUSINESS PARK</div>
+          <div class="tile-line"></div>
+          <div class="tile-cta">VIEW PROJECT</div>
+        </div></div>
+      </section>
+
+      <section class="panel panel--end">
+        <div class="end-left">
+          <img class="end-img" src="./interiorprojectfive.png" alt="Interior Projects final image">
+        </div>
+
+        <div class="end-card">
+          <div class="menu-panel">
+            <div class="menu-logo">
+              <img src="./logotwo.png" alt="RR Asset Management Logo">
+            </div>
+
+            <nav class="menu-links">
+              <a href="index.html">Home</a>
+              <a href="expertise.html">Expertise</a>
+              <a href="interior-projects.html" aria-current="page">Portfolio Selection</a>
+            </nav>
+
+            <div class="menu-divider"></div>
+
+            <div class="menu-address">
+              Sun House, 428 Long Drive,<br>
+              Greenford, UB6 8UH
+
+              <div class="menu-contact">
+                <span>+44 (0) 20 8575 3700</span>
+                <span class="dot">|</span>
+                <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+              </div>
+
+              <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
 </div>
 
-<!-- Sliding menu (BURGER OVERLAY) -->
+<!-- Sliding menu -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
+
     <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
 
     <div class="menu-logo">
-      <img src="./logo.png" alt="RR Asset Management Logo">
+      <img src="./logotwo.png" alt="RR Asset Management Logo">
     </div>
 
     <nav class="menu-links">
       <a href="index.html">Home</a>
       <a href="expertise.html">Expertise</a>
-      <a href="interior-projects.html" aria-current="page">Interior Projects</a>
-      <a href="press.html">Press</a>
+      <a href="interior-projects.html" aria-current="page">Portfolio Selection</a>
     </nav>
 
-    <div class="divider"></div>
+    <div class="menu-divider"></div>
 
-    <div class="menu-footer">
-      SUN HOUSE, 428 LONG DRIVE,<br>
-      GREENFORD, UB6 8UH
-      <div class="contact">+44 (0) 20 8575 3700</div>
-      <a href="#" class="privacy">Privacy Policy</a>
+    <div class="menu-address">
+      Sun House, 428 Long Drive,<br>
+      Greenford, UB6 8UH
+
+      <div class="menu-contact">
+        <span>+44 (0) 20 8575 3700</span>
+        <span class="dot">|</span>
+        <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+      </div>
+
+      <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
     </div>
+
   </div>
 </div>
 
 <script>
+/* ===== 100vh FIX ===== */
+function setVH(){
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+setVH();
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', setVH);
+
+/* ===== PAGE APPEAR ===== */
+window.addEventListener("load", ()=>{
+  requestAnimationFrame(()=>{
+    document.body.classList.add("loaded");
+    refreshAll();
+  });
+});
+
 /* ===== MENU ===== */
 const menu = document.getElementById("menu");
 const burger = document.getElementById("burger");
@@ -502,93 +596,121 @@ burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
 document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
 
-/* ===== AUTO SIZE: tile panels hug their image + end-only hugs its card ===== */
+/* ===== SIZING ===== */
 const track = document.getElementById("track");
-let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
 
+let panels = Array.from(track.querySelectorAll(".panel"));
+let currentX = 0;
+let targetX = 0;
+let isUserSliding = false;
+let isDown = false, startX = 0, startTarget = 0;
+let rafStarted = false;
+
+function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 
 function setPanelWidths(){
-  const vh = window.innerHeight;
+  const vhPx = window.innerHeight;
 
-  // tile panels
   const tiles = Array.from(track.querySelectorAll(".panel--tile"));
-  tiles.forEach(p=>{
-    const img = p.querySelector("img");
+  tiles.forEach(panel=>{
+    const img = panel.querySelector("img");
     if(!img) return;
 
-    const apply = () => {
-      const w = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 2;
-      p.style.flex = `0 0 ${w}px`;
-      p.style.width = `${w}px`;
+    const apply = ()=>{
+      const nw = img.naturalWidth || 0;
+      const nh = img.naturalHeight || 0;
+      if(!nw || !nh) return;
+      const ratio = nw / nh;
+      const w = Math.max(240, Math.round(ratio * vhPx));
+      panel.style.flex = `0 0 ${w}px`;
+      panel.style.width = `${w}px`;
     };
 
-    if(img.complete && img.naturalWidth) apply();
-    else img.addEventListener("load", apply, { once:true });
+    if(img.complete) apply();
+    else img.addEventListener("load", apply, {once:true});
   });
 
-  // end-only panel = card width only (NO GAP)
-  const endOnly = track.querySelector(".panel--end-only");
-  if(endOnly){
-    const card = endOnly.querySelector(".end-card");
-    const applyEndOnly = () => {
-      const cardW = Math.ceil(card.getBoundingClientRect().width) + 2;
-      endOnly.style.flex = `0 0 ${cardW}px`;
-      endOnly.style.width = `${cardW}px`;
+  const endPanel = track.querySelector(".panel--end");
+  if(endPanel){
+    const endImg = endPanel.querySelector(".end-img");
+    const endCard = endPanel.querySelector(".end-card");
+    const endLeft = endPanel.querySelector(".end-left");
+
+    const applyEnd = ()=>{
+      const cardW = Math.ceil(endCard.getBoundingClientRect().width);
+
+      if(window.innerWidth <= 900){
+        endPanel.style.flex = `0 0 ${window.innerWidth}px`;
+        endPanel.style.width = `${window.innerWidth}px`;
+        if(endLeft){
+          endLeft.style.flex = `0 0 0px`;
+          endLeft.style.width = `0px`;
+        }
+        return;
+      }
+
+      let imgW = 0;
+      if(endImg && endImg.naturalWidth && endImg.naturalHeight){
+        imgW = Math.max(240, Math.round((endImg.naturalWidth / endImg.naturalHeight) * vhPx));
+      }
+
+      const total = imgW + cardW;
+      endPanel.style.flex = `0 0 ${total}px`;
+      endPanel.style.width = `${total}px`;
+
+      if(endLeft){
+        endLeft.style.flex = `0 0 ${imgW}px`;
+        endLeft.style.width = `${imgW}px`;
+      }
     };
 
-    applyEndOnly();
-    requestAnimationFrame(applyEndOnly);
+    if(endImg && endImg.complete) applyEnd();
+    else if(endImg) endImg.addEventListener("load", applyEnd, {once:true});
+    else applyEnd();
   }
 
   panels = Array.from(track.querySelectorAll(".panel"));
 }
-window.addEventListener("load", setPanelWidths);
-window.addEventListener("resize", setPanelWidths);
 
-/* ===== HORIZONTAL SCROLL ===== */
-let currentX = 0;
-let targetX = 0;
-let isUserSliding = false;
-
-function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-function totalWidth(){ return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0); }
+function totalWidth(){ return panels.reduce((sum, p) => sum + p.offsetWidth, 0); }
 function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
 
-function raf(){
-  currentX += (targetX - currentX) * 0.075;
-  track.style.transform = `translate3d(${-currentX}px,0,0)`;
-
- 
-
+function updateSliderFromX(){
   const maxS = maxScroll();
   navSlider.max = String(Math.max(0, panels.length - 1));
+  if(isUserSliding) return;
+  const denom = (panels.length - 1) || 1;
+  const ratio = maxS === 0 ? 0 : (currentX / maxS);
+  navSlider.value = String(Math.round(ratio * denom));
+}
 
-  if(!isUserSliding){
-    const ratio = maxS === 0 ? 0 : (currentX / maxS);
-    navSlider.value = String(Math.round(ratio * (panels.length - 1)));
-  }
-
+function raf(){
+  rafStarted = true;
+  currentX += (targetX - currentX) * 0.085;
+  track.style.transform = `translate3d(${-currentX}px,0,0)`;
+  updateSliderFromX();
   requestAnimationFrame(raf);
 }
-raf();
 
+/* wheel */
 window.addEventListener("wheel", (e)=>{
   if(document.body.classList.contains("menu-open")) return;
   targetX = clamp(targetX + e.deltaY * 0.9, 0, maxScroll());
 },{passive:true});
 
 /* drag / touch */
-let isDown=false, startX=0, startTarget=0;
 function pointerDown(x){
   if(document.body.classList.contains("menu-open")) return;
-  isDown=true; startX=x; startTarget=targetX;
+  isDown = true;
+  startX = x;
+  startTarget = targetX;
 }
 function pointerMove(x){
   if(!isDown) return;
   targetX = clamp(startTarget - (x - startX), 0, maxScroll());
 }
-function pointerUp(){ isDown=false; }
+function pointerUp(){ isDown = false; }
 
 window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
 window.addEventListener("mousemove",(e)=>pointerMove(e.clientX));
@@ -602,16 +724,35 @@ window.addEventListener("touchend",pointerUp);
 function sliderToTarget(){
   const maxS = maxScroll();
   const denom = (panels.length - 1) || 1;
-  targetX = clamp((Number(navSlider.value) / denom) * maxS, 0, maxS);
+  const ratio = Number(navSlider.value) / denom;
+  targetX = clamp(ratio * maxS, 0, maxS);
 }
 navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
-navSlider.addEventListener("pointerup", ()=>{ isUserSliding = false; sliderToTarget(); });
+navSlider.addEventListener("pointerup", ()=>{
+  isUserSliding = false;
+  sliderToTarget();
+});
+navSlider.addEventListener("pointercancel", ()=>{
+  isUserSliding = false;
+  sliderToTarget();
+});
 navSlider.addEventListener("input", sliderToTarget);
+navSlider.addEventListener("change", sliderToTarget);
 
-/* keep bounds */
-window.addEventListener("resize", ()=>{
+/* init */
+function refreshAll(){
+  setVH();
+  setPanelWidths();
   targetX = clamp(targetX, 0, maxScroll());
   currentX = clamp(currentX, 0, maxScroll());
+  updateSliderFromX();
+}
+
+window.addEventListener("resize", refreshAll);
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  refreshAll();
+  if(!rafStarted) raf();
 });
 </script>
 
