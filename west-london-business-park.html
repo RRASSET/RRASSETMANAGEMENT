@@ -10,41 +10,85 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
+
+/* ================= VARIABLES ================= */
+:root{
+  --burgerW: clamp(52px, 5.5vw, 64px);
+  --menuW: clamp(320px, 40vw, 420px);
+  --endCardW: clamp(320px, 40vw, 420px);
+
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+
+  --vh: 1vh;
+  --copyW: 520px;
+}
+
 body{
   font-family:'Montserrat', sans-serif;
   background:#000;
-  overflow:hidden; /* we control scroll */
+  overflow:hidden;
+  height: calc(var(--vh) * 100);
+  overscroll-behavior:none;
+  touch-action:pan-y;
 }
 
-/* ================= LEFT BURGER (INDEX) ================= */
+.panel, .split, .split-copy, .split-media, .menu, .menu-panel, .end-card{ min-height:0; }
+
+/* ================= PAGE APPEAR ================= */
+.page-shell{
+  opacity:0;
+  transform:scale(1.015);
+  transition:opacity 1.2s ease, transform 1.6s cubic-bezier(.22,1,.36,1);
+  transform-origin:center center;
+}
+body.loaded .page-shell{
+  opacity:1;
+  transform:scale(1);
+}
+
+/* ================= LEFT BURGER STRIP ================= */
 .side-bar{
   position:fixed; top:0; left:0;
-  width:64px;
-  height:100vh;
-  background:rgba(255,255,255,0.88);
-  backdrop-filter: blur(10px);
+  width: calc(var(--burgerW) + var(--sal));
+  height: calc(var(--vh) * 100);
   display:flex;
   align-items:center;
   justify-content:center;
-  z-index:90;
+  z-index:200;
   cursor:pointer;
-  transition:background .6s ease;
+  opacity:1;
+  pointer-events:auto;
 }
-.side-bar:hover{ background:rgba(255,255,255,0.94); }
+
+.side-bar::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,0.88);
+  backdrop-filter: blur(10px);
+  opacity:1;
+  transition:background .35s ease;
+  z-index:0;
+}
+
+.side-bar:hover::before{
+  background:rgba(255,255,255,0.94);
+}
 
 .burger-lines{
-  opacity:0;
-  transform:translateY(8px);
-  animation:burgerIn 1.8s cubic-bezier(.22,1,.36,1) forwards;
-  animation-delay:0.25s;
+  position:relative;
+  z-index:2;
 }
-@keyframes burgerIn{ to{opacity:1; transform:translateY(0);} }
 
 .burger-lines i{
-  width:22px; height:1.6px;
+  width:22px;
+  height:2px;
   background:#111;
-  position:relative;
   display:block;
+  position:relative;
 }
 .burger-lines i::before,
 .burger-lines i::after{
@@ -52,7 +96,7 @@ body{
   position:absolute;
   left:0;
   width:22px;
-  height:1.6px;
+  height:2px;
   background:#111;
 }
 .burger-lines i::before{ top:-7px; }
@@ -62,7 +106,7 @@ body{
 .hwrap{
   position:relative;
   z-index:30;
-  height:100vh;
+  height: calc(var(--vh) * 100);
   width:100vw;
   overflow:hidden;
 }
@@ -73,32 +117,21 @@ body{
   transform:translate3d(0,0,0);
   gap:0;
   align-items:stretch;
+  position:relative;
+  z-index:2;
 }
 
-/* ================= PANELS BASE ================= */
+/* ================= PANELS ================= */
 .panel{
   flex:0 0 auto;
-  height:100vh;
-  flex-shrink:0;
-}
-/* seam killer ONLY between panels */
-.panel:not(:last-child){ margin-right:-2px; }
-
-/* ================= IMAGE PANELS (HUG IMAGE) ================= */
-.panel--img{
-  display:flex;
-  align-items:stretch;
-  justify-content:flex-start;
+  height: calc(var(--vh) * 100);
   background:#000;
-}
-.panel--img img{
-  height:100vh;
-  width:auto;
-  object-fit:contain;
-  display:block;
+  position:relative;
+  flex-shrink:0;
+  overflow:hidden;
 }
 
-/* ================= SPLIT PANEL (TEXT + IMAGE) ================= */
+/* ================= SPLIT PANEL ================= */
 .panel--split{
   flex:0 0 auto;
   width:auto;
@@ -108,55 +141,74 @@ body{
   height:100%;
   display:flex;
   width:auto;
+  align-items:stretch;
 }
+
 .split-copy{
   background:#f4f4f2;
-  flex:0 0 var(--copyW, 520px);
-  width:var(--copyW, 520px);
+  flex:0 0 var(--copyW);
+  width:var(--copyW);
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
-  padding:190px 120px 90px 150px;
+  padding: clamp(70px, 9vh, 120px) clamp(24px, 5vw, 70px)
+           clamp(60px, 8vh, 110px) clamp(60px, 8vw, 140px);
   color:#1a1a1a;
 }
-.copy-inner{ max-width:480px; }
+
+.copy-inner{
+  width:100%;
+  max-width:460px;
+}
 
 .aub-heading{
   font-family:'Cormorant Garamond', serif;
-  font-weight:400;
-  line-height:1.04;
-  margin:0 0 26px 0;
+  line-height:1.02;
+  margin-bottom:0;
+  max-width:560px;
 }
 .aub-heading .small{
   display:block;
   font-style:italic;
-  font-size:30px;
-  margin-bottom:6px;
+  font-weight:300;
+  font-size:clamp(26px, 2vw, 42px);
+  margin-bottom:10px;
+  color:#1a1a1a;
 }
 .aub-heading .big{
   display:block;
-  font-size:56px;
+  font-style:normal;
+  font-weight:400;
+  font-size:clamp(30px, 2.4vw, 50px);
   text-transform:uppercase;
-  letter-spacing:.6px;
+  letter-spacing:2px;
+  color:#1a1a1a;
 }
 
 .aub-line{
-  width:56px;
+  width:64px;
   height:1px;
   background:#c6b67a;
-  margin:0 0 140px 0;
+  margin:22px 0 70px 0;
 }
 
 .aub-text{
   font-family:'Cormorant Garamond', serif;
-  font-weight:300;
-  font-size:16.5px;
-  line-height:2.05;
-  max-width:340px;
-  color:#1f1f1f;
-  letter-spacing:0.2px;
+  color:#1a1a1a;
+  width:100%;
+  max-width:460px;
+  font-size:clamp(18px, 1.25vw, 20px);
+  line-height:1.75;
 }
 .aub-text p{ margin:0; }
+.aub-text .lead{
+  font-style:italic;
+  margin-bottom:42px;
+}
+.aub-text .body{
+  font-style:italic;
+  margin-bottom:0;
+}
 
 .split-media{
   flex:0 0 auto;
@@ -164,7 +216,7 @@ body{
   align-items:stretch;
   justify-content:flex-start;
   overflow:hidden;
-  background:#000;
+  background:#f4f4f2;
 }
 .split-media img{
   height:100%;
@@ -173,19 +225,34 @@ body{
   display:block;
 }
 
-/* ================= END SLIDE (INDEX MENU CARD ONLY) ================= */
-.panel--end-only{
-  flex:0 0 auto;
-  width:auto;
-  height:100vh;
+/* ================= IMAGE PANELS ================= */
+.panel--img{
   display:flex;
   align-items:stretch;
   justify-content:flex-start;
   background:#000;
+}
+.panel--img img{
+  height: calc(var(--vh) * 100);
+  width:auto;
+  object-fit:contain;
+  display:block;
+}
+
+/* ================= END CARD ONLY ================= */
+.panel--end-only{
+  flex:0 0 auto;
+  width:auto;
+  height: calc(var(--vh) * 100);
+  display:flex;
+  align-items:stretch;
+  justify-content:flex-start;
+  background:transparent;
   overflow:hidden;
 }
+
 .end-card{
-  flex:0 0 420px;
+  flex:0 0 var(--endCardW);
   height:100%;
   background:#f4f4f2;
   display:flex;
@@ -194,23 +261,25 @@ body{
   border-left:1px solid rgba(0,0,0,0.08);
   padding:0;
 }
-/* end card uses menu-panel but must NOT animate */
 .end-card .menu-panel{
   opacity:1 !important;
   transform:none !important;
   transition:none !important;
+  overflow:auto !important;
+  -webkit-overflow-scrolling:touch;
 }
-/* lift address like index end card */
+.end-card .menu-panel::-webkit-scrollbar{ width:0; height:0; }
+.end-card .menu-panel{ scrollbar-width:none; }
 .end-card .menu-address{ margin-top:-14px; }
 
-/* ================= BOTTOM THIN SLIDER ================= */
+/* ================= BOTTOM SLIDER ================= */
 .nav-slider{
   position:fixed;
-  left:84px;
-  right:28px;
-  bottom:14px;
-  z-index:92;
-  transition:opacity .35s ease;
+  left: calc(var(--burgerW) + var(--sal) + 20px);
+  right: calc(28px + var(--sar));
+  bottom: calc(14px + var(--sab));
+  z-index:210;
+  transition:opacity .25s ease;
 }
 .nav-slider input[type="range"]{
   width:100%;
@@ -220,18 +289,19 @@ body{
   background:rgba(255,255,255,0.60);
   border-radius:999px;
   outline:none;
+  touch-action:none;
 }
 .nav-slider input[type="range"]::-webkit-slider-thumb{
   -webkit-appearance:none;
   appearance:none;
-  width:80px;
+  width: clamp(46px, 10vw, 80px);
   height:6px;
   border-radius:999px;
   background:rgba(0,0,0,0.60);
   cursor:pointer;
 }
 .nav-slider input[type="range"]::-moz-range-thumb{
-  width:80px;
+  width: clamp(46px, 10vw, 80px);
   height:6px;
   border-radius:999px;
   background:rgba(0,0,0,0.60);
@@ -239,86 +309,84 @@ body{
   border:none;
 }
 
-/* =========================================================
-   AUBERRY-STYLE SLIDING MENU (INDEX VERSION)
-   ========================================================= */
+/* ================= MENU ================= */
 .menu{
   position:fixed; top:0; left:0;
-  height:100vh;
-  width:420px;
+  height: calc(var(--vh) * 100);
+  width: var(--menuW);
   background:#f4f4f2;
-  z-index:95;
+  z-index:250;
   transform:translateX(-100%);
   transition:transform 1.15s cubic-bezier(.77,0,.18,1);
   will-change:transform;
+  padding-left: var(--sal);
 }
 .menu.open{ transform:translateX(0); }
 
 .menu-panel{
   height:100%;
   position:relative;
-  padding:70px 46px 70px;
+  padding: 26px 46px 56px;
   display:flex;
   flex-direction:column;
   align-items:center;
   text-align:center;
   justify-content:flex-start;
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
 
   opacity:0;
   transform:translateY(10px);
   transition:opacity .9s ease, transform .9s ease;
-  transition-delay:.25s;
+  transition-delay:.2s;
 }
 .menu.open .menu-panel{ opacity:1; transform:translateY(0); }
+.menu-panel::-webkit-scrollbar{ width:0; height:0; }
+.menu-panel{ scrollbar-width:none; }
 
-/* Back arrow */
 .back-arrow{
   position:absolute;
   left:26px;
   top:50%;
   transform:translateY(-50%);
-  font-size:28px;
+  font-size:34px;
+  line-height:1;
   cursor:pointer;
-  color:#222;
-  opacity:.9;
+  color:#111;
+  opacity:.95;
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
 }
 
-/* Logo */
-.menu-logo{ margin-top:30px; margin-bottom:0px; }
+.menu-logo{ margin-top:6px; margin-bottom:6px; }
 .menu-logo img{
   width:240px;
   height:auto;
   display:block;
-  margin:0 auto 14px auto;
-  filter:none;
+  margin:0 auto 10px auto;
 }
 
-/* Links */
-.menu-links{ margin-top:-10px; }
+.menu-links{ margin-top:-6px; }
 .menu-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
   font-size:22px;
   font-weight:400;
-  letter-spacing:0;
-  text-transform:none;
-  margin:26px 0;
+  margin:22px 0;
   text-decoration:none;
   color:#222;
   transition:opacity .25s ease;
 }
 .menu-links a:hover{ opacity:.65; }
 
-/* Divider */
 .menu-divider{
   width:260px;
   height:1px;
   background:#c6b67a !important;
   opacity:1 !important;
-  margin:40px 0 22px 0;
+  margin:34px 0 18px 0;
 }
 
-/* Address */
 .menu-address{
   font-family:'Montserrat', sans-serif;
   font-weight:300;
@@ -326,26 +394,22 @@ body{
   line-height:1.8;
   color:#222;
   max-width:320px;
-  text-transform:none;
   letter-spacing:.4px;
-  margin-top:-4px;
+  margin-top:0;
 }
 
-/* Phone | Email */
 .menu-contact{
-  margin-top:14px;
+  margin-top:12px;
   font-size:13px;
   font-weight:400;
-  text-transform:none;
   letter-spacing:.2px;
 }
 .menu-contact a{ color:#222; text-decoration:none; }
 .menu-contact a:hover{ opacity:.65; }
 .menu-contact .dot{ padding:0 10px; opacity:.7; }
 
-/* Privacy */
 .menu-privacy{
-  margin-top:14px;
+  margin-top:12px;
   display:inline-block;
   font-family:'Montserrat', sans-serif;
   font-size:10px;
@@ -359,18 +423,42 @@ body{
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
-/* MOBILE */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 900px){
-  .split{ flex-direction:column; }
+  .split{
+    flex-direction:column;
+  }
   .split-copy{
     width:100% !important;
     flex:0 0 auto !important;
-    padding:70px 24px 40px 24px;
+    max-width:none;
+    padding:90px 24px 30px 24px;
   }
-  .split-media img{ height:55vh; }
-  .nav-slider{ left:24px; right:24px; bottom:12px; }
-  .menu{ width:min(420px, 92vw); }
-  .end-card{ flex:0 0 100%; width:100%; }
+  .copy-inner,
+  .aub-heading,
+  .aub-text{
+    max-width:none;
+  }
+  .split-media{
+    width:100%;
+  }
+  .split-media img{
+    width:100%;
+    height:55vh;
+    object-fit:cover;
+  }
+
+  .end-card{
+    flex:0 0 100%;
+    width:100%;
+  }
+
+  .menu{
+    width:min(420px, 92vw);
+  }
+  .menu-panel{
+    padding: calc(28px + var(--sat)) 28px calc(38px + var(--sab));
+  }
 }
 </style>
 </head>
@@ -382,94 +470,99 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   <div class="burger-lines"><i></i></div>
 </div>
 
-<!-- Bottom slider -->
-<div class="nav-slider" aria-label="Slide navigation">
-  <input id="navSlider" type="range" min="0" max="10" step="1" value="0">
-</div>
+<div class="page-shell">
 
-<!-- Horizontal panels -->
-<div class="hwrap">
-  <div class="htrack" id="track">
-
-    <!-- SPLIT: TEXT + westone -->
-    <section class="panel panel--split">
-      <div class="split">
-        <div class="split-copy">
-          <div class="copy-inner">
-            <div class="aub-heading">
-              <span class="small">Project</span>
-              <span class="big">WEST LONDON<br>BUSINESS PARK</span>
-            </div>
-            <div class="aub-line"></div>
-            <div class="aub-text">
-              <p>Replace this paragraph with your final project description (location, scope, highlights, etc.).</p>
-            </div>
-          </div>
-        </div>
-        <div class="split-media">
-          <img src="./westone.png" alt="West London Business Park — Image 1">
-        </div>
-      </div>
-    </section>
-
-    <!-- Images -->
-    <section class="panel panel--img"><img src="./westtwo.png" alt="West London Business Park — Image 2"></section>
-    <section class="panel panel--img"><img src="./westthree.png" alt="West London Business Park — Image 3"></section>
-    <section class="panel panel--img"><img src="./westfour.png" alt="West London Business Park — Image 4"></section>
-    <section class="panel panel--img"><img src="./westfive.png" alt="West London Business Park — Image 5"></section>
-    <section class="panel panel--img"><img src="./westsix.png" alt="West London Business Park — Image 6"></section>
-
-    <!-- END SLIDE: INDEX MENU CARD -->
-    <section class="panel panel--end-only">
-      <div class="end-card">
-        <div class="menu-panel">
-          <div class="menu-logo">
-            <img src="./logo.png" alt="RR Asset Management Logo">
-          </div>
-
-          <nav class="menu-links">
-            <a href="index.html">Home</a>
-            <a href="expertise.html">Expertise</a>
-            <a href="interior-projects.html">Interior Projects</a>
-            <a href="press.html">Press</a>
-          </nav>
-
-          <div class="menu-divider"></div>
-
-          <div class="menu-address">
-            Sun House, 428 Long Drive,<br>
-            Greenford, UB6 8UH
-
-            <div class="menu-contact">
-              <span>+44 (0) 20 8575 3700</span>
-              <span class="dot">|</span>
-              <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
-            </div>
-
-            <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
+  <!-- Bottom slider -->
+  <div class="nav-slider" aria-label="Slide navigation">
+    <input id="navSlider" type="range" min="0" max="10" step="1" value="0">
   </div>
+
+  <!-- Horizontal panels -->
+  <div class="hwrap">
+    <div class="htrack" id="track">
+
+      <section class="panel panel--split">
+        <div class="split">
+          <div class="split-copy">
+            <div class="copy-inner">
+              <div class="aub-heading">
+                <span class="small">A Landmark Address</span>
+                <span class="big">WEST LONDON<br>BUSINESS PARK</span>
+              </div>
+              <div class="aub-line"></div>
+              <div class="aub-text">
+                <p class="lead">
+                  West London Business Park represents a strategically positioned commercial destination, bringing together scale, accessibility, and long-term investment potential within one of London’s most connected areas.
+                </p>
+                <p class="body">
+                  Defined by strong infrastructure, flexible space, and a prominent location, the project reflects a practical yet elevated approach to commercial real estate with lasting value.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="split-media">
+            <img src="./westone.png" alt="West London Business Park — Image 1">
+          </div>
+        </div>
+      </section>
+
+      <section class="panel panel--img"><img src="./westtwo.png" alt="West London Business Park — Image 2"></section>
+      <section class="panel panel--img"><img src="./westthree.png" alt="West London Business Park — Image 3"></section>
+      <section class="panel panel--img"><img src="./westfour.png" alt="West London Business Park — Image 4"></section>
+      <section class="panel panel--img"><img src="./westfive.png" alt="West London Business Park — Image 5"></section>
+      <section class="panel panel--img"><img src="./westsix.png" alt="West London Business Park — Image 6"></section>
+
+      <section class="panel panel--end-only">
+        <div class="end-card">
+          <div class="menu-panel">
+            <div class="menu-logo">
+              <img src="./logotwo.png" alt="RR Asset Management Logo">
+            </div>
+
+            <nav class="menu-links">
+              <a href="index.html">Home</a>
+              <a href="expertise.html">Expertise</a>
+              <a href="interior-projects.html">Portfolio Selection</a>
+            </nav>
+
+            <div class="menu-divider"></div>
+
+            <div class="menu-address">
+              Sun House, 428 Long Drive,<br>
+              Greenford, UB6 8UH
+
+              <div class="menu-contact">
+                <span>+44 (0) 20 8575 3700</span>
+                <span class="dot">|</span>
+                <a href="mailto:hello@rrmayfair.co.uk">hello@rrmayfair.co.uk</a>
+              </div>
+
+              <a class="menu-privacy" href="privacy.html">Privacy Policy</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
 </div>
 
-<!-- ================= MENU (HTML) ================= -->
+<!-- Sliding menu -->
 <div class="menu" id="menu" aria-label="Menu">
   <div class="menu-panel">
 
     <div class="back-arrow" id="closeMenu" aria-label="Close menu">←</div>
 
     <div class="menu-logo">
-      <img src="./logo.png" alt="RR Asset Management Logo">
+      <img src="./logotwo.png" alt="RR Asset Management Logo">
     </div>
 
     <nav class="menu-links">
       <a href="index.html">Home</a>
       <a href="expertise.html">Expertise</a>
-      <a href="interior-projects.html">Interior Projects</a>
-      <a href="press.html">Press</a>
+      <a href="interior-projects.html">Portfolio Selection</a>
     </nav>
 
     <div class="menu-divider"></div>
@@ -491,6 +584,23 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 </div>
 
 <script>
+/* ===== 100vh FIX ===== */
+function setVH(){
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+setVH();
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', setVH);
+
+/* ===== PAGE APPEAR ===== */
+window.addEventListener("load", ()=>{
+  requestAnimationFrame(()=>{
+    document.body.classList.add("loaded");
+    refreshAll();
+  });
+});
+
 /* ===== MENU ===== */
 const menu = document.getElementById("menu");
 const burger = document.getElementById("burger");
@@ -508,115 +618,136 @@ burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
 document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
 
-/* ===== SIZING: split + img + end-only ===== */
+/* ===== SIZING ===== */
 const track = document.getElementById("track");
-let panels = Array.from(track.querySelectorAll(".panel"));
 const navSlider = document.getElementById("navSlider");
 
+let panels = Array.from(track.querySelectorAll(".panel"));
+let currentX = 0;
+let targetX = 0;
+let isUserSliding = false;
+let isDown = false, startX = 0, startTarget = 0;
+let rafStarted = false;
+
+function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+
 function setPanelWidths(){
-  const vh = window.innerHeight;
+  const vhPx = window.innerHeight;
 
-  // image panels
-  const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
-  imgPanels.forEach(p=>{
-    const img = p.querySelector("img");
-    if(!img) return;
-
-    const apply = () => {
-      const w = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 6; // seam buffer
-      p.style.flex = `0 0 ${w}px`;
-      p.style.width = `${w}px`;
-    };
-
-    if(img.complete && img.naturalWidth) apply();
-    else img.addEventListener("load", apply, { once:true });
-  });
-
-  // split panel width = copy + image
   const splitPanels = Array.from(track.querySelectorAll(".panel--split"));
-  splitPanels.forEach(p=>{
-    const img  = p.querySelector(".split-media img");
-    const media = p.querySelector(".split-media");
-    if(!img || !media) return;
+  splitPanels.forEach(panel=>{
+    const mediaImg = panel.querySelector(".split-media img");
+    const media = panel.querySelector(".split-media");
+    if(!mediaImg || !media) return;
 
-    const apply = () => {
-      const copyW = 520; // fixed like your design
-      const imgW  = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 6;
+    const apply = ()=>{
+      if(window.innerWidth <= 900){
+        panel.style.flex = `0 0 ${window.innerWidth}px`;
+        panel.style.width = `${window.innerWidth}px`;
+        media.style.flex = `0 0 auto`;
+        media.style.width = `100%`;
+        return;
+      }
 
-      p.style.setProperty("--copyW", copyW + "px");
+      const nw = mediaImg.naturalWidth || 0;
+      const nh = mediaImg.naturalHeight || 0;
+      if(!nw || !nh) return;
+
+      const imgW = Math.max(240, Math.round((nw / nh) * vhPx));
+      const copyW = 520;
+
+      panel.style.setProperty('--copyW', `${copyW}px`);
       media.style.flex = `0 0 ${imgW}px`;
       media.style.width = `${imgW}px`;
 
       const total = copyW + imgW;
-      p.style.flex = `0 0 ${total}px`;
-      p.style.width = `${total}px`;
+      panel.style.flex = `0 0 ${total}px`;
+      panel.style.width = `${total}px`;
     };
 
-    if(img.complete && img.naturalWidth) apply();
-    else img.addEventListener("load", apply, { once:true });
+    if(mediaImg.complete) apply();
+    else mediaImg.addEventListener("load", apply, {once:true});
   });
 
-  // end-only panel = card width only
+  const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
+  imgPanels.forEach(panel=>{
+    const img = panel.querySelector("img");
+    if(!img) return;
+
+    const apply = ()=>{
+      const nw = img.naturalWidth || 0;
+      const nh = img.naturalHeight || 0;
+      if(!nw || !nh) return;
+      const ratio = nw / nh;
+      const w = Math.max(240, Math.round(ratio * vhPx));
+      panel.style.flex = `0 0 ${w}px`;
+      panel.style.width = `${w}px`;
+    };
+
+    if(img.complete) apply();
+    else img.addEventListener("load", apply, {once:true});
+  });
+
   const endOnly = track.querySelector(".panel--end-only");
   if(endOnly){
-    const card = endOnly.querySelector(".end-card");
-    const applyEndOnly = () => {
-      const cardW = Math.ceil(card.getBoundingClientRect().width);
+    const endCard = endOnly.querySelector(".end-card");
+
+    const applyEndOnly = ()=>{
+      let cardW = Math.ceil(endCard.getBoundingClientRect().width);
+
+      if(window.innerWidth <= 900){
+        cardW = window.innerWidth;
+      }
+
       endOnly.style.flex = `0 0 ${cardW}px`;
       endOnly.style.width = `${cardW}px`;
     };
+
+    applyEndOnly();
     requestAnimationFrame(applyEndOnly);
   }
 
   panels = Array.from(track.querySelectorAll(".panel"));
 }
-window.addEventListener("load", setPanelWidths);
-window.addEventListener("resize", setPanelWidths);
 
-/* ===== HORIZONTAL SCROLL ===== */
-let currentX = 0;
-let targetX = 0;
-let isUserSliding = false;
-
-function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-function totalWidth(){ return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0); }
+function totalWidth(){ return panels.reduce((sum, p) => sum + p.offsetWidth, 0); }
 function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
 
-function raf(){
-  currentX += (targetX - currentX) * 0.075;
-
-  const dpr = window.devicePixelRatio || 1;
-  const x = Math.round(currentX * dpr) / dpr;
-  track.style.transform = `translate3d(${-x}px,0,0)`;
-
+function updateSliderFromX(){
   const maxS = maxScroll();
   navSlider.max = String(Math.max(0, panels.length - 1));
+  if(isUserSliding) return;
+  const denom = (panels.length - 1) || 1;
+  const ratio = maxS === 0 ? 0 : (currentX / maxS);
+  navSlider.value = String(Math.round(ratio * denom));
+}
 
-  if(!isUserSliding){
-    const ratio = maxS === 0 ? 0 : (currentX / maxS);
-    navSlider.value = String(Math.round(ratio * (panels.length - 1)));
-  }
-
+function raf(){
+  rafStarted = true;
+  currentX += (targetX - currentX) * 0.085;
+  track.style.transform = `translate3d(${-currentX}px,0,0)`;
+  updateSliderFromX();
   requestAnimationFrame(raf);
 }
-raf();
 
+/* wheel */
 window.addEventListener("wheel", (e)=>{
   if(document.body.classList.contains("menu-open")) return;
   targetX = clamp(targetX + e.deltaY * 0.9, 0, maxScroll());
 },{passive:true});
 
 /* drag / touch */
-let isDown=false, startX=0, startTarget=0;
 function pointerDown(x){
   if(document.body.classList.contains("menu-open")) return;
-  isDown=true; startX=x; startTarget=targetX;
+  isDown = true;
+  startX = x;
+  startTarget = targetX;
 }
 function pointerMove(x){
   if(!isDown) return;
   targetX = clamp(startTarget - (x - startX), 0, maxScroll());
 }
-function pointerUp(){ isDown=false; }
+function pointerUp(){ isDown = false; }
 
 window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
 window.addEventListener("mousemove",(e)=>pointerMove(e.clientX));
@@ -630,16 +761,35 @@ window.addEventListener("touchend",pointerUp);
 function sliderToTarget(){
   const maxS = maxScroll();
   const denom = (panels.length - 1) || 1;
-  targetX = clamp((Number(navSlider.value) / denom) * maxS, 0, maxS);
+  const ratio = Number(navSlider.value) / denom;
+  targetX = clamp(ratio * maxS, 0, maxS);
 }
 navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
-navSlider.addEventListener("pointerup", ()=>{ isUserSliding = false; sliderToTarget(); });
+navSlider.addEventListener("pointerup", ()=>{
+  isUserSliding = false;
+  sliderToTarget();
+});
+navSlider.addEventListener("pointercancel", ()=>{
+  isUserSliding = false;
+  sliderToTarget();
+});
 navSlider.addEventListener("input", sliderToTarget);
+navSlider.addEventListener("change", sliderToTarget);
 
-/* keep bounds */
-window.addEventListener("resize", ()=>{
+/* init */
+function refreshAll(){
+  setVH();
+  setPanelWidths();
   targetX = clamp(targetX, 0, maxScroll());
   currentX = clamp(currentX, 0, maxScroll());
+  updateSliderFromX();
+}
+
+window.addEventListener("resize", refreshAll);
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  refreshAll();
+  if(!rafStarted) raf();
 });
 </script>
 
