@@ -834,7 +834,7 @@ function updateSliderFromX(){
 
 function raf(){
   rafStarted = true;
-  currentX += (targetX - currentX) * 0.085;
+  currentX += (targetX - currentX) * 0.065;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
   updateSliderFromX();
   requestAnimationFrame(raf);
