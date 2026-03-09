@@ -204,10 +204,18 @@ body.ui-ready .burger-lines{
 
 /* Home / Split / End = full viewport */
 .panel--home,
-.panel--split,
-.panel--end{
+.panel--split{
   flex:0 0 100vw;
   width:100vw;
+}
+
+.panel--end{
+  height: calc(var(--vh) * 100);
+  display:flex;
+  align-items:stretch;
+  justify-content:flex-end;
+  background:#000;
+  overflow:hidden;
 }
 
 /* Home must be transparent so video shows */
@@ -331,7 +339,7 @@ body.ui-ready .burger-lines{
   height:100%;
   width:100%;
   max-width:100%;
-  object-fit:cover;
+  object-fit:contain;
   object-position:center;
   display:block;
 }
@@ -773,6 +781,7 @@ function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 /* make image-only panel widths match image aspect ratio */
 function sizeImagePanels(){
   const vhPx = window.innerHeight;
+
   const imgPanels = track.querySelectorAll(".panel--img");
 
   imgPanels.forEach(panel=>{
@@ -785,12 +794,52 @@ function sizeImagePanels(){
       if(!nw || !nh) return;
       const ratio = nw / nh;
       const w = Math.max(240, Math.round(ratio * vhPx));
-      panel.style.width = w + "px";
+      panel.style.flex = `0 0 ${w}px`;
+      panel.style.width = `${w}px`;
     };
 
     if(img.complete) apply();
     else img.addEventListener("load", apply, {once:true});
   });
+
+  const endPanel = track.querySelector(".panel--end");
+  if(endPanel){
+    const endImg = endPanel.querySelector(".end-img");
+    const endCard = endPanel.querySelector(".end-card");
+    const endLeft = endPanel.querySelector(".end-left");
+
+    const applyEnd = ()=>{
+      const cardW = Math.ceil(endCard.getBoundingClientRect().width);
+
+      if(window.innerWidth <= 900){
+        endPanel.style.flex = `0 0 ${window.innerWidth}px`;
+        endPanel.style.width = `${window.innerWidth}px`;
+        if(endLeft){
+          endLeft.style.flex = `0 0 0px`;
+          endLeft.style.width = `0px`;
+        }
+        return;
+      }
+
+      let imgW = 0;
+      if(endImg && endImg.naturalWidth && endImg.naturalHeight){
+        imgW = Math.max(240, Math.round((endImg.naturalWidth / endImg.naturalHeight) * vhPx));
+      }
+
+      const total = imgW + cardW;
+      endPanel.style.flex = `0 0 ${total}px`;
+      endPanel.style.width = `${total}px`;
+
+      if(endLeft){
+        endLeft.style.flex = `0 0 ${imgW}px`;
+        endLeft.style.width = `${imgW}px`;
+      }
+    };
+
+    if(endImg && endImg.complete) applyEnd();
+    else if(endImg) endImg.addEventListener("load", applyEnd, {once:true});
+    else applyEnd();
+  }
 
   panels = Array.from(track.querySelectorAll(".panel"));
 }
