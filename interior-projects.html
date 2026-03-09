@@ -209,31 +209,17 @@ body.loaded .page-shell{
 }
 
 /* ================= END SLIDE ================= */
-.panel--end{
+.panel--end-only{
+  flex:0 0 auto;
+  width:auto;
   height: calc(var(--vh) * 100);
   display:flex;
   align-items:stretch;
-  justify-content:flex-end;
-  background:#000;
+  justify-content:flex-start;
+  background:transparent;
   overflow:hidden;
 }
-.end-left{
-  flex:1 1 auto;
-  min-width:0;
-  display:flex;
-  align-items:stretch;
-  justify-content:flex-end;
-  overflow:hidden;
-  background:#000;
-}
-.end-img{
-  height:100%;
-  width:100%;
-  max-width:100%;
-  object-fit:cover;
-  object-position:center;
-  display:block;
-}
+
 .end-card{
   flex:0 0 var(--endCardW);
   height:100%;
