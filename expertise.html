@@ -777,7 +777,7 @@ if(endPanel){
   else applyEnd();
 }
 
-function totalWidth(){ return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0); }
+function totalWidth(){ return panels.reduce((sum, p) => sum + p.offsetWidth, 0); }
 function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
 
 function updateSliderFromX(){
@@ -790,12 +790,8 @@ function updateSliderFromX(){
 }
 
 function raf(){
-  currentX += (targetX - currentX) * 0.075;
-
-  const dpr = window.devicePixelRatio || 1;
-  const x = Math.round(currentX * dpr) / dpr;
-  track.style.transform = `translate3d(${-x}px,0,0)`;
-
+  currentX += (targetX - currentX) * 0.085;
+  track.style.transform = `translate3d(${-currentX}px,0,0)`;
   updateSliderFromX();
   requestAnimationFrame(raf);
 }
