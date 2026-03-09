@@ -490,7 +490,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 <div class="page-shell">
 
   <div class="nav-slider" aria-label="Slide navigation">
-    <input id="navSlider" type="range" min="0" max="1000" step="1" value="0">
+    <input id="navSlider" type="range" min="0" max="1000" step="0.1" value="0">
   </div>
 
   <div class="hwrap">
@@ -829,7 +829,7 @@ function updateSliderFromX(){
   if(isUserSliding) return;
 
   const ratio = maxS === 0 ? 0 : (currentX / maxS);
-  navSlider.value = String(Math.round(ratio * 1000));
+  navSlider.value = String(ratio * 1000);
 }
 
 function raf(){
@@ -875,17 +875,28 @@ function sliderToTarget(){
   const ratio = Number(navSlider.value) / 1000;
   targetX = clamp(ratio * maxS, 0, maxS);
 }
-navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
-navSlider.addEventListener("pointerup", ()=>{
-  isUserSliding = false;
+
+navSlider.addEventListener("pointerdown", ()=>{
+  isUserSliding = true;
+});
+
+navSlider.addEventListener("input", ()=>{
+  if(!isUserSliding) return;
   sliderToTarget();
 });
+
+navSlider.addEventListener("pointerup", ()=>{
+  sliderToTarget();
+  isUserSliding = false;
+});
+
 navSlider.addEventListener("pointercancel", ()=>{
   isUserSliding = false;
-  sliderToTarget();
 });
-navSlider.addEventListener("input", sliderToTarget);
-navSlider.addEventListener("change", sliderToTarget);
+
+navSlider.addEventListener("change", ()=>{
+  if(isUserSliding) sliderToTarget();
+});
 
 /* init */
 function refreshAll(){
