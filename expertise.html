@@ -141,7 +141,7 @@ body.loaded .page-shell{
   overflow:hidden;
   background:#000;
   flex-shrink:0;
-  margin-right:-2px;
+ 
 }
 
 /* ================= IMAGE-ONLY PANELS ================= */
@@ -689,20 +689,25 @@ function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 function setPanelWidths(){
   const vh = window.innerHeight;
 
-  const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
-  imgPanels.forEach(p=>{
-    const img = p.querySelector("img");
-    if(!img) return;
+ const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
+imgPanels.forEach(panel=>{
+  const img = panel.querySelector("img");
+  if(!img) return;
 
-    const apply = ()=>{
-      const w = Math.ceil((img.naturalWidth / img.naturalHeight) * vh) + 6;
-      p.style.flex = `0 0 ${w}px`;
-      p.style.width = `${w}px`;
-    };
+  const apply = ()=>{
+    const nw = img.naturalWidth || 0;
+    const nh = img.naturalHeight || 0;
+    if(!nw || !nh) return;
 
-    if(img.complete && img.naturalWidth) apply();
-    else img.addEventListener("load", apply, { once:true });
-  });
+    const ratio = nw / nh;
+    const w = Math.max(240, Math.round(ratio * vh));
+    panel.style.flex = `0 0 ${w}px`;
+    panel.style.width = `${w}px`;
+  };
+
+  if(img.complete) apply();
+  else img.addEventListener("load", apply, { once:true });
+});
 
   const splitPanels = Array.from(track.querySelectorAll(".panel--split"));
   splitPanels.forEach(p=>{
@@ -727,14 +732,49 @@ function setPanelWidths(){
     else img.addEventListener("load", apply, { once:true });
   });
 
-  const endPanel = track.querySelector(".panel--end");
-  if(endPanel){
-    const panelW = window.innerWidth;
-    endPanel.style.flex = `0 0 ${panelW}px`;
-    endPanel.style.width = `${panelW}px`;
-  }
+ const endPanel = track.querySelector(".panel--end");
+if(endPanel){
+  const endCard = endPanel.querySelector(".end-card");
+  const endLeft = endPanel.querySelector(".end-left");
+  const endImg = endPanel.querySelector(".end-img");
 
-  panels = Array.from(track.querySelectorAll(".panel"));
+  const applyEnd = ()=>{
+    const cardW = Math.ceil(endCard.getBoundingClientRect().width);
+
+    if(window.innerWidth <= 900){
+      endPanel.style.flex = `0 0 ${window.innerWidth}px`;
+      endPanel.style.width = `${window.innerWidth}px`;
+
+      if(endLeft){
+        endLeft.style.flex = `0 0 0px`;
+        endLeft.style.width = `0px`;
+      }
+      return;
+    }
+
+    let imgW = 0;
+
+    if(endImg && endImg.naturalWidth && endImg.naturalHeight){
+      imgW = Math.max(
+        240,
+        Math.round((endImg.naturalWidth / endImg.naturalHeight) * window.innerHeight)
+      );
+    }
+
+    const total = imgW + cardW;
+
+    endPanel.style.flex = `0 0 ${total}px`;
+    endPanel.style.width = `${total}px`;
+
+    if(endLeft){
+      endLeft.style.flex = `0 0 ${imgW}px`;
+      endLeft.style.width = `${imgW}px`;
+    }
+  };
+
+  if(endImg && endImg.complete) applyEnd();
+  else if(endImg) endImg.addEventListener("load", applyEnd, { once:true });
+  else applyEnd();
 }
 
 function totalWidth(){ return panels.reduce((sum, p) => sum + p.getBoundingClientRect().width, 0); }
