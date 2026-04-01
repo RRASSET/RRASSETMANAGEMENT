@@ -22,37 +22,43 @@ html,body{height:100%}
   --sal: env(safe-area-inset-left, 0px);
   --sar: env(safe-area-inset-right, 0px);
 
-  --vh: 1vh; /* set by JS */
+  --vh: 1vh;
 }
 
 body{
   font-family:'Montserrat', sans-serif;
   background:#000;
-  overflow:hidden;              /* we control scroll */
+  overflow:hidden;
   height: calc(var(--vh) * 100);
-  overscroll-behavior: none;
-  touch-action: pan-y;
+  overscroll-behavior:none;
+  touch-action:pan-y;
 }
 
 /* prevent weird flex/grid cropping */
 .panel, .split, .split-left, .split-right, .menu, .menu-panel, .end-card, .end-left{ min-height:0; }
 
 /* ================= BACKGROUND VIDEO ================= */
-.bg{ position:fixed; inset:0; z-index:0; overflow:hidden; background:#000; }
+.bg{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  background:#000;
+}
 .bg video{
-  width:100%; height:100%;
-  object-fit:cover; object-position:center;
-
-  /* luxury settle */
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
   transform:scale(1.03);
   transition:transform 1.6s ease;
 }
 body.loaded .bg video{ transform:scale(1); }
 
-/* smooth reveal overlay (prevents ugly “flash” while video buffers) */
 .bg::after{
   content:"";
-  position:absolute; inset:0;
+  position:absolute;
+  inset:0;
   background:#000;
   opacity:1;
   transition:opacity 1.1s ease;
@@ -60,10 +66,14 @@ body.loaded .bg video{ transform:scale(1); }
 }
 body.loaded .bg::after{ opacity:0; }
 
-/* ================= INTRO LOGO (HOME ONLY) ================= */
+/* ================= INTRO LOGO ================= */
 .intro{
-  position:fixed; inset:0; z-index:40;
-  display:flex; align-items:center; justify-content:center;
+  position:fixed;
+  inset:0;
+  z-index:40;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   pointer-events:none;
   transition:opacity .75s ease;
 }
@@ -74,15 +84,20 @@ body.loaded .bg::after{ opacity:0; }
   animation:logoIn 2.2s cubic-bezier(.22,1,.36,1) forwards;
   animation-delay:0.55s;
 }
-@keyframes logoIn{ to{opacity:1; transform:translateY(0);} }
+@keyframes logoIn{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
 
-/* ================= FIXED SCROLL HINT (ONLY FIRST SLIDE) ================= */
+/* ================= FIXED SCROLL HINT ================= */
 .scroll-indicator-fixed{
   position:fixed;
   left:50%;
   bottom: calc(68px + var(--sab));
   transform:translateX(-50%);
-  z-index:1;                 /* above video, below slides */
+  z-index:1;
   font-family:'Montserrat', sans-serif;
   font-weight:400;
   font-size:16px;
@@ -93,32 +108,26 @@ body.loaded .bg::after{ opacity:0; }
   transition:opacity .25s ease;
 }
 
-/* ================= LEFT BURGER STRIP (DELAYED APPEAR) ================= */
+/* ================= LEFT BURGER STRIP ================= */
 .side-bar{
-  position:fixed; top:0; left:0;
+  position:fixed;
+  top:0;
+  left:0;
   width: calc(var(--burgerW) + var(--sal));
   height: calc(var(--vh) * 100);
-
-  /* START hidden so no white strip on load */
   background:transparent;
   backdrop-filter:none;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   z-index:200;
   cursor:pointer;
-
-  opacity:0;                 /* hidden */
-  pointer-events:none;       /* don't block anything */
-
-  /* nicer Auberry motion */
+  opacity:0;
+  pointer-events:none;
   transform:translateX(-10px);
   transition:opacity .6s ease, transform .8s cubic-bezier(.22,1,.36,1);
 }
 
-/* White/blur layer (so we can fade it in nicely) */
 .side-bar::before{
   content:"";
   position:absolute;
@@ -126,16 +135,14 @@ body.loaded .bg::after{ opacity:0; }
   background:rgba(255,255,255,0.88);
   backdrop-filter: blur(10px);
   opacity:0;
-  transition:opacity .6s ease;
+  transition:opacity .6s ease, background .35s ease;
   z-index:0;
 }
 
-/* Hover (after it's visible) */
 body.ui-ready .side-bar:hover::before{
   background:rgba(255,255,255,0.94);
 }
 
-/* When ready -> show strip */
 body.ui-ready .side-bar{
   opacity:1;
   transform:translateX(0);
@@ -143,7 +150,6 @@ body.ui-ready .side-bar{
 }
 body.ui-ready .side-bar::before{ opacity:1; }
 
-/* Burger icon above ::before */
 .burger-lines{
   position:relative;
   z-index:2;
@@ -156,7 +162,6 @@ body.ui-ready .burger-lines{
   transform:translateY(0);
 }
 
-/* THE 3 BURGER LINES */
 .burger-lines i{
   width:22px;
   height:2px;
@@ -190,35 +195,28 @@ body.ui-ready .burger-lines{
   will-change:transform;
   transform:translate3d(0,0,0);
   position:relative;
-  z-index:2; /* slides above scroll hint */
+  z-index:2;
+  gap:0;
+  align-items:stretch;
 }
 
 /* ================= PANELS ================= */
 .panel{
   flex:0 0 auto;
+  flex-shrink:0;
   height: calc(var(--vh) * 100);
   position:relative;
   overflow:hidden;
   background:#000;
 }
 
-/* Home / Split / End = full viewport */
+/* Home / Split */
 .panel--home,
 .panel--split{
   flex:0 0 100vw;
   width:100vw;
 }
 
-.panel--end{
-  height: calc(var(--vh) * 100);
-  display:flex;
-  align-items:stretch;
-  justify-content:flex-end;
-  background:#000;
-  overflow:hidden;
-}
-
-/* Home must be transparent so video shows */
 .panel--home{ background:transparent !important; }
 
 /* Image-only slides */
@@ -240,7 +238,6 @@ body.ui-ready .burger-lines{
   grid-template-columns: 40% 60%;
 }
 
-/* TEXT */
 .split-left{
   padding: clamp(70px, 9vh, 120px) clamp(24px, 5vw, 70px)
            clamp(60px, 8vh, 110px) clamp(60px, 8vw, 140px);
@@ -403,7 +400,9 @@ body.ui-ready .burger-lines{
 
 /* ================= MENU ================= */
 .menu{
-  position:fixed; top:0; left:0;
+  position:fixed;
+  top:0;
+  left:0;
   height: calc(var(--vh) * 100);
   width: var(--menuW);
   background:#f4f4f2;
@@ -426,13 +425,15 @@ body.ui-ready .burger-lines{
   justify-content:flex-start;
   overflow:auto;
   -webkit-overflow-scrolling: touch;
-
   opacity:0;
   transform:translateY(10px);
   transition:opacity .9s ease, transform .9s ease;
   transition-delay:.2s;
 }
-.menu.open .menu-panel{ opacity:1; transform:translateY(0); }
+.menu.open .menu-panel{
+  opacity:1;
+  transform:translateY(0);
+}
 .menu-panel::-webkit-scrollbar{ width:0; height:0; }
 .menu-panel{ scrollbar-width:none; }
 
@@ -512,7 +513,6 @@ body.ui-ready .burger-lines{
 }
 .menu-privacy:hover{ opacity:.7; }
 
-/* when menu open */
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 body.menu-open #scrollHint{ opacity:0 !important; }
@@ -523,11 +523,20 @@ body.menu-open #scrollHint{ opacity:0 !important; }
     grid-template-columns: 1fr;
     grid-template-rows: auto 55vh;
   }
-  .split-left{ padding:90px 24px 30px 24px; max-width:none; }
+  .split-left{
+    padding:90px 24px 30px 24px;
+    max-width:none;
+  }
   .aub-heading, .aub-text{ max-width:none; }
 
   .end-left{ display:none; }
   .end-card{ flex:0 0 100%; width:100%; }
+
+  .nav-slider{
+    left: calc(24px + var(--sal));
+    right: calc(24px + var(--sar));
+    bottom: calc(12px + var(--sab));
+  }
 
   .menu{ width: min(420px, 92vw); }
   .menu-panel{ padding: calc(28px + var(--sat)) 28px calc(38px + var(--sab)); }
@@ -537,7 +546,7 @@ body.menu-open #scrollHint{ opacity:0 !important; }
 
 <body>
 
-<!-- Background video (ADD a poster image file: Bg-poster.jpg) -->
+<!-- Background video -->
 <div class="bg">
   <video id="bgVideo" autoplay muted loop playsinline preload="metadata" poster="./Bg-poster.jpg">
     <source src="./Bg.mp4" type="video/mp4">
@@ -559,7 +568,7 @@ body.menu-open #scrollHint{ opacity:0 !important; }
 
 <!-- Bottom slider -->
 <div class="nav-slider" aria-label="Slide navigation">
-  <input id="navSlider" type="range" min="0" max="20" step="1" value="0">
+  <input id="navSlider" type="range" min="0" max="1000" step="0.1" value="0">
 </div>
 
 <!-- Horizontal panels -->
@@ -604,10 +613,10 @@ body.menu-open #scrollHint{ opacity:0 !important; }
           <div class="aub-line"></div>
           <div class="aub-text">
             <p class="lead">
-             We work with the world’s finest materials to ensure every residence reflects the standards of ultra-prime living. Rare Italian marble, natural hardwoods, custom metalwork, and bespoke stone are carefully selected to deliver both beauty and longevity.
+              We work with the world’s finest materials to ensure every residence reflects the standards of ultra-prime living. Rare Italian marble, natural hardwoods, custom metalwork, and bespoke stone are carefully selected to deliver both beauty and longevity.
             </p>
             <p class="body">
-             Our approach combines traditional craftsmanship with modern innovation, ensuring that every element — from kitchens and bathrooms to architectural features and façades — meets the expectations of the most discerning global clientele.
+              Our approach combines traditional craftsmanship with modern innovation, ensuring that every element — from kitchens and bathrooms to architectural features and façades — meets the expectations of the most discerning global clientele.
             </p>
           </div>
         </div>
@@ -631,11 +640,10 @@ body.menu-open #scrollHint{ opacity:0 !important; }
           <div class="aub-line"></div>
           <div class="aub-text">
             <p class="lead">
-         At R&R Mayfair, architecture is more than structure — it is the foundation of identity. Every development is designed in collaboration with leading architects, interior designers, and master planners to create residences that are both visually striking and deeply functional.
+              At R&amp;R Mayfair, architecture is more than structure — it is the foundation of identity. Every development is designed in collaboration with leading architects, interior designers, and master planners to create residences that are both visually striking and deeply functional.
             </p>
             <p class="body">
-              
-Our projects balance timeless design principles with contemporary innovation, ensuring that each property reflects both the character of its location and the expectations of modern ultra-prime living.
+              Our projects balance timeless design principles with contemporary innovation, ensuring that each property reflects both the character of its location and the expectations of modern ultra-prime living.
             </p>
           </div>
         </div>
@@ -732,17 +740,14 @@ window.addEventListener('orientationchange', setVH);
 
 /* ===== Auberry-like intro sequence ===== */
 document.addEventListener("DOMContentLoaded", ()=>{
-  // Scroll hint appears after logo starts settling
   setTimeout(()=> document.body.classList.add("hint-ready"), 1400);
-
-  // Burger strip appears after ~2s
   setTimeout(()=> document.body.classList.add("ui-ready"), 2000);
 });
 
 /* Reveal background smoothly once everything is ready */
 window.addEventListener("load", ()=>{
   document.body.classList.add("loaded");
-  refreshAll();   // final sizing pass
+  refreshAll();
 });
 
 /* ===== MENU ===== */
@@ -760,7 +765,9 @@ function closeMenuFn(){
 }
 burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
-document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape") closeMenuFn();
+});
 
 /* ===== HORIZONTAL SCROLL ===== */
 const track = document.getElementById("track");
@@ -772,18 +779,25 @@ let panels = Array.from(track.querySelectorAll(".panel"));
 let currentX = 0;
 let targetX = 0;
 let isUserSliding = false;
-let isDown = false, startX = 0, startTarget = 0;
-
+let isDown = false;
+let startX = 0;
+let startTarget = 0;
 let rafStarted = false;
 
-function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+function clamp(v, min, max){
+  return Math.max(min, Math.min(max, v));
+}
 
-/* make image-only panel widths match image aspect ratio */
-function sizeImagePanels(){
+function setPanelWidths(){
   const vhPx = window.innerHeight;
 
-  const imgPanels = track.querySelectorAll(".panel--img");
+  const fixedFullPanels = Array.from(track.querySelectorAll(".panel--home, .panel--split"));
+  fixedFullPanels.forEach(panel=>{
+    panel.style.flex = `0 0 ${window.innerWidth}px`;
+    panel.style.width = `${window.innerWidth}px`;
+  });
 
+  const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
   imgPanels.forEach(panel=>{
     const img = panel.querySelector("img");
     if(!img) return;
@@ -792,14 +806,15 @@ function sizeImagePanels(){
       const nw = img.naturalWidth || 0;
       const nh = img.naturalHeight || 0;
       if(!nw || !nh) return;
+
       const ratio = nw / nh;
       const w = Math.max(240, Math.round(ratio * vhPx));
       panel.style.flex = `0 0 ${w}px`;
       panel.style.width = `${w}px`;
     };
 
-    if(img.complete) apply();
-    else img.addEventListener("load", apply, {once:true});
+    if(img.complete && img.naturalWidth) apply();
+    else img.addEventListener("load", apply, { once:true });
   });
 
   const endPanel = track.querySelector(".panel--end");
@@ -814,6 +829,7 @@ function sizeImagePanels(){
       if(window.innerWidth <= 900){
         endPanel.style.flex = `0 0 ${window.innerWidth}px`;
         endPanel.style.width = `${window.innerWidth}px`;
+
         if(endLeft){
           endLeft.style.flex = `0 0 0px`;
           endLeft.style.width = `0px`;
@@ -836,54 +852,61 @@ function sizeImagePanels(){
       }
     };
 
-    if(endImg && endImg.complete) applyEnd();
-    else if(endImg) endImg.addEventListener("load", applyEnd, {once:true});
+    if(endImg && endImg.complete && endImg.naturalWidth) applyEnd();
+    else if(endImg) endImg.addEventListener("load", applyEnd, { once:true });
     else applyEnd();
   }
 
   panels = Array.from(track.querySelectorAll(".panel"));
 }
 
-function totalWidth(){ return panels.reduce((sum, p) => sum + p.offsetWidth, 0); }
-function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
-function xForIndex(idx){ return panels.slice(0, idx).reduce((sum, p) => sum + p.offsetWidth, 0); }
+function totalWidth(){
+  return panels.reduce((sum, p) => sum + p.offsetWidth, 0);
+}
+
+function maxScroll(){
+  return Math.max(0, totalWidth() - window.innerWidth);
+}
+
+function xForIndex(idx){
+  return panels.slice(0, idx).reduce((sum, p) => sum + p.offsetWidth, 0);
+}
 
 function updateSliderFromX(){
   const maxS = maxScroll();
-  navSlider.max = String(Math.max(0, panels.length - 1));
   if(isUserSliding) return;
-  const denom = (panels.length - 1) || 1;
+
   const ratio = maxS === 0 ? 0 : (currentX / maxS);
-  navSlider.value = String(Math.round(ratio * denom));
+  navSlider.value = String(ratio * 1000);
 }
 
 function raf(){
   rafStarted = true;
 
-  currentX += (targetX - currentX) * 0.085;
+  currentX += (targetX - currentX) * 0.065;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
 
-  /* Fade intro logo out */
-  if (intro) {
+  if(intro){
     const fadeStart = 55;
-    const fadeEnd   = 320;
+    const fadeEnd = 320;
     const t = (currentX - fadeStart) / (fadeEnd - fadeStart);
     intro.style.opacity = String(1 - Math.max(0, Math.min(1, t)));
   }
 
-  /* Scroll hint: only if hint-ready + not menu-open */
-  if (scrollHint && !document.body.classList.contains("menu-open")) {
+  if(scrollHint && !document.body.classList.contains("menu-open")){
     if(!document.body.classList.contains("hint-ready")){
       scrollHint.style.opacity = "0";
     } else {
       const showUntil = 30;
-      const fadeEnd   = 220;
+      const fadeEnd = 220;
       let op = 0;
-      if (currentX < showUntil) op = 1;
+
+      if(currentX < showUntil) op = 1;
       else {
         const t = (currentX - showUntil) / (fadeEnd - showUntil);
         op = 1 - Math.max(0, Math.min(1, t));
       }
+
       scrollHint.style.opacity = String(op);
     }
   }
@@ -895,8 +918,7 @@ function raf(){
 /* Wheel */
 window.addEventListener("wheel", (e)=>{
   if(document.body.classList.contains("menu-open")) return;
-  const speed = 0.9;
-  targetX = clamp(targetX + e.deltaY * speed, 0, maxScroll());
+  targetX = clamp(targetX + e.deltaY * 0.9, 0, maxScroll());
 },{passive:true});
 
 /* Drag / touch */
@@ -911,7 +933,9 @@ function pointerMove(x){
   const dx = x - startX;
   targetX = clamp(startTarget - dx, 0, maxScroll());
 }
-function pointerUp(){ isDown = false; }
+function pointerUp(){
+  isDown = false;
+}
 
 window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
 window.addEventListener("mousemove",(e)=>pointerMove(e.clientX));
@@ -924,21 +948,26 @@ window.addEventListener("touchend",pointerUp);
 /* Slider */
 function sliderToTarget(){
   const maxS = maxScroll();
-  const denom = (panels.length - 1) || 1;
-  const ratio = Number(navSlider.value) / denom;
+  const ratio = Number(navSlider.value) / 1000;
   targetX = clamp(ratio * maxS, 0, maxS);
 }
-navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
+navSlider.addEventListener("pointerdown", ()=>{
+  isUserSliding = true;
+});
 navSlider.addEventListener("pointerup", ()=>{
-  isUserSliding = false;
   sliderToTarget();
+  isUserSliding = false;
 });
 navSlider.addEventListener("pointercancel", ()=>{
   isUserSliding = false;
+});
+navSlider.addEventListener("input", ()=>{
+  if(!isUserSliding) return;
   sliderToTarget();
 });
-navSlider.addEventListener("input", sliderToTarget);
-navSlider.addEventListener("change", sliderToTarget);
+navSlider.addEventListener("change", ()=>{
+  if(isUserSliding) sliderToTarget();
+});
 
 /* data-goto links */
 document.querySelectorAll('[data-goto]').forEach(a=>{
@@ -953,19 +982,17 @@ document.querySelectorAll('[data-goto]').forEach(a=>{
 /* Initial sizing + start */
 function refreshAll(){
   setVH();
-  sizeImagePanels();
+  setPanelWidths();
   targetX = clamp(targetX, 0, maxScroll());
   currentX = clamp(currentX, 0, maxScroll());
   updateSliderFromX();
 }
 
-/* Start early so it feels fast */
 document.addEventListener("DOMContentLoaded", ()=>{
   refreshAll();
   if(!rafStarted) raf();
 });
 
-/* Recompute widths on resize */
 window.addEventListener("resize", refreshAll);
 </script>
 
