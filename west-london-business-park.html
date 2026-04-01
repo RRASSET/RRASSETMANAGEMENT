@@ -453,6 +453,12 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     width:100%;
   }
 
+  .nav-slider{
+    left: calc(24px + var(--sal));
+    right: calc(24px + var(--sar));
+    bottom: calc(12px + var(--sab));
+  }
+
   .menu{
     width:min(420px, 92vw);
   }
@@ -474,7 +480,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
   <!-- Bottom slider -->
   <div class="nav-slider" aria-label="Slide navigation">
-    <input id="navSlider" type="range" min="0" max="10" step="1" value="0">
+    <input id="navSlider" type="range" min="0" max="1000" step="0.1" value="0">
   </div>
 
   <!-- Horizontal panels -->
@@ -618,7 +624,7 @@ burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
 document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
 
-/* ===== SIZING ===== */
+/* ===== HORIZONTAL SCROLL ===== */
 const track = document.getElementById("track");
 const navSlider = document.getElementById("navSlider");
 
@@ -665,7 +671,7 @@ function setPanelWidths(){
       panel.style.width = `${total}px`;
     };
 
-    if(mediaImg.complete) apply();
+    if(mediaImg.complete && mediaImg.naturalWidth) apply();
     else mediaImg.addEventListener("load", apply, {once:true});
   });
 
@@ -684,7 +690,7 @@ function setPanelWidths(){
       panel.style.width = `${w}px`;
     };
 
-    if(img.complete) apply();
+    if(img.complete && img.naturalWidth) apply();
     else img.addEventListener("load", apply, {once:true});
   });
 
@@ -715,16 +721,14 @@ function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
 
 function updateSliderFromX(){
   const maxS = maxScroll();
-  navSlider.max = String(Math.max(0, panels.length - 1));
   if(isUserSliding) return;
-  const denom = (panels.length - 1) || 1;
   const ratio = maxS === 0 ? 0 : (currentX / maxS);
-  navSlider.value = String(Math.round(ratio * denom));
+  navSlider.value = String(ratio * 1000);
 }
 
 function raf(){
   rafStarted = true;
-  currentX += (targetX - currentX) * 0.085;
+  currentX += (targetX - currentX) * 0.065;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
   updateSliderFromX();
   requestAnimationFrame(raf);
@@ -760,21 +764,24 @@ window.addEventListener("touchend",pointerUp);
 /* slider */
 function sliderToTarget(){
   const maxS = maxScroll();
-  const denom = (panels.length - 1) || 1;
-  const ratio = Number(navSlider.value) / denom;
+  const ratio = Number(navSlider.value) / 1000;
   targetX = clamp(ratio * maxS, 0, maxS);
 }
 navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
 navSlider.addEventListener("pointerup", ()=>{
-  isUserSliding = false;
   sliderToTarget();
+  isUserSliding = false;
 });
 navSlider.addEventListener("pointercancel", ()=>{
   isUserSliding = false;
+});
+navSlider.addEventListener("input", ()=>{
+  if(!isUserSliding) return;
   sliderToTarget();
 });
-navSlider.addEventListener("input", sliderToTarget);
-navSlider.addEventListener("change", sliderToTarget);
+navSlider.addEventListener("change", ()=>{
+  if(isUserSliding) sliderToTarget();
+});
 
 /* init */
 function refreshAll(){
