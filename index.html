@@ -232,28 +232,48 @@ body.ui-ready .burger-lines{
 
 /* ================= SPLIT SLIDE ================= */
 .panel--split{ background:#f4f4f2; }
+
 .split{
   width:100%;
   height:100%;
-  display:grid;
-  grid-template-columns: 40% 60%;
+  display:flex;
 }
 
 .split-left{
+  flex:0 0 40%;
   padding: clamp(70px, 9vh, 120px) clamp(24px, 5vw, 70px)
            clamp(60px, 8vh, 110px) clamp(60px, 8vw, 140px);
   color:#1a1a1a;
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
-  width:100%;
-  max-width:680px;
   max-height: calc(var(--vh) * 100);
   overflow:auto;
   -webkit-overflow-scrolling: touch;
+  min-width:0;
 }
 .split-left::-webkit-scrollbar{ width:0; height:0; }
 .split-left{ scrollbar-width:none; }
+
+.split-right{
+  flex:0 0 60%;
+  position:relative;
+  overflow:hidden;
+  background:#f4f4f2;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+  min-width:0;
+}
+
+.panel--split .panel-img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:center;
+  background:#f4f4f2;
+}
 
 .aub-heading{
   font-family:'Cormorant Garamond', serif;
@@ -295,6 +315,59 @@ body.ui-ready .burger-lines{
   line-height:1.75;
 }
 .aub-text .lead{ font-style:italic; margin-bottom:42px; }
+.aub-text .body{ font-style:italic; margin-bottom:0; }
+
+@media (max-width: 900px){
+  .split{
+    display:flex;
+    flex-direction:row;
+    width:100%;
+    height:100%;
+  }
+
+  .split-left{
+    flex:0 0 40%;
+    padding:
+      calc(78px + var(--sat))
+      16px
+      calc(24px + var(--sab))
+      18px;
+  }
+
+  .split-right{
+    flex:0 0 60%;
+  }
+
+  .aub-heading{
+    max-width:none;
+  }
+
+  .aub-heading .small{
+    font-size:18px;
+    margin-bottom:6px;
+  }
+
+  .aub-heading .big{
+    font-size:22px;
+    line-height:1.02;
+    letter-spacing:1.1px;
+  }
+
+  .aub-line{
+    width:42px;
+    margin:14px 0 20px 0;
+  }
+
+  .aub-text{
+    max-width:none;
+    font-size:13px;
+    line-height:1.5;
+  }
+
+  .aub-text .lead{
+    margin-bottom:18px;
+  }
+}
 .aub-text .body{ font-style:italic; margin-bottom:0; }
 
 /* RIGHT IMAGE IN SPLIT */
@@ -899,7 +972,7 @@ function clamp(v, min, max){
 
 function updateHintText(){
   if(!scrollHint) return;
-  scrollHint.textContent = isMobile() ? "Swipe" : "Scroll";
+  scrollHint.textContent = isMobile() ? "⇠Swipe" : "Scroll";
 }
 
 function setPanelWidths(){
@@ -912,16 +985,16 @@ function setPanelWidths(){
   });
 
   const splitPanels = Array.from(track.querySelectorAll(".panel--split"));
-  splitPanels.forEach(panel=>{
-    let panelW = window.innerWidth;
+splitPanels.forEach(panel=>{
+  let panelW = window.innerWidth;
 
-    if(window.innerWidth <= 900){
-      panelW = Math.round(window.innerWidth * 2.2);
-    }
+  if(window.innerWidth <= 900){
+    panelW = Math.round(window.innerWidth * 2.6);
+  }
 
-    panel.style.flex = `0 0 ${panelW}px`;
-    panel.style.width = `${panelW}px`;
-  });
+  panel.style.flex = `0 0 ${panelW}px`;
+  panel.style.width = `${panelW}px`;
+});
 
   const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
   imgPanels.forEach(panel=>{
@@ -1009,7 +1082,7 @@ function updateSliderFromX(){
 function raf(){
   rafStarted = true;
 
-  const ease = isMobile() ? 0.75 : 0.065;
+  const ease = isMobile() ? 0.9 : 0.065;
   currentX += (targetX - currentX) * ease;
 
   if(Math.abs(targetX - currentX) < 0.08){
@@ -1077,7 +1150,7 @@ function pointerMove(x){
   const dx = x - startX;
 
   if(isMobile()){
-    targetX = clamp(startTarget - dx * 4.2, 0, maxScroll());
+    targetX = clamp(startTarget - dx * 5.5, 0, maxScroll());
   } else {
     targetX = clamp(startTarget - dx, 0, maxScroll());
   }
@@ -1098,7 +1171,7 @@ function pointerUp(){
   isDown = false;
 
   if(isMobile()){
-    targetX = clamp(targetX - velocityX * 1200, 0, maxScroll());
+    targetX = clamp(targetX - velocityX * 1800, 0, maxScroll());
   }
 }
 
