@@ -540,6 +540,16 @@ body.menu-open #scrollHint{ opacity:0 !important; }
 
   .menu{ width: min(420px, 92vw); }
   .menu-panel{ padding: calc(28px + var(--sat)) 28px calc(38px + var(--sab)); }
+
+  body{
+    touch-action: pan-x;
+  }
+
+  .scroll-indicator-fixed{
+    font-size:14px;
+    letter-spacing:1.6px;
+    bottom: calc(64px + var(--sab));
+  }
 }
 </style>
 </head>
@@ -558,7 +568,7 @@ body.menu-open #scrollHint{ opacity:0 !important; }
   <img src="./logo.png" alt="RR Logo">
 </div>
 
-<!-- Fixed scroll hint -->
+<!-- Fixed scroll / swipe hint -->
 <div class="scroll-indicator-fixed" id="scrollHint">Scroll</div>
 
 <!-- Burger strip -->
@@ -744,12 +754,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
   setTimeout(()=> document.body.classList.add("ui-ready"), 2000);
 });
 
-/* Reveal background smoothly once everything is ready */
-window.addEventListener("load", ()=>{
-  document.body.classList.add("loaded");
-  refreshAll();
-});
-
 /* ===== MENU ===== */
 const menu = document.getElementById("menu");
 const burger = document.getElementById("burger");
@@ -784,8 +788,15 @@ let startX = 0;
 let startTarget = 0;
 let rafStarted = false;
 
+const isMobile = () => window.innerWidth <= 900;
+
 function clamp(v, min, max){
   return Math.max(min, Math.min(max, v));
+}
+
+function updateHintText(){
+  if(!scrollHint) return;
+  scrollHint.textContent = isMobile() ? "Swipe" : "Scroll";
 }
 
 function setPanelWidths(){
@@ -883,7 +894,8 @@ function updateSliderFromX(){
 function raf(){
   rafStarted = true;
 
-  currentX += (targetX - currentX) * 0.065;
+  const ease = isMobile() ? 0.18 : 0.065;
+  currentX += (targetX - currentX) * ease;
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
 
   if(intro){
@@ -915,6 +927,12 @@ function raf(){
   requestAnimationFrame(raf);
 }
 
+/* Reveal background smoothly once everything is ready */
+window.addEventListener("load", ()=>{
+  document.body.classList.add("loaded");
+  refreshAll();
+});
+
 /* Wheel */
 window.addEventListener("wheel", (e)=>{
   if(document.body.classList.contains("menu-open")) return;
@@ -928,11 +946,18 @@ function pointerDown(x){
   startX = x;
   startTarget = targetX;
 }
+
 function pointerMove(x){
   if(!isDown) return;
   const dx = x - startX;
-  targetX = clamp(startTarget - dx, 0, maxScroll());
+
+  if(isMobile()){
+    targetX = clamp(startTarget - dx * 1.35, 0, maxScroll());
+  } else {
+    targetX = clamp(startTarget - dx, 0, maxScroll());
+  }
 }
+
 function pointerUp(){
   isDown = false;
 }
@@ -941,9 +966,18 @@ window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
 window.addEventListener("mousemove",(e)=>pointerMove(e.clientX));
 window.addEventListener("mouseup",pointerUp);
 
-window.addEventListener("touchstart",(e)=>pointerDown(e.touches[0].clientX),{passive:true});
-window.addEventListener("touchmove",(e)=>pointerMove(e.touches[0].clientX),{passive:true});
-window.addEventListener("touchend",pointerUp);
+window.addEventListener("touchstart",(e)=>{
+  if(!e.touches.length) return;
+  pointerDown(e.touches[0].clientX);
+},{passive:true});
+
+window.addEventListener("touchmove",(e)=>{
+  if(!e.touches.length) return;
+  pointerMove(e.touches[0].clientX);
+},{passive:true});
+
+window.addEventListener("touchend", pointerUp);
+window.addEventListener("touchcancel", pointerUp);
 
 /* Slider */
 function sliderToTarget(){
@@ -983,6 +1017,7 @@ document.querySelectorAll('[data-goto]').forEach(a=>{
 function refreshAll(){
   setVH();
   setPanelWidths();
+  updateHintText();
   targetX = clamp(targetX, 0, maxScroll());
   currentX = clamp(currentX, 0, maxScroll());
   updateSliderFromX();
@@ -994,6 +1029,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 });
 
 window.addEventListener("resize", refreshAll);
+window.addEventListener("orientationchange", refreshAll);
 </script>
 
 </body>
