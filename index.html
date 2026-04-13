@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>RR Asset Management</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
@@ -519,23 +519,84 @@ body.menu-open #scrollHint{ opacity:0 !important; }
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 900px){
-  .split{
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 55vh;
+  .panel--split{
+    width:100vw;
+    flex:0 0 100vw;
   }
+
+  .split{
+    grid-template-columns: 43% 57%;
+    grid-template-rows: 100%;
+    height:100%;
+  }
+
   .split-left{
-    padding:90px 24px 30px 24px;
+    padding:
+      calc(84px + var(--sat))
+      14px
+      calc(32px + var(--sab))
+      18px;
+    max-width:none;
+    max-height: calc(var(--vh) * 100);
+    overflow:auto;
+  }
+
+  .aub-heading{
     max-width:none;
   }
-  .aub-heading, .aub-text{ max-width:none; }
+
+  .aub-heading .small{
+    font-size:clamp(18px, 4.8vw, 24px);
+    margin-bottom:6px;
+  }
+
+  .aub-heading .big{
+    font-size:clamp(21px, 7vw, 34px);
+    line-height:0.95;
+    letter-spacing:1.2px;
+  }
+
+  .aub-line{
+    width:42px;
+    margin:14px 0 26px 0;
+  }
+
+  .aub-text{
+    max-width:none;
+    font-size:clamp(13px, 3.9vw, 17px);
+    line-height:1.5;
+  }
+
+  .aub-text .lead{
+    margin-bottom:18px;
+  }
+
+  .split-right{
+    height:100%;
+    min-width:0;
+  }
+
+  .panel--split .panel-img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+  }
 
   .end-left{ display:none; }
   .end-card{ flex:0 0 100%; width:100%; }
 
   .nav-slider{
-    left: calc(24px + var(--sal));
+    left: calc(40px + var(--sal));
     right: calc(24px + var(--sar));
     bottom: calc(12px + var(--sab));
+  }
+
+  .nav-slider input[type="range"]::-webkit-slider-thumb{
+    width: 54px;
+  }
+  .nav-slider input[type="range"]::-moz-range-thumb{
+    width: 54px;
   }
 
   .menu{ width: min(420px, 92vw); }
@@ -549,6 +610,48 @@ body.menu-open #scrollHint{ opacity:0 !important; }
     font-size:14px;
     letter-spacing:1.6px;
     bottom: calc(64px + var(--sab));
+  }
+
+  .side-bar{
+    width: calc(44px + var(--sal));
+  }
+
+  .burger-lines i,
+  .burger-lines i::before,
+  .burger-lines i::after{
+    width:20px;
+  }
+}
+
+@media (max-width: 520px){
+  .split{
+    grid-template-columns: 41% 59%;
+  }
+
+  .split-left{
+    padding:
+      calc(78px + var(--sat))
+      12px
+      calc(24px + var(--sab))
+      14px;
+  }
+
+  .aub-heading .small{
+    font-size:17px;
+  }
+
+  .aub-heading .big{
+    font-size:18px;
+    letter-spacing:1px;
+  }
+
+  .aub-text{
+    font-size:12px;
+    line-height:1.45;
+  }
+
+  .aub-line{
+    margin:12px 0 20px 0;
   }
 }
 </style>
@@ -568,7 +671,7 @@ body.menu-open #scrollHint{ opacity:0 !important; }
   <img src="./logo.png" alt="RR Logo">
 </div>
 
-<!-- Fixed scroll / swipe hint -->
+<!-- Fixed scroll hint -->
 <div class="scroll-indicator-fixed" id="scrollHint">Scroll</div>
 
 <!-- Burger strip -->
@@ -796,7 +899,7 @@ function clamp(v, min, max){
 
 function updateHintText(){
   if(!scrollHint) return;
-  scrollHint.textContent = isMobile() ? "Swipe" : "Scroll";
+  scrollHint.textContent = isMobile() ? "←Swipe" : "Scroll";
 }
 
 function setPanelWidths(){
