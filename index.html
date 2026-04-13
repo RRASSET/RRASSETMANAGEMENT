@@ -1150,7 +1150,7 @@ function pointerMove(x){
   const dx = x - startX;
 
   if(isMobile()){
-    targetX = clamp(startTarget - dx * 5.5, 0, maxScroll());
+    targetX = clamp(startTarget - dx * 3.2, 0, maxScroll());
   } else {
     targetX = clamp(startTarget - dx, 0, maxScroll());
   }
