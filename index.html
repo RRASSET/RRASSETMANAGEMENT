@@ -519,13 +519,8 @@ body.menu-open #scrollHint{ opacity:0 !important; }
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 900px){
-  .panel--split{
-    width:100vw;
-    flex:0 0 100vw;
-  }
-
   .split{
-    grid-template-columns: 43% 57%;
+    grid-template-columns: 40% 60%;
     grid-template-rows: 100%;
     height:100%;
   }
@@ -533,9 +528,9 @@ body.menu-open #scrollHint{ opacity:0 !important; }
   .split-left{
     padding:
       calc(84px + var(--sat))
-      14px
+      18px
       calc(32px + var(--sab))
-      18px;
+      22px;
     max-width:none;
     max-height: calc(var(--vh) * 100);
     overflow:auto;
@@ -546,29 +541,29 @@ body.menu-open #scrollHint{ opacity:0 !important; }
   }
 
   .aub-heading .small{
-    font-size:clamp(18px, 4.8vw, 24px);
-    margin-bottom:6px;
+    font-size:clamp(20px, 4.8vw, 28px);
+    margin-bottom:8px;
   }
 
   .aub-heading .big{
-    font-size:clamp(21px, 7vw, 34px);
-    line-height:0.95;
-    letter-spacing:1.2px;
+    font-size:clamp(26px, 6.5vw, 38px);
+    line-height:0.98;
+    letter-spacing:1.4px;
   }
 
   .aub-line{
-    width:42px;
-    margin:14px 0 26px 0;
+    width:48px;
+    margin:16px 0 28px 0;
   }
 
   .aub-text{
     max-width:none;
-    font-size:clamp(13px, 3.9vw, 17px);
-    line-height:1.5;
+    font-size:clamp(14px, 3.5vw, 18px);
+    line-height:1.55;
   }
 
   .aub-text .lead{
-    margin-bottom:18px;
+    margin-bottom:20px;
   }
 
   .split-right{
@@ -593,10 +588,10 @@ body.menu-open #scrollHint{ opacity:0 !important; }
   }
 
   .nav-slider input[type="range"]::-webkit-slider-thumb{
-    width: 54px;
+    width:54px;
   }
   .nav-slider input[type="range"]::-moz-range-thumb{
-    width: 54px;
+    width:54px;
   }
 
   .menu{ width: min(420px, 92vw); }
@@ -625,33 +620,33 @@ body.menu-open #scrollHint{ opacity:0 !important; }
 
 @media (max-width: 520px){
   .split{
-    grid-template-columns: 41% 59%;
+    grid-template-columns: 40% 60%;
   }
 
   .split-left{
     padding:
       calc(78px + var(--sat))
-      12px
+      16px
       calc(24px + var(--sab))
-      14px;
+      18px;
   }
 
   .aub-heading .small{
-    font-size:17px;
+    font-size:18px;
   }
 
   .aub-heading .big{
-    font-size:18px;
-    letter-spacing:1px;
+    font-size:22px;
+    letter-spacing:1.1px;
   }
 
   .aub-text{
-    font-size:12px;
-    line-height:1.45;
+    font-size:13px;
+    line-height:1.5;
   }
 
   .aub-line{
-    margin:12px 0 20px 0;
+    margin:14px 0 22px 0;
   }
 }
 </style>
@@ -891,6 +886,10 @@ let startX = 0;
 let startTarget = 0;
 let rafStarted = false;
 
+let lastPointerX = 0;
+let lastPointerTime = 0;
+let velocityX = 0;
+
 const isMobile = () => window.innerWidth <= 900;
 
 function clamp(v, min, max){
@@ -899,16 +898,28 @@ function clamp(v, min, max){
 
 function updateHintText(){
   if(!scrollHint) return;
-  scrollHint.textContent = isMobile() ? "←Swipe" : "Scroll";
+  scrollHint.textContent = isMobile() ? "Swipe" : "Scroll";
 }
 
 function setPanelWidths(){
   const vhPx = window.innerHeight;
 
-  const fixedFullPanels = Array.from(track.querySelectorAll(".panel--home, .panel--split"));
-  fixedFullPanels.forEach(panel=>{
+  const homePanels = Array.from(track.querySelectorAll(".panel--home"));
+  homePanels.forEach(panel=>{
     panel.style.flex = `0 0 ${window.innerWidth}px`;
     panel.style.width = `${window.innerWidth}px`;
+  });
+
+  const splitPanels = Array.from(track.querySelectorAll(".panel--split"));
+  splitPanels.forEach(panel=>{
+    let panelW = window.innerWidth;
+
+    if(window.innerWidth <= 900){
+      panelW = Math.round(window.innerWidth * 1.75);
+    }
+
+    panel.style.flex = `0 0 ${panelW}px`;
+    panel.style.width = `${panelW}px`;
   });
 
   const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
@@ -997,8 +1008,13 @@ function updateSliderFromX(){
 function raf(){
   rafStarted = true;
 
-  const ease = isMobile() ? 0.18 : 0.065;
+  const ease = isMobile() ? 0.5 : 0.065;
   currentX += (targetX - currentX) * ease;
+
+  if(Math.abs(targetX - currentX) < 0.08){
+    currentX = targetX;
+  }
+
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
 
   if(intro){
@@ -1048,21 +1064,41 @@ function pointerDown(x){
   isDown = true;
   startX = x;
   startTarget = targetX;
+  lastPointerX = x;
+  lastPointerTime = performance.now();
+  velocityX = 0;
 }
 
 function pointerMove(x){
   if(!isDown) return;
+
+  const now = performance.now();
   const dx = x - startX;
 
   if(isMobile()){
-    targetX = clamp(startTarget - dx * 1.35, 0, maxScroll());
+    targetX = clamp(startTarget - dx * 2.8, 0, maxScroll());
   } else {
     targetX = clamp(startTarget - dx, 0, maxScroll());
   }
+
+  const moveDx = x - lastPointerX;
+  const dt = now - lastPointerTime;
+
+  if(dt > 0){
+    velocityX = moveDx / dt;
+  }
+
+  lastPointerX = x;
+  lastPointerTime = now;
 }
 
 function pointerUp(){
+  if(!isDown) return;
   isDown = false;
+
+  if(isMobile()){
+    targetX = clamp(targetX - velocityX * 650, 0, maxScroll());
+  }
 }
 
 window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
