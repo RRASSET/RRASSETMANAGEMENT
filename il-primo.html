@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>RR Asset Management — Il Primo</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
@@ -50,7 +50,9 @@ body.loaded .page-shell{
 
 /* ================= LEFT BURGER STRIP ================= */
 .side-bar{
-  position:fixed; top:0; left:0;
+  position:fixed;
+  top:0;
+  left:0;
   width: calc(var(--burgerW) + var(--sal));
   height: calc(var(--vh) * 100);
   display:flex;
@@ -139,11 +141,11 @@ body.loaded .page-shell{
 .split{
   width:100%;
   height:100%;
-  display:grid;
-  grid-template-columns: 40% 60%;
+  display:flex;
 }
 
 .split-left{
+  flex:0 0 40%;
   padding: clamp(70px, 9vh, 120px) clamp(24px, 5vw, 70px)
            clamp(60px, 8vh, 110px) clamp(60px, 8vw, 140px);
   color:#1a1a1a;
@@ -155,6 +157,7 @@ body.loaded .page-shell{
   max-height: calc(var(--vh) * 100);
   overflow:auto;
   -webkit-overflow-scrolling:touch;
+  min-width:0;
 }
 .split-left::-webkit-scrollbar{ width:0; height:0; }
 .split-left{ scrollbar-width:none; }
@@ -209,12 +212,14 @@ body.loaded .page-shell{
 
 /* ================= RIGHT IMAGE ================= */
 .split-right{
+  flex:0 0 60%;
   position:relative;
   overflow:hidden;
   background:#f4f4f2;
   display:flex;
   align-items:stretch;
   justify-content:center;
+  min-width:0;
 }
 .copy-hero{
   width:100%;
@@ -325,7 +330,9 @@ body.loaded .page-shell{
 
 /* ================= MENU ================= */
 .menu{
-  position:fixed; top:0; left:0;
+  position:fixed;
+  top:0;
+  left:0;
   height: calc(var(--vh) * 100);
   width: var(--menuW);
   background:#f4f4f2;
@@ -348,7 +355,6 @@ body.loaded .page-shell{
   justify-content:flex-start;
   overflow:auto;
   -webkit-overflow-scrolling: touch;
-
   opacity:0;
   transform:translateY(10px);
   transition:opacity .9s ease, transform .9s ease;
@@ -443,14 +449,57 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 /* ================= RESPONSIVE ================= */
 @media (max-width: 900px){
   .split{
-    grid-template-columns:1fr;
-    grid-template-rows:auto 55vh;
+    display:flex;
+    flex-direction:row;
+    width:100%;
+    height:100%;
   }
+
   .split-left{
-    padding:90px 24px 30px 24px;
+    flex:0 0 40%;
+    padding:
+      calc(78px + var(--sat))
+      16px
+      calc(24px + var(--sab))
+      18px;
     max-width:none;
   }
-  .aub-heading, .aub-text{ max-width:none; }
+
+  .split-right{
+    flex:0 0 60%;
+    min-width:0;
+    height:100%;
+  }
+
+  .aub-heading,
+  .aub-text{
+    max-width:none;
+  }
+
+  .aub-heading .small{
+    font-size:18px;
+    margin-bottom:6px;
+  }
+
+  .aub-heading .big{
+    font-size:22px;
+    line-height:1.02;
+    letter-spacing:1.1px;
+  }
+
+  .aub-line{
+    width:42px;
+    margin:14px 0 20px 0;
+  }
+
+  .aub-text{
+    font-size:13px;
+    line-height:1.5;
+  }
+
+  .aub-text .lead{
+    margin-bottom:18px;
+  }
 
   .end-left{ display:none; }
   .end-card{ flex:0 0 100%; width:100%; }
@@ -463,6 +512,48 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
   .menu{ width:min(420px, 92vw); }
   .menu-panel{ padding: calc(28px + var(--sat)) 28px calc(38px + var(--sab)); }
+
+  body{
+    touch-action: pan-x;
+  }
+
+  .side-bar{
+    width: calc(44px + var(--sal));
+  }
+
+  .burger-lines i,
+  .burger-lines i::before,
+  .burger-lines i::after{
+    width:20px;
+  }
+}
+
+@media (max-width: 520px){
+  .split-left{
+    padding:
+      calc(74px + var(--sat))
+      14px
+      calc(22px + var(--sab))
+      16px;
+  }
+
+  .aub-heading .small{
+    font-size:17px;
+  }
+
+  .aub-heading .big{
+    font-size:20px;
+    letter-spacing:1px;
+  }
+
+  .aub-text{
+    font-size:12.5px;
+    line-height:1.45;
+  }
+
+  .aub-line{
+    margin:12px 0 18px 0;
+  }
 }
 </style>
 </head>
@@ -629,8 +720,16 @@ let panels = Array.from(track.querySelectorAll(".panel"));
 let currentX = 0;
 let targetX = 0;
 let isUserSliding = false;
-let isDown = false, startX = 0, startTarget = 0;
+let isDown = false;
+let startX = 0;
+let startTarget = 0;
 let rafStarted = false;
+
+let lastPointerX = 0;
+let lastPointerTime = 0;
+let velocityX = 0;
+
+const isMobile = () => window.innerWidth <= 900;
 
 function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 
@@ -639,8 +738,14 @@ function setPanelWidths(){
 
   const copyPanels = Array.from(track.querySelectorAll(".panel--copy"));
   copyPanels.forEach(panel=>{
-    panel.style.flex = `0 0 ${window.innerWidth}px`;
-    panel.style.width = `${window.innerWidth}px`;
+    let panelW = window.innerWidth;
+
+    if(window.innerWidth <= 900){
+      panelW = Math.round(window.innerWidth * 2.2);
+    }
+
+    panel.style.flex = `0 0 ${panelW}px`;
+    panel.style.width = `${panelW}px`;
   });
 
   const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
@@ -716,7 +821,14 @@ function updateSliderFromX(){
 
 function raf(){
   rafStarted = true;
-  currentX += (targetX - currentX) * 0.065;
+
+  const ease = isMobile() ? 0.45 : 0.065;
+  currentX += (targetX - currentX) * ease;
+
+  if(Math.abs(targetX - currentX) < 0.08){
+    currentX = targetX;
+  }
+
   track.style.transform = `translate3d(${-currentX}px,0,0)`;
   updateSliderFromX();
   requestAnimationFrame(raf);
@@ -734,20 +846,57 @@ function pointerDown(x){
   isDown = true;
   startX = x;
   startTarget = targetX;
+  lastPointerX = x;
+  lastPointerTime = performance.now();
+  velocityX = 0;
 }
 function pointerMove(x){
   if(!isDown) return;
-  targetX = clamp(startTarget - (x - startX), 0, maxScroll());
+
+  const now = performance.now();
+  const dx = x - startX;
+
+  if(isMobile()){
+    targetX = clamp(startTarget - dx * 3.2, 0, maxScroll());
+  } else {
+    targetX = clamp(startTarget - dx, 0, maxScroll());
+  }
+
+  const moveDx = x - lastPointerX;
+  const dt = now - lastPointerTime;
+
+  if(dt > 0){
+    velocityX = moveDx / dt;
+  }
+
+  lastPointerX = x;
+  lastPointerTime = now;
 }
-function pointerUp(){ isDown = false; }
+function pointerUp(){
+  if(!isDown) return;
+  isDown = false;
+
+  if(isMobile()){
+    targetX = clamp(targetX - velocityX * 850, 0, maxScroll());
+  }
+}
 
 window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
 window.addEventListener("mousemove",(e)=>pointerMove(e.clientX));
 window.addEventListener("mouseup",pointerUp);
 
-window.addEventListener("touchstart",(e)=>pointerDown(e.touches[0].clientX),{passive:true});
-window.addEventListener("touchmove",(e)=>pointerMove(e.touches[0].clientX),{passive:true});
+window.addEventListener("touchstart",(e)=>{
+  if(!e.touches.length) return;
+  pointerDown(e.touches[0].clientX);
+},{passive:true});
+
+window.addEventListener("touchmove",(e)=>{
+  if(!e.touches.length) return;
+  pointerMove(e.touches[0].clientX);
+},{passive:true});
+
 window.addEventListener("touchend",pointerUp);
+window.addEventListener("touchcancel",pointerUp);
 
 /* slider */
 function sliderToTarget(){
@@ -781,6 +930,7 @@ function refreshAll(){
 }
 
 window.addEventListener("resize", refreshAll);
+window.addEventListener("orientationchange", refreshAll);
 
 document.addEventListener("DOMContentLoaded", ()=>{
   refreshAll();
