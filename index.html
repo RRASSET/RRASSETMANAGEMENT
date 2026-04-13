@@ -1082,7 +1082,7 @@ function updateSliderFromX(){
 function raf(){
   rafStarted = true;
 
-  const ease = isMobile() ? 0.9 : 0.065;
+  const ease = isMobile() ? 0.45 : 0.065;
   currentX += (targetX - currentX) * ease;
 
   if(Math.abs(targetX - currentX) < 0.08){
