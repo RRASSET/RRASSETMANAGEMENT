@@ -457,7 +457,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   }
 
   .split-copy{
-    flex:0 0 68% !important;
+    flex:0 0 60% !important;
     width:auto !important;
     max-width:none;
     padding:
@@ -501,7 +501,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   }
 
   .split-media{
-    flex:0 0 32%;
+    flex:0 0 40%;
     width:auto;
     min-width:0;
     height:100%;
@@ -852,11 +852,11 @@ function setPanelWidths(){
       let imgW;
       let total;
 
-      if(window.innerWidth <= 900){
-        total = Math.round(window.innerWidth * 2.2);
-        copyW = Math.round(total * 0.40);
-        imgW = total - copyW;
-      } else {
+    if(window.innerWidth <= 900){
+  total = Math.round(window.innerWidth * 2.25);
+  copyW = Math.round(total * 0.58);
+  imgW = total - copyW;
+} else {
         copyW = Math.round(window.innerWidth * 0.42);
         imgW = Math.max(240, Math.round((img.naturalWidth / img.naturalHeight) * vhPx));
         total = copyW + imgW;
