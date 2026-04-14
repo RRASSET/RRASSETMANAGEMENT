@@ -181,8 +181,8 @@ body.loaded .page-shell{
   font-style:normal;
   font-weight:400;
   font-size:clamp(30px, 2.4vw, 50px);
-  text-transform:uppercase;
-  letter-spacing:2px;
+  text-transform:none;
+  letter-spacing:1px;
   color:#1a1a1a;
 }
 
@@ -453,44 +453,45 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   }
 
   .split-left{
-    flex:0 0 40%;
-    padding:
-      calc(78px + var(--sat))
-      16px
-      calc(24px + var(--sab))
-      18px;
+    flex:0 0 52%;
     max-width:none;
+    padding:
+      calc(76px + var(--sat))
+      18px
+      calc(24px + var(--sab))
+      calc(56px + var(--sal) + 10px);
   }
 
   .split-right{
-    flex:0 0 60%;
+    flex:0 0 48%;
     min-width:0;
     height:100%;
   }
 
-  .aub-heading, .aub-text{
+  .aub-heading,
+  .aub-text{
     max-width:none;
   }
 
   .aub-heading .small{
-    font-size:18px;
+    font-size:20px;
     margin-bottom:6px;
   }
 
   .aub-heading .big{
-    font-size:22px;
-    line-height:1.02;
-    letter-spacing:1.1px;
+    font-size:24px;
+    line-height:1.04;
+    letter-spacing:.3px;
   }
 
   .aub-line{
     width:42px;
-    margin:14px 0 20px 0;
+    margin:14px 0 24px 0;
   }
 
   .aub-text{
-    font-size:13px;
-    line-height:1.5;
+    font-size:13.5px;
+    line-height:1.58;
   }
 
   .aub-text .lead{
@@ -526,29 +527,35 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
 @media (max-width: 520px){
   .split-left{
+    flex:0 0 52%;
     padding:
-      calc(74px + var(--sat))
-      14px
+      calc(72px + var(--sat))
+      16px
       calc(22px + var(--sab))
-      16px;
+      calc(52px + var(--sal) + 10px);
+  }
+
+  .split-right{
+    flex:0 0 48%;
   }
 
   .aub-heading .small{
-    font-size:17px;
+    font-size:18px;
   }
 
   .aub-heading .big{
-    font-size:20px;
-    letter-spacing:1px;
+    font-size:22px;
+    line-height:1.03;
+    letter-spacing:.2px;
   }
 
   .aub-text{
-    font-size:12.5px;
-    line-height:1.45;
+    font-size:13px;
+    line-height:1.54;
   }
 
   .aub-line{
-    margin:12px 0 18px 0;
+    margin:12px 0 20px 0;
   }
 }
 </style>
