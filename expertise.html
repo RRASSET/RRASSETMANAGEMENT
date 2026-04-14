@@ -551,28 +551,32 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 @media (max-width: 520px){
   .split-copy{
     padding:
-      calc(74px + var(--sat))
-      14px
-      calc(22px + var(--sab))
-      16px;
+      calc(110px + var(--sat))
+      18px
+      calc(28px + var(--sab))
+      calc(22px + 44px + var(--sal));
   }
 
   .aub-heading .small{
-    font-size:17px;
+    font-size:18px;
+    margin-bottom:2px;
   }
 
   .aub-heading .big{
-    font-size:20px;
-    letter-spacing:1px;
-  }
-
-  .aub-text{
-    font-size:12.5px;
-    line-height:1.45;
+    font-size:26px;
+    line-height:0.94;
+    letter-spacing:0.6px;
   }
 
   .aub-line{
-    margin:0 0 18px 0;
+    width:34px;
+    margin:16px 0 48px 0;
+  }
+
+  .aub-text{
+    max-width:300px;
+    font-size:14.5px;
+    line-height:1.7;
   }
 }
 </style>
