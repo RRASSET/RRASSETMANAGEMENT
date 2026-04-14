@@ -528,16 +528,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     width: calc(44px + var(--sal));
   }
 
-.panel--img{
-  justify-content:center;
-}
 
-.panel--img img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  object-position:center;
-}
   
   .burger-lines i,
   .burger-lines i::before,
@@ -558,16 +549,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
       calc(var(--burgerW) + var(--sal) + 18px);
   }
 
-.panel--img{
-  justify-content:center;
-}
 
-.panel--img img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  object-position:center;
-}
   
   .split-right{
     flex:0 0 53%;
@@ -806,13 +788,6 @@ imgPanels.forEach(panel=>{
   if(!img) return;
 
   const apply = ()=>{
-    if(window.innerWidth <= 900){
-      const w = window.innerWidth;
-      panel.style.flex = `0 0 ${w}px`;
-      panel.style.width = `${w}px`;
-      return;
-    }
-
     const nw = img.naturalWidth || 0;
     const nh = img.naturalHeight || 0;
     if(!nw || !nh) return;
