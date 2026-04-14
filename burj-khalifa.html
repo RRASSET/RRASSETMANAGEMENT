@@ -252,7 +252,7 @@ body.loaded .page-shell{
   display:flex;
   align-items:stretch;
   justify-content:flex-end;
-  background:#000;
+  background:#f4f4f2;
   overflow:hidden;
 }
 .end-left{
@@ -833,12 +833,32 @@ imgPanels.forEach(panel=>{
     const applyEnd = ()=>{
       const cardW = Math.ceil(endCard.getBoundingClientRect().width);
 
-      if(window.innerWidth <= 900){
-  const cardW = Math.min(420, Math.round(window.innerWidth * 0.92));
+   const applyEnd = ()=>{
+     
+  if(window.innerWidth <= 900){
+    const cardW = Math.min(420, Math.round(window.innerWidth * 0.92));
+
+    let imgW = 0;
+    if(endImg && endImg.naturalWidth && endImg.naturalHeight){
+      imgW = Math.max(220, Math.round((endImg.naturalWidth / endImg.naturalHeight) * vhPx));
+    }
+
+    const total = imgW + cardW;
+    endPanel.style.flex = `0 0 ${total}px`;
+    endPanel.style.width = `${total}px`;
+
+    if(endLeft){
+      endLeft.style.flex = `0 0 ${imgW}px`;
+      endLeft.style.width = `${imgW}px`;
+    }
+    return;
+  }
+
+  const cardW = Math.ceil(endCard.getBoundingClientRect().width);
 
   let imgW = 0;
   if(endImg && endImg.naturalWidth && endImg.naturalHeight){
-    imgW = Math.max(220, Math.round((endImg.naturalWidth / endImg.naturalHeight) * vhPx));
+    imgW = Math.max(240, Math.round((endImg.naturalWidth / endImg.naturalHeight) * vhPx));
   }
 
   const total = imgW + cardW;
@@ -849,11 +869,7 @@ imgPanels.forEach(panel=>{
     endLeft.style.flex = `0 0 ${imgW}px`;
     endLeft.style.width = `${imgW}px`;
   }
-  return;
-}
-
-        return;
-      }
+};
 
       let imgW = 0;
       if(endImg && endImg.naturalWidth && endImg.naturalHeight){
