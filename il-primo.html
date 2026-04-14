@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>RR Asset Management — Il Primo</title>
+<title>RR Asset Management — Ultra-Prime Living</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 
@@ -146,14 +146,14 @@ body.loaded .page-shell{
 
 .split-left{
   flex:0 0 40%;
-  padding: clamp(70px, 9vh, 120px) clamp(24px, 5vw, 70px)
-           clamp(60px, 8vh, 110px) clamp(60px, 8vw, 140px);
+  padding: clamp(78px, 9vh, 120px) clamp(28px, 5vw, 70px)
+           clamp(70px, 8vh, 110px) clamp(78px, 8vw, 140px);
   color:#1a1a1a;
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
   width:100%;
-  max-width:680px;
+  max-width:760px;
   max-height: calc(var(--vh) * 100);
   overflow:auto;
   -webkit-overflow-scrolling:touch;
@@ -164,46 +164,47 @@ body.loaded .page-shell{
 
 .aub-heading{
   font-family:'Cormorant Garamond', serif;
-  line-height:1.02;
+  line-height:0.98;
   margin-bottom:0;
-  max-width:560px;
+  max-width:680px;
 }
 .aub-heading .small{
   display:block;
-  font-style:italic;
-  font-weight:300;
-  font-size:clamp(26px, 2vw, 42px);
-  margin-bottom:10px;
+  font-style:normal;
+  font-weight:400;
+  font-size:clamp(36px, 2.6vw, 58px);
+  text-transform:uppercase;
+  letter-spacing:1.2px;
   color:#1a1a1a;
 }
 .aub-heading .big{
   display:block;
   font-style:normal;
   font-weight:400;
-  font-size:clamp(30px, 2.4vw, 50px);
+  font-size:clamp(36px, 2.8vw, 60px);
   text-transform:uppercase;
-  letter-spacing:2px;
+  letter-spacing:1.6px;
   color:#1a1a1a;
 }
 
 .aub-line{
-  width:64px;
+  width:54px;
   height:1px;
   background:#c6b67a;
-  margin:22px 0 70px 0;
+  margin:26px 0 54px 0;
 }
 
 .aub-text{
   font-family:'Cormorant Garamond', serif;
   color:#1a1a1a;
   width:100%;
-  max-width:460px;
-  font-size:clamp(18px, 1.25vw, 20px);
-  line-height:1.75;
+  max-width:560px;
+  font-size:clamp(21px, 1.35vw, 26px);
+  line-height:1.8;
 }
 .aub-text .lead{
   font-style:italic;
-  margin-bottom:42px;
+  margin-bottom:34px;
 }
 .aub-text .body{
   font-style:italic;
@@ -285,13 +286,13 @@ body.loaded .page-shell{
   transform:none !important;
   transition:none !important;
   overflow:auto !important;
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling:touch;
 }
 .end-card .menu-panel::-webkit-scrollbar{ width:0; height:0; }
 .end-card .menu-panel{ scrollbar-width:none; }
 .end-card .menu-address{ margin-top:-14px; }
 
-/* ================= BOTTOM THIN SLIDER ================= */
+/* ================= BOTTOM SLIDER ================= */
 .nav-slider{
   position:fixed;
   left: calc(var(--burgerW) + var(--sal) + 20px);
@@ -354,7 +355,7 @@ body.loaded .page-shell{
   text-align:center;
   justify-content:flex-start;
   overflow:auto;
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling:touch;
   opacity:0;
   transform:translateY(10px);
   transition:opacity .9s ease, transform .9s ease;
@@ -379,7 +380,6 @@ body.loaded .page-shell{
 }
 
 .menu-logo{ margin-top:6px; margin-bottom:6px; }
-
 .menu-logo img{
   width:240px;
   height:auto;
@@ -388,7 +388,6 @@ body.loaded .page-shell{
 }
 
 .menu-links{ margin-top:-6px; }
-
 .menu-links a{
   display:block;
   font-family:'Cormorant Garamond', serif;
@@ -442,7 +441,6 @@ body.loaded .page-shell{
 }
 .menu-privacy:hover{ opacity:.7; }
 
-/* when menu open */
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
@@ -459,12 +457,12 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     flex:0 0 44%;
     max-width:none;
     min-height:100%;
-    justify-content:center;
+    justify-content:flex-start;
     padding:
-      calc(100px + var(--sat))
-      18px
+      calc(92px + var(--sat))
+      20px
       calc(34px + var(--sab))
-      calc(var(--burgerW) + var(--sal) + 16px);
+      calc(var(--burgerW) + var(--sal) + 18px);
   }
 
   .split-right{
@@ -480,14 +478,14 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
   .aub-heading .small{
     font-size:20px;
-    margin-bottom:8px;
-    line-height:1.08;
+    line-height:1.04;
+    letter-spacing:1px;
   }
 
   .aub-heading .big{
-    font-size:23px;
-    line-height:1.04;
-    letter-spacing:1.15px;
+    font-size:24px;
+    line-height:1.02;
+    letter-spacing:1px;
   }
 
   .aub-line{
@@ -496,16 +494,12 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   }
 
   .aub-text{
-    font-size:13.5px;
-    line-height:1.62;
+    font-size:15px;
+    line-height:1.72;
   }
 
   .aub-text .lead{
-    margin-bottom:18px;
-  }
-
-  .aub-text .body{
-    margin-bottom:0;
+    margin-bottom:22px;
   }
 
   .end-left{ display:none; }
@@ -538,12 +532,11 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 @media (max-width: 520px){
   .split-left{
     flex:0 0 46%;
-    justify-content:center;
     padding:
-      calc(108px + var(--sat))
-      16px
-      calc(30px + var(--sab))
-      calc(var(--burgerW) + var(--sal) + 12px);
+      calc(88px + var(--sat))
+      18px
+      calc(28px + var(--sab))
+      calc(var(--burgerW) + var(--sal) + 14px);
   }
 
   .split-right{
@@ -552,18 +545,19 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
   .aub-heading .small{
     font-size:18px;
-    margin-bottom:6px;
+    line-height:1.04;
+    letter-spacing:.9px;
   }
 
   .aub-heading .big{
-    font-size:21px;
-    line-height:1.05;
-    letter-spacing:1px;
+    font-size:22px;
+    line-height:1.03;
+    letter-spacing:.9px;
   }
 
   .aub-text{
-    font-size:13px;
-    line-height:1.56;
+    font-size:14px;
+    line-height:1.68;
   }
 
   .aub-line{
@@ -572,7 +566,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   }
 
   .aub-text .lead{
-    margin-bottom:16px;
+    margin-bottom:18px;
   }
 }
 </style>
@@ -600,32 +594,40 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
         <div class="split">
           <div class="split-left">
             <div class="aub-heading">
-              <span class="small">A Landmark Address</span>
-              <span class="big">IL PRIMO</span>
+              <span class="small">REDEFINING</span>
+              <span class="big">ULTRA-PRIME LIVING</span>
             </div>
+
             <div class="aub-line"></div>
+
             <div class="aub-text">
               <p class="lead">
-                Positioned beside the Burj Khalifa and Dubai Opera, Il Primo represents a rare expression of elevated city living, defined by scale, privacy, and architectural distinction.
+                As an ultra-prime developer operating between London and Dubai, R&amp;R Asset Management creates residences that stand as enduring statements of status and sophistication. We unite timeless European heritage with the ambition and dynamism of the Middle East, delivering exceptional properties that define the future of global luxury.
               </p>
+
               <p class="body">
-                Each residence is crafted with exceptional attention to detail, offering expansive interiors, panoramic views, and a level of refinement reserved for one of Downtown Dubai’s most prestigious addresses.
+                Positioned within the world’s most desirable addresses, R&amp;R Asset Management curates rare opportunities distinguished by architectural integrity, absolute discretion, and long-term capital strength.
               </p>
             </div>
           </div>
 
           <div class="split-right">
-            <img class="copy-hero" src="./primoone.png" alt="Il Primo hero">
+            <img class="copy-hero" src="./hero-one.png" alt="Ultra-prime living hero">
           </div>
         </div>
       </section>
 
-      <section class="panel panel--img"><img src="./primotwo.png" alt="Il Primo 2"></section>
-      <section class="panel panel--img"><img src="./primothree.png" alt="Il Primo 3"></section>
+      <section class="panel panel--img">
+        <img src="./image-two.png" alt="Property image 2">
+      </section>
+
+      <section class="panel panel--img">
+        <img src="./image-three.png" alt="Property image 3">
+      </section>
 
       <section class="panel panel--end">
         <div class="end-left">
-          <img class="end-img" src="./primofour.png" alt="Il Primo last">
+          <img class="end-img" src="./image-four.png" alt="Final property image">
         </div>
 
         <div class="end-card">
@@ -730,7 +732,9 @@ function closeMenuFn(){
 }
 burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
-document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape") closeMenuFn();
+});
 
 /* ===== HORIZONTAL SCROLL ===== */
 const track = document.getElementById("track");
@@ -751,7 +755,9 @@ let velocityX = 0;
 
 const isMobile = () => window.innerWidth <= 900;
 
-function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+function clamp(v, min, max){
+  return Math.max(min, Math.min(max, v));
+}
 
 function setPanelWidths(){
   const vhPx = window.innerHeight;
@@ -761,7 +767,7 @@ function setPanelWidths(){
     let panelW = window.innerWidth;
 
     if(window.innerWidth <= 900){
-      panelW = Math.round(window.innerWidth * 2.2);
+      panelW = Math.round(window.innerWidth * 1.35);
     }
 
     panel.style.flex = `0 0 ${panelW}px`;
@@ -777,6 +783,7 @@ function setPanelWidths(){
       const nw = img.naturalWidth || 0;
       const nh = img.naturalHeight || 0;
       if(!nw || !nh) return;
+
       const ratio = nw / nh;
       const w = Math.max(240, Math.round(ratio * vhPx));
       panel.style.flex = `0 0 ${w}px`;
@@ -784,14 +791,14 @@ function setPanelWidths(){
     };
 
     if(img.complete && img.naturalWidth) apply();
-    else img.addEventListener("load", apply, {once:true});
+    else img.addEventListener("load", apply, { once:true });
   });
 
   const endPanel = track.querySelector(".panel--end");
   if(endPanel){
-    const endImg = endPanel.querySelector(".end-img");
     const endCard = endPanel.querySelector(".end-card");
     const endLeft = endPanel.querySelector(".end-left");
+    const endImg = endPanel.querySelector(".end-img");
 
     const applyEnd = ()=>{
       const cardW = Math.ceil(endCard.getBoundingClientRect().width);
@@ -799,6 +806,7 @@ function setPanelWidths(){
       if(window.innerWidth <= 900){
         endPanel.style.flex = `0 0 ${window.innerWidth}px`;
         endPanel.style.width = `${window.innerWidth}px`;
+
         if(endLeft){
           endLeft.style.flex = `0 0 0px`;
           endLeft.style.width = `0px`;
@@ -822,19 +830,25 @@ function setPanelWidths(){
     };
 
     if(endImg && endImg.complete && endImg.naturalWidth) applyEnd();
-    else if(endImg) endImg.addEventListener("load", applyEnd, {once:true});
+    else if(endImg) endImg.addEventListener("load", applyEnd, { once:true });
     else applyEnd();
   }
 
   panels = Array.from(track.querySelectorAll(".panel"));
 }
 
-function totalWidth(){ return panels.reduce((sum, p) => sum + p.offsetWidth, 0); }
-function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
+function totalWidth(){
+  return panels.reduce((sum, p) => sum + p.offsetWidth, 0);
+}
+
+function maxScroll(){
+  return Math.max(0, totalWidth() - window.innerWidth);
+}
 
 function updateSliderFromX(){
   const maxS = maxScroll();
   if(isUserSliding) return;
+
   const ratio = maxS === 0 ? 0 : (currentX / maxS);
   navSlider.value = String(ratio * 1000);
 }
@@ -870,6 +884,7 @@ function pointerDown(x){
   lastPointerTime = performance.now();
   velocityX = 0;
 }
+
 function pointerMove(x){
   if(!isDown) return;
 
@@ -892,6 +907,7 @@ function pointerMove(x){
   lastPointerX = x;
   lastPointerTime = now;
 }
+
 function pointerUp(){
   if(!isDown) return;
   isDown = false;
@@ -901,22 +917,22 @@ function pointerUp(){
   }
 }
 
-window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
-window.addEventListener("mousemove",(e)=>pointerMove(e.clientX));
-window.addEventListener("mouseup",pointerUp);
+window.addEventListener("mousedown", (e)=>pointerDown(e.clientX));
+window.addEventListener("mousemove", (e)=>pointerMove(e.clientX));
+window.addEventListener("mouseup", pointerUp);
 
-window.addEventListener("touchstart",(e)=>{
+window.addEventListener("touchstart", (e)=>{
   if(!e.touches.length) return;
   pointerDown(e.touches[0].clientX);
 },{passive:true});
 
-window.addEventListener("touchmove",(e)=>{
+window.addEventListener("touchmove", (e)=>{
   if(!e.touches.length) return;
   pointerMove(e.touches[0].clientX);
 },{passive:true});
 
-window.addEventListener("touchend",pointerUp);
-window.addEventListener("touchcancel",pointerUp);
+window.addEventListener("touchend", pointerUp);
+window.addEventListener("touchcancel", pointerUp);
 
 /* slider */
 function sliderToTarget(){
@@ -924,18 +940,25 @@ function sliderToTarget(){
   const ratio = Number(navSlider.value) / 1000;
   targetX = clamp(ratio * maxS, 0, maxS);
 }
-navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
-navSlider.addEventListener("pointerup", ()=>{
-  sliderToTarget();
-  isUserSliding = false;
+
+navSlider.addEventListener("pointerdown", ()=>{
+  isUserSliding = true;
 });
-navSlider.addEventListener("pointercancel", ()=>{
-  isUserSliding = false;
-});
+
 navSlider.addEventListener("input", ()=>{
   if(!isUserSliding) return;
   sliderToTarget();
 });
+
+navSlider.addEventListener("pointerup", ()=>{
+  sliderToTarget();
+  isUserSliding = false;
+});
+
+navSlider.addEventListener("pointercancel", ()=>{
+  isUserSliding = false;
+});
+
 navSlider.addEventListener("change", ()=>{
   if(isUserSliding) sliderToTarget();
 });
