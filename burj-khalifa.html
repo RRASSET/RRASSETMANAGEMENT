@@ -455,61 +455,92 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   }
 
   .split-left{
-    flex:0 0 42%;
+    flex:0 0 43%;
     max-width:none;
     min-height:100%;
     justify-content:center;
     padding:
       calc(92px + var(--sat))
-      20px
+      18px
       calc(44px + var(--sab))
-      calc(var(--burgerW) + var(--sal) + 22px);
+      calc(var(--burgerW) + var(--sal) + 18px);
   }
 
   .split-right{
-    flex:0 0 58%;
+    flex:0 0 57%;
     min-width:0;
     height:100%;
   }
 
+  /* keep desktop text feel on phone */
   .aub-heading,
   .aub-text{
     max-width:none;
   }
 
   .aub-heading .small{
-    font-size:clamp(28px, 4.8vw, 38px);
-    margin-bottom:8px;
+    font-size:18px;
+    margin-bottom:6px;
     line-height:1.02;
   }
 
   .aub-heading .big{
-    font-size:clamp(42px, 7vw, 62px);
-    line-height:0.94;
+    font-size:26px;
+    line-height:1.02;
     letter-spacing:0.8px;
   }
 
   .aub-line{
-    width:36px;
-    margin:30px 0 42px 0;
+    width:30px;
+    margin:18px 0 26px 0;
   }
 
   .aub-text{
-    font-size:clamp(22px, 3vw, 28px);
-    line-height:1.56;
-    max-width:340px;
+    font-size:17px;
+    line-height:1.58;
+    max-width:255px;
   }
 
   .aub-text .lead{
-    margin-bottom:34px;
+    margin-bottom:24px;
   }
 
   .aub-text .body{
     margin-bottom:0;
   }
 
-  .end-left{ display:none; }
-  .end-card{ flex:0 0 100%; width:100%; }
+  /* phone image slides should be full width */
+  .panel--img{
+    justify-content:center;
+    width:100vw;
+    background:#000;
+  }
+
+  .panel--img img{
+    width:100vw;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    display:block;
+  }
+
+  .end-left{
+    display:flex;
+    flex:0 0 100vw;
+    width:100vw;
+  }
+
+  .end-img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+  }
+
+  .end-card{
+    flex:0 0 100%;
+    width:100%;
+  }
 
   .nav-slider{
     left: calc(24px + var(--sal));
@@ -552,28 +583,39 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
   .aub-heading .small{
     font-size:17px;
-    margin-bottom:8px;
+    margin-bottom:6px;
   }
 
   .aub-heading .big{
-    font-size:23px;
+    font-size:24px;
     line-height:1.02;
     letter-spacing:0.8px;
   }
 
   .aub-text{
     font-size:16px;
-    line-height:1.62;
-    max-width:250px;
+    line-height:1.58;
+    max-width:240px;
   }
 
   .aub-line{
     width:28px;
-    margin:20px 0 28px 0;
+    margin:18px 0 24px 0;
   }
 
   .aub-text .lead{
-    margin-bottom:24px;
+    margin-bottom:22px;
+  }
+
+  .panel--img img{
+    width:100vw;
+    height:100%;
+    object-fit:cover;
+  }
+
+  .end-left{
+    flex:0 0 100vw;
+    width:100vw;
   }
 }
 </style>
@@ -781,6 +823,13 @@ function setPanelWidths(){
     if(!img) return;
 
     const apply = ()=>{
+      if(window.innerWidth <= 900){
+        const w = window.innerWidth;
+        panel.style.flex = `0 0 ${w}px`;
+        panel.style.width = `${w}px`;
+        return;
+      }
+
       const nw = img.naturalWidth || 0;
       const nh = img.naturalHeight || 0;
       if(!nw || !nh) return;
@@ -806,13 +855,16 @@ function setPanelWidths(){
       const cardW = Math.ceil(endCard.getBoundingClientRect().width);
 
       if(window.innerWidth <= 900){
-        endPanel.style.flex = `0 0 ${window.innerWidth}px`;
-        endPanel.style.width = `${window.innerWidth}px`;
+        const total = window.innerWidth + window.innerWidth;
+        endPanel.style.flex = `0 0 ${total}px`;
+        endPanel.style.width = `${total}px`;
 
         if(endLeft){
-          endLeft.style.flex = `0 0 0px`;
-          endLeft.style.width = `0px`;
+          endLeft.style.display = "flex";
+          endLeft.style.flex = `0 0 ${window.innerWidth}px`;
+          endLeft.style.width = `${window.innerWidth}px`;
         }
+
         return;
       }
 
