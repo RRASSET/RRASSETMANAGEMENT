@@ -798,33 +798,34 @@ function setPanelWidths(){
     panel.style.width = `${panelW}px`;
   });
 
-  /* image panels */
-  const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
-  imgPanels.forEach(panel=>{
-    const img = panel.querySelector("img");
-    if(!img) return;
 
-    const apply = ()=>{
-      if(window.innerWidth <= 900){
-        const w = window.innerWidth;
-        panel.style.flex = `0 0 ${w}px`;
-        panel.style.width = `${w}px`;
-        return;
-      }
+/* image panels */
+const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
+imgPanels.forEach(panel=>{
+  const img = panel.querySelector("img");
+  if(!img) return;
 
-      const nw = img.naturalWidth || 0;
-      const nh = img.naturalHeight || 0;
-      if(!nw || !nh) return;
-
-      const ratio = nw / nh;
-      const w = Math.max(240, Math.round(ratio * vhPx));
+  const apply = ()=>{
+    if(window.innerWidth <= 900){
+      const w = window.innerWidth;
       panel.style.flex = `0 0 ${w}px`;
       panel.style.width = `${w}px`;
-    };
+      return;
+    }
 
-    if(img.complete && img.naturalWidth) apply();
-    else img.addEventListener("load", apply, { once:true });
-  });
+    const nw = img.naturalWidth || 0;
+    const nh = img.naturalHeight || 0;
+    if(!nw || !nh) return;
+
+    const ratio = nw / nh;
+    const w = Math.max(240, Math.round(ratio * vhPx));
+    panel.style.flex = `0 0 ${w}px`;
+    panel.style.width = `${w}px`;
+  };
+
+  if(img.complete && img.naturalWidth) apply();
+  else img.addEventListener("load", apply, { once:true });
+});
 
   /* end panel */
   const endPanel = track.querySelector(".panel--end");
