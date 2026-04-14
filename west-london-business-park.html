@@ -447,15 +447,51 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     max-width:none;
     padding:
       calc(78px + var(--sat))
-      16px
-      calc(24px + var(--sab))
-      18px;
+      18px
+      calc(26px + var(--sab))
+      22px;
   }
 
-  .copy-inner,
-  .aub-heading,
+  .copy-inner{
+    max-width: 420px;
+  }
+
+  .aub-heading{
+    max-width: 380px;
+  }
+
+  .aub-heading .small{
+    font-size: 22px;
+    line-height: 1.05;
+    margin-bottom: 4px;
+    font-weight: 300;
+  }
+
+  .aub-heading .big{
+    font-size: 34px;
+    line-height: 0.96;
+    letter-spacing: 0.8px;
+    font-weight: 400;
+  }
+
+  .aub-line{
+    width: 40px;
+    margin: 18px 0 34px 0;
+  }
+
   .aub-text{
-    max-width:none;
+    max-width: 360px;
+    font-size: 17px;
+    line-height: 1.7;
+    letter-spacing: 0;
+  }
+
+  .aub-text .lead{
+    margin-bottom: 28px;
+  }
+
+  .aub-text .body{
+    margin-bottom: 0;
   }
 
   .split-media{
@@ -469,31 +505,6 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     width:auto;
     height:100%;
     object-fit:contain;
-  }
-
-  .aub-heading .small{
-    font-size:18px;
-    margin-bottom:6px;
-  }
-
-  .aub-heading .big{
-    font-size:22px;
-    line-height:1.02;
-    letter-spacing:1.1px;
-  }
-
-  .aub-line{
-    width:42px;
-    margin:14px 0 20px 0;
-  }
-
-  .aub-text{
-    font-size:13px;
-    line-height:1.5;
-  }
-
-  .aub-text .lead{
-    margin-bottom:18px;
   }
 
   .end-card{
@@ -510,6 +521,7 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   .menu{
     width:min(420px, 92vw);
   }
+
   .menu-panel{
     padding: calc(28px + var(--sat)) 28px calc(38px + var(--sab));
   }
@@ -533,27 +545,43 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   .split-copy{
     padding:
       calc(74px + var(--sat))
-      14px
+      16px
       calc(22px + var(--sab))
-      16px;
+      20px;
+  }
+
+  .copy-inner{
+    max-width: 340px;
+  }
+
+  .aub-heading{
+    max-width: 320px;
   }
 
   .aub-heading .small{
-    font-size:17px;
+    font-size: 19px;
+    margin-bottom: 3px;
   }
 
   .aub-heading .big{
-    font-size:20px;
-    letter-spacing:1px;
-  }
-
-  .aub-text{
-    font-size:12.5px;
-    line-height:1.45;
+    font-size: 28px;
+    line-height: 0.95;
+    letter-spacing: 0.6px;
   }
 
   .aub-line{
-    margin:12px 0 18px 0;
+    width: 36px;
+    margin: 16px 0 28px 0;
+  }
+
+  .aub-text{
+    max-width: 300px;
+    font-size: 15.5px;
+    line-height: 1.68;
+  }
+
+  .aub-text .lead{
+    margin-bottom: 24px;
   }
 }
 </style>
