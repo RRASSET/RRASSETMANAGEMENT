@@ -34,7 +34,6 @@ body{
   touch-action:pan-y;
 }
 
-/* prevent weird flex/grid cropping */
 .panel, .split, .split-left, .split-right, .menu, .menu-panel, .end-card, .end-left{ min-height:0; }
 
 /* ================= BACKGROUND VIDEO ================= */
@@ -117,7 +116,6 @@ body.loaded .bg::after{ opacity:0; }
   width: calc(var(--burgerW) + var(--sal));
   height: calc(var(--vh) * 100);
   background:transparent;
-  backdrop-filter:none;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -211,7 +209,6 @@ body.ui-ready .burger-lines{
   background:#000;
 }
 
-/* Home / Split */
 .panel--home,
 .panel--split{
   flex:0 0 100vw;
@@ -220,9 +217,11 @@ body.ui-ready .burger-lines{
 
 .panel--home{ background:transparent !important; }
 
-/* Image-only slides */
-.panel.panel--img{ background:#000; }
-.panel.panel--img .panel-img{
+/* ================= IMAGE-ONLY PANELS ================= */
+.panel--img{
+  background:#000;
+}
+.panel--img .panel-img{
   width:100%;
   height:100%;
   display:block;
@@ -241,8 +240,8 @@ body.ui-ready .burger-lines{
 
 .split-left{
   flex:0 0 40%;
-  padding: clamp(70px, 9vh, 120px) clamp(24px, 5vw, 70px)
-           clamp(60px, 8vh, 110px) clamp(60px, 8vw, 140px);
+  padding: clamp(92px, 11vh, 138px) clamp(30px, 5vw, 72px)
+           clamp(72px, 9vh, 118px) clamp(64px, 8vw, 140px);
   color:#1a1a1a;
   display:flex;
   flex-direction:column;
@@ -277,7 +276,7 @@ body.ui-ready .burger-lines{
 
 .aub-heading{
   font-family:'Cormorant Garamond', serif;
-  line-height:1.02;
+  line-height:0.98;
   margin-bottom:0;
   max-width:560px;
 }
@@ -286,7 +285,7 @@ body.ui-ready .burger-lines{
   font-style:italic;
   font-weight:300;
   font-size:clamp(26px, 2vw, 42px);
-  margin-bottom:10px;
+  margin-bottom:8px;
   color:#1a1a1a;
 }
 .aub-heading .big{
@@ -295,97 +294,32 @@ body.ui-ready .burger-lines{
   font-weight:400;
   font-size:clamp(30px, 2.4vw, 50px);
   text-transform:uppercase;
-  letter-spacing:2px;
+  letter-spacing:1.2px;
   color:#1a1a1a;
 }
 
 .aub-line{
-  width:64px;
+  width:44px;
   height:1px;
   background:#c6b67a;
-  margin:22px 0 70px 0;
+  margin:22px 0 82px 0;
 }
 
 .aub-text{
   font-family:'Cormorant Garamond', serif;
   color:#1a1a1a;
   width:100%;
-  max-width:420px;
+  max-width:440px;
   font-size:clamp(18px, 1.25vw, 20px);
-  line-height:1.75;
+  line-height:1.9;
 }
-.aub-text .lead{ font-style:italic; margin-bottom:42px; }
-.aub-text .body{ font-style:italic; margin-bottom:0; }
-
-@media (max-width: 900px){
-  .split{
-    display:flex;
-    flex-direction:row;
-    width:100%;
-    height:100%;
-  }
-
-  .split-left{
-    flex:0 0 40%;
-    padding:
-      calc(78px + var(--sat))
-      16px
-      calc(24px + var(--sab))
-      18px;
-  }
-
-  .split-right{
-    flex:0 0 60%;
-  }
-
-  .aub-heading{
-    max-width:none;
-  }
-
-  .aub-heading .small{
-    font-size:18px;
-    margin-bottom:6px;
-  }
-
-  .aub-heading .big{
-    font-size:22px;
-    line-height:1.02;
-    letter-spacing:1.1px;
-  }
-
-  .aub-line{
-    width:42px;
-    margin:14px 0 20px 0;
-  }
-
-  .aub-text{
-    max-width:none;
-    font-size:13px;
-    line-height:1.5;
-  }
-
-  .aub-text .lead{
-    margin-bottom:18px;
-  }
+.aub-text .lead{
+  font-style:italic;
+  margin-bottom:54px;
 }
-.aub-text .body{ font-style:italic; margin-bottom:0; }
-
-/* RIGHT IMAGE IN SPLIT */
-.split-right{
-  position:relative;
-  overflow:hidden;
-  background:#f4f4f2;
-  display:flex;
-  align-items:stretch;
-  justify-content:center;
-}
-.panel--split .panel-img{
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:cover;
-  object-position:center;
-  background:#f4f4f2;
+.aub-text .body{
+  font-style:italic;
+  margin-bottom:0;
 }
 
 /* ================= END SLIDE ================= */
@@ -513,8 +447,8 @@ body.ui-ready .burger-lines{
 
 .back-arrow{
   position:absolute;
-  left: 26px;
-  top: 50%;
+  left:26px;
+  top:50%;
   transform:translateY(-50%);
   font-size:34px;
   line-height:1;
@@ -594,55 +528,28 @@ body.menu-open #scrollHint{ opacity:0 !important; }
 /* ================= RESPONSIVE ================= */
 @media (max-width: 900px){
   .split{
-    grid-template-columns: 40% 60%;
-    grid-template-rows: 100%;
+    display:flex;
+    flex-direction:row;
+    width:100%;
     height:100%;
   }
 
   .split-left{
+    flex:0 0 72% !important;
+    width:auto !important;
+    max-width:none;
     padding:
-      calc(84px + var(--sat))
-      18px
-      calc(32px + var(--sab))
-      22px;
-    max-width:none;
-    max-height: calc(var(--vh) * 100);
-    overflow:auto;
-  }
-
-  .aub-heading{
-    max-width:none;
-  }
-
-  .aub-heading .small{
-    font-size:clamp(20px, 4.8vw, 28px);
-    margin-bottom:8px;
-  }
-
-  .aub-heading .big{
-    font-size:clamp(26px, 6.5vw, 38px);
-    line-height:0.98;
-    letter-spacing:1.4px;
-  }
-
-  .aub-line{
-    width:48px;
-    margin:16px 0 28px 0;
-  }
-
-  .aub-text{
-    max-width:none;
-    font-size:clamp(14px, 3.5vw, 18px);
-    line-height:1.55;
-  }
-
-  .aub-text .lead{
-    margin-bottom:20px;
+      calc(118px + var(--sat))
+      22px
+      calc(34px + var(--sab))
+      calc(26px + 44px + var(--sal));
   }
 
   .split-right{
-    height:100%;
+    flex:0 0 28%;
+    width:auto;
     min-width:0;
+    height:100%;
   }
 
   .panel--split .panel-img{
@@ -652,23 +559,51 @@ body.menu-open #scrollHint{ opacity:0 !important; }
     object-position:center;
   }
 
+  .aub-heading,
+  .aub-text{
+    max-width:none;
+  }
+
+  .aub-heading .small{
+    font-size:20px;
+    line-height:1.02;
+    margin-bottom:2px;
+  }
+
+  .aub-heading .big{
+    font-size:29px;
+    line-height:0.95;
+    letter-spacing:0.8px;
+  }
+
+  .aub-line{
+    width:36px;
+    margin:18px 0 54px 0;
+  }
+
+  .aub-text{
+    max-width:330px;
+    font-size:15.5px;
+    line-height:1.72;
+  }
+
+  .aub-text .lead{
+    margin-bottom:38px;
+  }
+
   .end-left{ display:none; }
   .end-card{ flex:0 0 100%; width:100%; }
 
   .nav-slider{
-    left: calc(40px + var(--sal));
+    left: calc(24px + var(--sal));
     right: calc(24px + var(--sar));
     bottom: calc(12px + var(--sab));
   }
 
-  .nav-slider input[type="range"]::-webkit-slider-thumb{
-    width:54px;
-  }
-  .nav-slider input[type="range"]::-moz-range-thumb{
-    width:54px;
-  }
+  .nav-slider input[type="range"]::-webkit-slider-thumb{ width:54px; }
+  .nav-slider input[type="range"]::-moz-range-thumb{ width:54px; }
 
-  .menu{ width: min(420px, 92vw); }
+  .menu{ width:min(420px, 92vw); }
   .menu-panel{ padding: calc(28px + var(--sat)) 28px calc(38px + var(--sab)); }
 
   body{
@@ -693,34 +628,38 @@ body.menu-open #scrollHint{ opacity:0 !important; }
 }
 
 @media (max-width: 520px){
-  .split{
-    grid-template-columns: 40% 60%;
-  }
-
   .split-left{
     padding:
-      calc(78px + var(--sat))
-      16px
-      calc(24px + var(--sab))
-      18px;
+      calc(110px + var(--sat))
+      18px
+      calc(28px + var(--sab))
+      calc(22px + 44px + var(--sal));
   }
 
   .aub-heading .small{
     font-size:18px;
+    margin-bottom:2px;
   }
 
   .aub-heading .big{
-    font-size:22px;
-    letter-spacing:1.1px;
-  }
-
-  .aub-text{
-    font-size:13px;
-    line-height:1.5;
+    font-size:26px;
+    line-height:0.94;
+    letter-spacing:0.6px;
   }
 
   .aub-line{
-    margin:14px 0 22px 0;
+    width:34px;
+    margin:16px 0 48px 0;
+  }
+
+  .aub-text{
+    max-width:300px;
+    font-size:14.5px;
+    line-height:1.7;
+  }
+
+  .aub-text .lead{
+    margin-bottom:34px;
   }
 }
 </style>
@@ -789,7 +728,7 @@ body.menu-open #scrollHint{ opacity:0 !important; }
       <div class="split">
         <div class="split-left">
           <div class="aub-heading">
-            <span class="small">The Finest Materials </span>
+            <span class="small">The Finest Materials</span>
             <span class="big">Globally Sourced</span>
           </div>
           <div class="aub-line"></div>
@@ -816,7 +755,7 @@ body.menu-open #scrollHint{ opacity:0 !important; }
       <div class="split">
         <div class="split-left">
           <div class="aub-heading">
-            <span class="small">Architecture & </span>
+            <span class="small">Architecture &amp;</span>
             <span class="big">Design</span>
           </div>
           <div class="aub-line"></div>
@@ -972,7 +911,7 @@ function clamp(v, min, max){
 
 function updateHintText(){
   if(!scrollHint) return;
-  scrollHint.textContent = isMobile() ? "⇠Swipe" : "Scroll";
+  scrollHint.textContent = isMobile() ? "Swipe" : "Scroll";
 }
 
 function setPanelWidths(){
@@ -985,16 +924,16 @@ function setPanelWidths(){
   });
 
   const splitPanels = Array.from(track.querySelectorAll(".panel--split"));
-splitPanels.forEach(panel=>{
-  let panelW = window.innerWidth;
+  splitPanels.forEach(panel=>{
+    let panelW = window.innerWidth;
 
-  if(window.innerWidth <= 900){
-    panelW = Math.round(window.innerWidth * 2.6);
-  }
+    if(window.innerWidth <= 900){
+      panelW = Math.round(window.innerWidth * 2.8);
+    }
 
-  panel.style.flex = `0 0 ${panelW}px`;
-  panel.style.width = `${panelW}px`;
-});
+    panel.style.flex = `0 0 ${panelW}px`;
+    panel.style.width = `${panelW}px`;
+  });
 
   const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
   imgPanels.forEach(panel=>{
