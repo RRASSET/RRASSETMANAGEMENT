@@ -508,8 +508,16 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     margin-bottom:0;
   }
 
-  .end-left{ display:none; }
-  .end-card{ flex:0 0 100%; width:100%; }
+.end-left{ display:none; }
+.end-card{
+  flex:0 0 min(420px, 92vw);
+  width:min(420px, 92vw);
+  margin-left:auto;
+}
+
+  .panel--end{
+  justify-content:flex-end;
+}
 
   .nav-slider{
     left: calc(24px + var(--sal));
@@ -577,6 +585,12 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     margin:16px 0 24px 0;
   }
 
+.end-card{
+  flex:0 0 min(420px, 92vw);
+  width:min(420px, 92vw);
+  margin-left:auto;
+}
+  
   .aub-text .lead{
     margin-bottom:20px;
   }
