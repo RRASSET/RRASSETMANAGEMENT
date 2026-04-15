@@ -444,165 +444,104 @@ body.loaded .page-shell{
 body.menu-open .hwrap{ pointer-events:none; }
 body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
 
-/* ================= RESPONSIVE ================= */
-@media (max-width: 900px){
-  .split{
-    display:flex;
-    flex-direction:row;
-    width:100%;
-    height:100%;
-  }
-
-.split-left{
-  flex:0 0 360px;
-  width:360px;
-  max-width:none;
-  min-height:100%;
-  justify-content:flex-start;
-  padding:
-    calc(118px + var(--sat))
-    22px
-    calc(34px + var(--sab))
-    calc(26px + 44px + var(--sal));
-}
-
- .split-right{
+  
+/* ================= SPLIT PANELS ================= */
+.panel--split{
   flex:0 0 auto;
   width:auto;
-  min-width:0;
-  height:100%;
-}
-
-  .aub-heading,
-  .aub-text{
-    max-width:none;
-  }
-
-  .aub-heading .small{
-    font-size:20px;
-    margin-bottom:8px;
-    line-height:1.08;
-  }
-
-  .aub-heading .big{
-    font-size:28px;
-    line-height:1.04;
-    letter-spacing:1px;
-  }
-
-  .aub-line{
-    width:42px;
-    margin:18px 0 28px 0;
-  }
-
-  .aub-text{
-  font-size:15px;
-  line-height:1.72;
-  max-width:390px;
-}
-
-  .aub-text .lead{
-    margin-bottom:24px;
-  }
-
-  .aub-text .body{
-    margin-bottom:0;
-  }
-
-.end-left{
-  display:flex;
-  flex:0 0 auto;
-  width:auto;
-  min-width:0;
-}
-
-.end-card{
-  flex:0 0 min(420px, 92vw);
-  width:min(420px, 92vw);
-  margin-left:0;
-}
-
-.panel--end{
-  justify-content:flex-start;
   background:#f4f4f2;
 }
 
-  .nav-slider{
-    left: calc(24px + var(--sal));
-    right: calc(24px + var(--sar));
-    bottom: calc(12px + var(--sab));
-  }
-
-  .menu{ width:min(420px, 92vw); }
-  .menu-panel{ padding: calc(28px + var(--sat)) 28px calc(38px + var(--sab)); }
-
-  body{
-    touch-action: pan-x;
-  }
-
-  .side-bar{
-    width: calc(44px + var(--sal));
-  }
-
-
-  
-  .burger-lines i,
-  .burger-lines i::before,
-  .burger-lines i::after{
-    width:20px;
-  }
+.split{
+  height:100%;
+  display:flex;
+  width:100%;
+  align-items:stretch;
 }
 
-
-@media (max-width: 520px){
-.split-left{
-  flex:0 0 320px;
-  width:320px;
+.split-copy{
+  background:#f4f4f2;
+  flex:0 0 var(--copyW, 680px);
+  width:var(--copyW, 680px);
+  display:flex;
+  flex-direction:column;
   justify-content:flex-start;
-  padding:
-    calc(110px + var(--sat))
-    18px
-    calc(28px + var(--sab))
-    calc(22px + 44px + var(--sal));
+  padding: clamp(92px, 11vh, 138px) clamp(30px, 5vw, 72px)
+           clamp(72px, 9vh, 118px) clamp(64px, 8vw, 140px);
+  color:#1a1a1a;
+  min-width:0;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: calc(var(--vh) * 100);
+}
+.split-copy::-webkit-scrollbar{ width:0; height:0; }
+.split-copy{ scrollbar-width:none; }
+
+.copy-inner{
+  width:100%;
+  max-width:560px;
 }
 
+.aub-heading{
+  font-family:'Cormorant Garamond', serif;
+  line-height:0.98;
+  margin-bottom:0;
+  max-width:560px;
+}
+.aub-heading .small{
+  display:block;
+  font-style:italic;
+  font-weight:300;
+  font-size:clamp(26px, 2vw, 42px);
+  margin-bottom:8px;
+  color:#1a1a1a;
+}
+.aub-heading .big{
+  display:block;
+  font-style:normal;
+  font-weight:400;
+  font-size:clamp(30px, 2.4vw, 50px);
+  text-transform:uppercase;
+  letter-spacing:1.2px;
+  color:#1a1a1a;
+  line-height:0.95;
+}
 
-  
-  .split-right{
-    flex:0 0 51%;
-  }
-
-  .aub-heading .small{
-    font-size:18px;
-    margin-bottom:8px;
-  }
-
-  .aub-heading .big{
-    font-size:24px;
-    line-height:1.05;
-    letter-spacing:1px;
-  }
+.aub-line{
+  width:44px;
+  height:1px;
+  background:#c6b67a;
+  margin:22px 0 82px 0;
+}
 
 .aub-text{
-  font-size:14px;
-  line-height:1.74;
-  max-width:320px;
+  font-family:'Cormorant Garamond', serif;
+  color:#1a1a1a;
+  width:100%;
+  max-width:440px;
+  font-size:clamp(18px, 1.25vw, 20px);
+  line-height:1.9;
+}
+.aub-text p{
+  margin:0;
 }
 
-  .aub-line{
-    width:38px;
-    margin:16px 0 24px 0;
-  }
-
-.end-card{
-  flex:0 0 min(420px, 92vw);
-  width:min(420px, 92vw);
-  margin-left:auto;
+.split-media{
+  flex:0 0 auto;
+  display:flex;
+  align-items:stretch;
+  justify-content:flex-start;
+  overflow:hidden;
+  background:#f4f4f2;
+  min-width:0;
 }
-  
-  .aub-text .lead{
-    margin-bottom:20px;
-  }
+.split-media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  display:block;
+}
 }
   
 </style>
