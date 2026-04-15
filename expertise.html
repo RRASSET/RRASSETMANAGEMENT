@@ -466,25 +466,32 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     height:100%;
   }
 
-.split-left{
-  flex:0 0 360px;
-  width:360px;
-  max-width:none;
-  min-height:100%;
-  justify-content:flex-start;
-  padding:
-    calc(118px + var(--sat))
-    22px
-    calc(34px + var(--sab))
-    calc(26px + 44px + var(--sal));
-}
+  .split-copy{
+    flex:0 0 360px;
+    width:360px;
+    max-width:none;
+    min-height:100%;
+    justify-content:center;
+    padding:
+      calc(95px + var(--sat))
+      24px
+      calc(36px + var(--sab))
+      calc(30px + 44px + var(--sal));
+  }
 
- .split-right{
-  flex:0 0 auto;
-  width:auto;
-  min-width:0;
-  height:100%;
-}
+  .split-media{
+    flex:0 0 auto;
+    width:auto;
+    min-width:0;
+    height:100%;
+  }
+
+  .split-media img{
+    height:100%;
+    width:auto;
+    object-fit:cover;
+    object-position:center center;
+  }
 
   .aub-heading,
   .aub-text{
@@ -492,53 +499,45 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   }
 
   .aub-heading .small{
-    font-size:20px;
+    font-size:24px;
     margin-bottom:8px;
     line-height:1.08;
   }
 
   .aub-heading .big{
-    font-size:28px;
-    line-height:1.04;
+    font-size:34px;
+    line-height:1.02;
     letter-spacing:1px;
   }
 
   .aub-line{
-    width:42px;
-    margin:18px 0 28px 0;
+    width:40px;
+    margin:20px 0 30px 0;
   }
 
   .aub-text{
-  font-size:15px;
-  line-height:1.72;
-  max-width:390px;
-}
-
-  .aub-text .lead{
-    margin-bottom:24px;
+    font-size:16px;
+    line-height:1.75;
+    max-width:320px;
   }
 
-  .aub-text .body{
-    margin-bottom:0;
+  .end-left{
+    display:flex;
+    flex:0 0 auto;
+    width:auto;
+    min-width:0;
   }
 
-.end-left{
-  display:flex;
-  flex:0 0 auto;
-  width:auto;
-  min-width:0;
-}
+  .end-card{
+    flex:0 0 min(420px, 92vw);
+    width:min(420px, 92vw);
+    margin-left:0;
+  }
 
-.end-card{
-  flex:0 0 min(420px, 92vw);
-  width:min(420px, 92vw);
-  margin-left:0;
-}
-
-.panel--end{
-  justify-content:flex-start;
-  background:#f4f4f2;
-}
+  .panel--end{
+    justify-content:flex-start;
+    background:#f4f4f2;
+  }
 
   .nav-slider{
     left: calc(24px + var(--sal));
@@ -546,8 +545,13 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     bottom: calc(12px + var(--sab));
   }
 
-  .menu{ width:min(420px, 92vw); }
-  .menu-panel{ padding: calc(28px + var(--sat)) 28px calc(38px + var(--sab)); }
+  .menu{
+    width:min(420px, 92vw);
+  }
+
+  .menu-panel{
+    padding: calc(28px + var(--sat)) 28px calc(38px + var(--sab));
+  }
 
   body{
     touch-action: pan-x;
@@ -557,8 +561,6 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
     width: calc(44px + var(--sal));
   }
 
-
-  
   .burger-lines i,
   .burger-lines i::before,
   .burger-lines i::after{
@@ -566,55 +568,58 @@ body.menu-open .nav-slider{ pointer-events:none; opacity:.25; }
   }
 }
 
-
 @media (max-width: 520px){
-.split-left{
-  flex:0 0 320px;
-  width:320px;
-  justify-content:flex-start;
-  padding:
-    calc(110px + var(--sat))
-    18px
-    calc(28px + var(--sab))
-    calc(22px + 44px + var(--sal));
-}
+  .split-copy{
+    flex:0 0 320px;
+    width:320px;
+    justify-content:center;
+    padding:
+      calc(88px + var(--sat))
+      18px
+      calc(28px + var(--sab))
+      calc(22px + 44px + var(--sal));
+  }
 
+  .split-media{
+    flex:0 0 auto;
+    width:auto;
+    min-width:0;
+    height:100%;
+  }
 
-  
-  .split-right{
-    flex:0 0 51%;
+  .split-media img{
+    height:100%;
+    width:auto;
+    object-fit:cover;
+    object-position:center center;
   }
 
   .aub-heading .small{
-    font-size:18px;
+    font-size:20px;
     margin-bottom:8px;
   }
 
   .aub-heading .big{
-    font-size:24px;
-    line-height:1.05;
+    font-size:28px;
+    line-height:1.04;
     letter-spacing:1px;
   }
 
-.aub-text{
-  font-size:14px;
-  line-height:1.74;
-  max-width:320px;
-}
+  .aub-text{
+    font-size:14px;
+    line-height:1.72;
+    max-width:280px;
+  }
 
   .aub-line{
-    width:38px;
+    width:36px;
     margin:16px 0 24px 0;
   }
 
-.end-card{
-  flex:0 0 min(420px, 92vw);
-  width:min(420px, 92vw);
-  margin-left:auto;
-}
-  
-  .aub-text .lead{
-    margin-bottom:20px;
+  .end-card{
+    flex:0 0 min(420px, 92vw);
+    width:min(420px, 92vw);
+    margin-left:auto;
   }
 
 }
