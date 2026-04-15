@@ -760,7 +760,9 @@ function closeMenuFn(){
 }
 burger.addEventListener("click", openMenu);
 closeMenu.addEventListener("click", closeMenuFn);
-document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeMenuFn(); });
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape") closeMenuFn();
+});
 
 /* ===== HORIZONTAL SCROLL ===== */
 const track = document.getElementById("track");
@@ -781,27 +783,11 @@ let velocityX = 0;
 
 const isMobile = () => window.innerWidth <= 900;
 
-function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+function clamp(v, min, max){
+  return Math.max(min, Math.min(max, v));
+}
 
 function setPanelWidths(){
-  const vhPx = window.innerHeight;
-
-  const splitPanels = Array.from(track.querySelectorAll(".panel--split"));
-  splitPanels.forEach(panel=>{
-    const mediaImg = panel.querySelector(".split-media img");
-    const media = panel.querySelector(".split-media");
-    if(!mediaImg || !media) return;
-
-    const apply = ()=>{
-      const nw = mediaImg.naturalWidth || 0;
-      const nh = mediaImg.naturalHeight || 0;
-      if(!nw || !nh) return;
-
-      let copyW;
-      let imgW;
-      let total;
-
- function setPanelWidths(){
   const vhPx = window.innerHeight;
 
   const splitPanels = Array.from(track.querySelectorAll(".panel--split"));
@@ -838,7 +824,7 @@ function setPanelWidths(){
     };
 
     if(mediaImg.complete && mediaImg.naturalWidth) apply();
-    else mediaImg.addEventListener("load", apply, {once:true});
+    else mediaImg.addEventListener("load", apply, { once:true });
   });
 
   const imgPanels = Array.from(track.querySelectorAll(".panel--img"));
@@ -850,6 +836,7 @@ function setPanelWidths(){
       const nw = img.naturalWidth || 0;
       const nh = img.naturalHeight || 0;
       if(!nw || !nh) return;
+
       const ratio = nw / nh;
       const w = Math.max(240, Math.round(ratio * vhPx));
       panel.style.flex = `0 0 ${w}px`;
@@ -857,7 +844,7 @@ function setPanelWidths(){
     };
 
     if(img.complete && img.naturalWidth) apply();
-    else img.addEventListener("load", apply, {once:true});
+    else img.addEventListener("load", apply, { once:true });
   });
 
   const endOnly = track.querySelector(".panel--end-only");
@@ -882,12 +869,18 @@ function setPanelWidths(){
   panels = Array.from(track.querySelectorAll(".panel"));
 }
 
-function totalWidth(){ return panels.reduce((sum, p) => sum + p.offsetWidth, 0); }
-function maxScroll(){ return Math.max(0, totalWidth() - window.innerWidth); }
+function totalWidth(){
+  return panels.reduce((sum, p) => sum + p.offsetWidth, 0);
+}
+
+function maxScroll(){
+  return Math.max(0, totalWidth() - window.innerWidth);
+}
 
 function updateSliderFromX(){
   const maxS = maxScroll();
   if(isUserSliding) return;
+
   const ratio = maxS === 0 ? 0 : (currentX / maxS);
   navSlider.value = String(ratio * 1000);
 }
@@ -911,7 +904,7 @@ function raf(){
 window.addEventListener("wheel", (e)=>{
   if(document.body.classList.contains("menu-open")) return;
   targetX = clamp(targetX + e.deltaY * 0.9, 0, maxScroll());
-},{passive:true});
+}, { passive:true });
 
 /* drag / touch */
 function pointerDown(x){
@@ -923,6 +916,7 @@ function pointerDown(x){
   lastPointerTime = performance.now();
   velocityX = 0;
 }
+
 function pointerMove(x){
   if(!isDown) return;
 
@@ -945,6 +939,7 @@ function pointerMove(x){
   lastPointerX = x;
   lastPointerTime = now;
 }
+
 function pointerUp(){
   if(!isDown) return;
   isDown = false;
@@ -954,22 +949,22 @@ function pointerUp(){
   }
 }
 
-window.addEventListener("mousedown",(e)=>pointerDown(e.clientX));
-window.addEventListener("mousemove",(e)=>pointerMove(e.clientX));
-window.addEventListener("mouseup",pointerUp);
+window.addEventListener("mousedown", (e)=>pointerDown(e.clientX));
+window.addEventListener("mousemove", (e)=>pointerMove(e.clientX));
+window.addEventListener("mouseup", pointerUp);
 
-window.addEventListener("touchstart",(e)=>{
+window.addEventListener("touchstart", (e)=>{
   if(!e.touches.length) return;
   pointerDown(e.touches[0].clientX);
-},{passive:true});
+}, { passive:true });
 
-window.addEventListener("touchmove",(e)=>{
+window.addEventListener("touchmove", (e)=>{
   if(!e.touches.length) return;
   pointerMove(e.touches[0].clientX);
-},{passive:true});
+}, { passive:true });
 
-window.addEventListener("touchend",pointerUp);
-window.addEventListener("touchcancel",pointerUp);
+window.addEventListener("touchend", pointerUp);
+window.addEventListener("touchcancel", pointerUp);
 
 /* slider */
 function sliderToTarget(){
@@ -977,18 +972,25 @@ function sliderToTarget(){
   const ratio = Number(navSlider.value) / 1000;
   targetX = clamp(ratio * maxS, 0, maxS);
 }
-navSlider.addEventListener("pointerdown", ()=>{ isUserSliding = true; });
+
+navSlider.addEventListener("pointerdown", ()=>{
+  isUserSliding = true;
+});
+
 navSlider.addEventListener("pointerup", ()=>{
   sliderToTarget();
   isUserSliding = false;
 });
+
 navSlider.addEventListener("pointercancel", ()=>{
   isUserSliding = false;
 });
+
 navSlider.addEventListener("input", ()=>{
   if(!isUserSliding) return;
   sliderToTarget();
 });
+
 navSlider.addEventListener("change", ()=>{
   if(isUserSliding) sliderToTarget();
 });
