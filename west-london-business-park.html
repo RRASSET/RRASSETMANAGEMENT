@@ -812,11 +812,12 @@ function setPanelWidths(){
         copyW = window.innerWidth <= 520 ? 320 : 360;
         imgW = Math.max(220, Math.round(window.innerWidth * 0.72));
         total = copyW + imgW;
-      } else {
-        copyW = 610;
-        imgW = Math.max(380, Math.round((nw / nh) * vhPx));
-        total = copyW + imgW;
-      }
+     
+} else {
+  copyW = 680;
+  imgW = Math.max(380, Math.round((nw / nh) * vhPx));
+  total = copyW + imgW;
+}
 
       panel.style.setProperty('--copyW', `${copyW}px`);
       media.style.flex = `0 0 ${imgW}px`;
