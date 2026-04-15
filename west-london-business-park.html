@@ -801,14 +801,33 @@ function setPanelWidths(){
       let imgW;
       let total;
 
-   if(window.innerWidth <= 900){
-  copyW = window.innerWidth <= 520 ? 320 : 360;
-  imgW = Math.max(220, Math.round(window.innerWidth * 0.72));
-  total = copyW + imgW;
-} else {
-copyW = 610;
-imgW = Math.max(380, Math.round((nw / nh) * vhPx));
-total = copyW + imgW;
+ function setPanelWidths(){
+  const vhPx = window.innerHeight;
+
+  const splitPanels = Array.from(track.querySelectorAll(".panel--split"));
+  splitPanels.forEach(panel=>{
+    const mediaImg = panel.querySelector(".split-media img");
+    const media = panel.querySelector(".split-media");
+    if(!mediaImg || !media) return;
+
+    const apply = ()=>{
+      const nw = mediaImg.naturalWidth || 0;
+      const nh = mediaImg.naturalHeight || 0;
+      if(!nw || !nh) return;
+
+      let copyW;
+      let imgW;
+      let total;
+
+      if(window.innerWidth <= 900){
+        copyW = window.innerWidth <= 520 ? 320 : 360;
+        imgW = Math.max(220, Math.round(window.innerWidth * 0.72));
+        total = copyW + imgW;
+      } else {
+        copyW = 610;
+        imgW = Math.max(380, Math.round((nw / nh) * vhPx));
+        total = copyW + imgW;
+      }
 
       panel.style.setProperty('--copyW', `${copyW}px`);
       media.style.flex = `0 0 ${imgW}px`;
