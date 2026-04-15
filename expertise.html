@@ -897,14 +897,14 @@ function setPanelWidths(){
       let total;
 
 if(window.innerWidth <= 900){
-  total = Math.round(window.innerWidth * 2.2);
-  copyW = Math.round(total * 0.52);
-  imgW = total - copyW;
+  copyW = window.innerWidth <= 520 ? 320 : 360;
+  imgW = window.innerWidth;
+  total = copyW + imgW;
 } else {
-        copyW = Math.round(window.innerWidth * 0.42);
-        imgW = Math.max(240, Math.round((img.naturalWidth / img.naturalHeight) * vhPx));
-        total = copyW + imgW;
-      }
+  copyW = 680;
+  imgW = Math.max(420, Math.round((img.naturalWidth / img.naturalHeight) * vhPx));
+  total = copyW + imgW;
+}
 
       panel.style.setProperty("--copyW", copyW + "px");
       media.style.flex = `0 0 ${imgW}px`;
