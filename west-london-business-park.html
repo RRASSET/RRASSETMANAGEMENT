@@ -23,7 +23,7 @@ html,body{height:100%}
   --sar: env(safe-area-inset-right, 0px);
 
   --vh: 1vh;
-  --copyW: 520px;
+  --copyW: 610px;
 }
 
 body{
@@ -153,15 +153,12 @@ body.loaded .page-shell{
   display:flex;
   flex-direction:column;
   justify-content:flex-start;
-  padding: clamp(105px, 12vh, 150px) clamp(24px, 5vw, 70px)
-           clamp(70px, 9vh, 120px) clamp(60px, 8vw, 140px);
+  padding: 96px 56px 72px 110px;
   color:#1a1a1a;
   min-width:0;
   overflow:auto;
   -webkit-overflow-scrolling:touch;
 }
-.split-copy::-webkit-scrollbar{ width:0; height:0; }
-.split-copy{ scrollbar-width:none; }
 
 .copy-inner{
   width:100%;
@@ -170,48 +167,57 @@ body.loaded .page-shell{
 
 .aub-heading{
   font-family:'Cormorant Garamond', serif;
-  line-height:0.98;
+  line-height:0.95;
   margin-bottom:0;
-  max-width:560px;
+  max-width:540px;
 }
+
 .aub-heading .small{
   display:block;
   font-style:italic;
   font-weight:300;
-  font-size:clamp(26px, 2vw, 42px);
-  margin-bottom:10px;
+  font-size:46px;
+  margin-bottom:12px;
   color:#1a1a1a;
+  line-height:1.02;
 }
+
 .aub-heading .big{
   display:block;
   font-style:normal;
   font-weight:400;
-  font-size:clamp(30px, 2.4vw, 50px);
+  font-size:58px;
   text-transform:uppercase;
-  letter-spacing:2px;
+  letter-spacing:1.2px;
   color:#1a1a1a;
+  line-height:0.9;
 }
 
 .aub-line{
-  width:40px;
+  width:60px;
   height:1px;
   background:#c6b67a;
-  margin:24px 0 82px 0;
+  margin:28px 0 60px 0;
 }
 
 .aub-text{
   font-family:'Cormorant Garamond', serif;
   color:#1a1a1a;
   width:100%;
-  max-width:430px;
-  font-size:clamp(18px, 1.25vw, 20px);
-  line-height:1.9;
+  max-width:500px;
+  font-size:23px;
+  line-height:1.72;
 }
-.aub-text p{ margin:0; }
+
+.aub-text p{
+  margin:0;
+}
+
 .aub-text .lead{
   font-style:italic;
-  margin-bottom:52px;
+  margin-bottom:44px;
 }
+
 .aub-text .body{
   font-style:italic;
   margin-bottom:0;
@@ -800,10 +806,9 @@ function setPanelWidths(){
   imgW = Math.max(220, Math.round(window.innerWidth * 0.72));
   total = copyW + imgW;
 } else {
-  copyW = 520;
-  imgW = Math.max(240, Math.round((nw / nh) * vhPx));
-  total = copyW + imgW;
-}
+copyW = 610;
+imgW = Math.max(380, Math.round((nw / nh) * vhPx));
+total = copyW + imgW;
 
       panel.style.setProperty('--copyW', `${copyW}px`);
       media.style.flex = `0 0 ${imgW}px`;
